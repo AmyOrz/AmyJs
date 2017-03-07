@@ -46,6 +46,7 @@
 
 	var aa = __webpack_require__(1);
 	console.log(aa.fck("efwef"));
+	console.log(1123);
 
 
 /***/ },
