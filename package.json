@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/AmyOrz/AmyJs#readme",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "webpack": "^2.2.1"
+    "gulp-uglify": "^2.0.0",
+    "gulp-webpack": "^1.5.0",
+    "source-map-loader": "^0.1.6",
+    "ts-loader": "^0.8.2"
   }
 }
