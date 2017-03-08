@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "moduleResolution": "Node",
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "outDir": "../dist/es2015",
+    "declaration": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "typeRoots": [
+      "./dts",
+      "../node_modules/@types"
+    ],
+    "experimentalDecorators": true
+  },
+  "files": [
+    "./index.ts"
+  ]
+}
