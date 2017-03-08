@@ -42,13 +42,13 @@ export default {
         {
             sourceMap: true,
             format: "umd",
-            moduleName: "wd",
-            dest: "./dist/wd.js"
+            moduleName: "amy",
+            dest: "./dist/amy.js"
         },
-        {
+       /* {
             sourceMap: true,
             format: "es",
             dest: "./dist/wd.module.js"
-        }
+        }*/
     ]
 };

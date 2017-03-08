@@ -66,7 +66,7 @@ gulp.task("formatTs", function(done) {
 
 
 
-gulp.task("build", gulpSync.sync(["clean", "compileTsES2015", "compileTsCommonjs", "generateDTS", "generateDTS", "rollup", "formatTs"]));
+gulp.task("build", gulpSync.sync(["clean", /*"compileTsES2015",*/ "compileTsCommonjs",/* "generateDTS", "generateDTS", */"rollup", "formatTs"]));
 
 
 

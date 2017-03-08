@@ -1,4 +1,3 @@
 export { ExportClass } from "./ExportClass";
-var name = "asd";
-console.log(name + " is fck");
+export { Test } from "./Test";
 //# sourceMappingURL=index.js.map

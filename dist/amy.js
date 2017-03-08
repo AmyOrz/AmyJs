@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.wd = global.wd || {})));
+	(factory((global.amy = global.amy || {})));
 }(this, (function (exports) { 'use strict';
 
 	function __extends(d, b) {
@@ -16,15 +16,6 @@
 	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
 	    return c > 3 && r && Object.defineProperty(target, key, r), r;
 	}
-
-	var InnerClass = (function () {
-	    function InnerClass() {
-	    }
-	    InnerClass.prototype.method = function () {
-	        return 2;
-	    };
-	    return InnerClass;
-	}());
 
 	var JudgeUtils = (function () {
 	    function JudgeUtils() {
@@ -1586,22 +1577,32 @@
 	    }
 	    ExportClass.prototype.method = function (callback) {
 	        var result = 0;
-	        fromArray([1, 2])
+	        fromArray([3, 4])
 	            .subscribe(function (num) {
 	            result += num;
 	        }, null, function () {
-	            callback(new InnerClass().method() + result);
+	            callback(result);
 	        });
 	    };
 	    return ExportClass;
 	}());
 
-	var name = "asd";
-	console.log(name + " is fck");
+	var Test = (function () {
+	    function Test() {
+	        this.ex = new ExportClass();
+	    }
+	    Test.prototype.Method = function () {
+	        this.ex.method(function (num) { return console.log("fck " + num + 11); });
+	    };
+	    return Test;
+	}());
+	var a = new Test();
+	a.Method();
 
 	exports.ExportClass = ExportClass;
+	exports.Test = Test;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=wd.js.map
+//# sourceMappingURL=amy.js.map

@@ -1,5 +1,5 @@
 var mathTestUtils = (function () {
-    var Matrix4 = wd.Matrix4;
+    var Matrix4 = amy.Matrix4;
 
     return {
         getValues: function (values, digit) {
