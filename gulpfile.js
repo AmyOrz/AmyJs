@@ -66,12 +66,12 @@ gulp.task("formatTs", function(done) {
 
 
 
-gulp.task("build", gulpSync.sync(["clean", /*"compileTsES2015",*/ "compileTsCommonjs",/* "generateDTS", "generateDTS", */"rollup", "formatTs"]));
+gulp.task("build", gulpSync.sync(["clean",/* "compileTsES2015", */"compileTsCommonjs", "rollup", "formatTs"]));
 
 
 
 gulp.task("watch", function(){
     var totalPaths = tsFilePaths;
 
-    gulp.watch(totalPaths, gulpSync.sync(["compileTsES2015", "rollup"]));
+    gulp.watch(totalPaths, gulpSync.sync(["compileTsCommonjs", "rollup"]));
 });

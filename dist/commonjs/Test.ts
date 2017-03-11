@@ -1,13 +1,21 @@
-import { ExportClass } from "./ExportClass";
+
+import { Main } from "./core/Main";
+import {Director} from "../dist/commonjs/core/Director";
 export class Test {
-    private ex: ExportClass;
-    constructor() {
-        this.ex = new ExportClass();
+    public testCanvas() {
+        Main.setCanvas("webgl","ct").init();
+
+        var director = Director.getInstance();
+        // director.scene.addChild(this._createTriangle());
+
     }
-    public Method() {
-        this.ex.method((num) => console.log("fck "+ num + 11));
+    private _createTriangle(){
+        // var gameObj = amy.GameObject().create();
+        // var geometry = amy.Triangle.create();
+        // gameObj.addComponent(geometry);
+        //gameObj.addComponent(amy.MeshRender.create());
     }
 }
-let a = new Test();
-a.Method();
+var a = new Test();
+a.testCanvas();
 
