@@ -6,7 +6,7 @@ export class Test {
         Main.setCanvas("webgl","ct").init();
 
         var director = Director.getInstance();
-        // director.scene.addChild(this._createTriangle());
+        director.scene.addChild(this._createTriangle());
 
     }
     private _createTriangle(){
