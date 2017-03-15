@@ -1,4 +1,6 @@
-export class GameObject{
+import {EntityObject} from "./EntityObject";
+
+export class GameObject extends EntityObject{
     public static create(){
         var obj = new this();
 
@@ -6,8 +8,8 @@ export class GameObject{
 
         return obj;
     }
-    public name:string;
     public initWhenCreate(){
-        this.name = "GameObject"
+        super.initWhencreate();
+        this.name = `GameObject${this.uid}`;
     }
 }

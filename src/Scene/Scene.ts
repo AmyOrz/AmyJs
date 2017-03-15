@@ -1,8 +1,8 @@
 import {singleton} from "../until/singleton";
-import {EntityManager} from "../core/Entity/EntityManager";
+import {EntityDispatcher} from "../core/Entity/EntityDispatcher";
 
 @singleton()
-export class Scene extends EntityManager{
+export class Scene extends EntityDispatcher{
     public static getInstance(){}
 
 
