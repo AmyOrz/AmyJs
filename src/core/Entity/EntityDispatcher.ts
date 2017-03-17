@@ -4,17 +4,27 @@ import {Collection} from "wonder-commonlib/dist/es2015/Collection";
 
 export abstract class EntityDispatcher extends Entity{
     public name:string = null;
-    private _entityManager:EntityManager = EntityManager.create(this);
+    protected _entityManager:EntityManager = EntityManager.create(this);
 
     public init(){
         this._entityManager.init();
         return this;
     }
-
+    public dispose(){
+        this.onDispose();
+        this._entityManager.dispose();
+        return this;
+    }
     public onEnter(){
 
     }
-    public onExit(){}
+    public onExit(){
+
+    }
+
+    public onDispose(){
+
+    }
 
     public hasChild(child:EntityDispatcher):boolean{
         return this._entityManager.hasChild(child);

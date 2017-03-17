@@ -3,6 +3,7 @@ import {Collection} from "wonder-commonlib/dist/commonjs/Collection";
 export class ComponentManager{
     public static create(entityObject:EntityObject){
         var obj = new this(entityObject);
+
         return obj;
     }
 

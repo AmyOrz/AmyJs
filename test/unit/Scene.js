@@ -1,4 +1,4 @@
-describe("ExportClass", function () {
+describe("scene", function () {
     var sandbox = null;
 
     beforeEach(function () {
@@ -6,12 +6,10 @@ describe("ExportClass", function () {
 
     });
     afterEach(function () {
-        sandbox.restore();
+
     });
 
     describe("method", function () {
-/*        it("return 7", function (done) {
 
-        });*/
     });
 });

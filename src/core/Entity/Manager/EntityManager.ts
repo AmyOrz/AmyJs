@@ -2,6 +2,7 @@ import {Collection} from "wonder-commonlib/dist/commonjs/Collection";
 import {Entity} from "../Entity";
 import {EntityDispatcher} from "../EntityDispatcher";
 import {JudgeUtils} from "wonder-frp/dist/es2015/JudgeUtils";
+import {EntityObject} from "../EntityObject";
 
 export abstract class EntityManager extends Entity{
     public static create(entityDispatcher:EntityDispatcher){
@@ -17,7 +18,12 @@ export abstract class EntityManager extends Entity{
             child.init();
         })
     }
+    public dispose(){
+        this.forEach((child:EntityDispatcher)=>{
+            child.init();
+        })
 
+    }
     public hasChild(child:EntityDispatcher):boolean{
         return this._objectList.hasChild(child);
     }
@@ -29,7 +35,6 @@ export abstract class EntityManager extends Entity{
 
         return this;
     }
-
     public addChildren(children:EntityDispatcher,addFunc?:Function);
     public addChildren(children:Array<EntityDispatcher>,addFunc?:Function);
     public addChildren(children:Collection<EntityDispatcher>,addFunc?:Function);
