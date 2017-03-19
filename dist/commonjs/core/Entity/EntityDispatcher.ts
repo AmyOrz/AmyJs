@@ -1,6 +1,6 @@
 import { Entity } from "./Entity";
 import { EntityManager } from "./Manager/EntityManager";
-import { Collection } from "wonder-commonlib/dist/es2015/Collection";
+import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 
 export abstract class EntityDispatcher extends Entity {
     public name: string = null;

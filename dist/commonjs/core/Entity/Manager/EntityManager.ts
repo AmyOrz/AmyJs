@@ -1,7 +1,7 @@
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Entity } from "../Entity";
 import { EntityDispatcher } from "../EntityDispatcher";
-import { JudgeUtils } from "wonder-frp/dist/es2015/JudgeUtils";
+import { JudgeUtils } from "wonder-frp/dist/commonjs/JudgeUtils";
 import { EntityObject } from "../EntityObject";
 
 export abstract class EntityManager extends Entity {

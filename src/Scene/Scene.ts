@@ -1,9 +1,9 @@
-import {singleton} from "../until/singleton";
-import {EntityDispatcher} from "../core/Entity/EntityDispatcher";
+import { singleton } from "../until/singleton";
+import { EntityDispatcher } from "../core/Entity/EntityDispatcher";
 
 @singleton()
-export class Scene extends EntityDispatcher{
-    public static getInstance(){}
+export class Scene extends EntityDispatcher {
+    public static getInstance() { }
 
 
 }

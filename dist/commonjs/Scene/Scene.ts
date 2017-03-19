@@ -1,10 +1,9 @@
-import {singleton} from "../until/singleton";
-import {Collection} from "wonder-commonlib/dist/commonjs/Collection";
+import { singleton } from "../until/singleton";
+import { EntityDispatcher } from "../core/Entity/EntityDispatcher";
 
 @singleton()
-export class Scene{
-    public static getInstance(){}
+export class Scene extends EntityDispatcher {
+    public static getInstance() { }
 
-    private objectList:Collection<any> = new Collection();
 
 }

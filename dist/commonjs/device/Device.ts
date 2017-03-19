@@ -20,7 +20,7 @@ export class Device {
         }
         if (parentId) {
             this._parentEle = document.getElementById(parentId);
-            if(this._parentEle == void 0)
+            if (this._parentEle == void 0)
                 alert("找不到指定parentId的dom节点");
         }
         if (this._parentEle) this._parentEle.appendChild(canvas);

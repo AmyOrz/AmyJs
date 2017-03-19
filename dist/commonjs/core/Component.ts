@@ -1,4 +1,4 @@
-import { Entity } from "wonder-frp/dist/es2015/core/Entity";
+import { Entity } from "wonder-frp/dist/commonjs/core/Entity";
 import { EntityObject } from "./Entity/EntityObject";
 
 export class Component extends Entity {
