@@ -1,116 +1,117 @@
-import {Program} from "./Program";
-import {Device} from "../../device/Device";
-import {Matrix4} from "../../Math/Matrix4";
+import { Program } from "./Program";
+import { Device } from "../../device/Device";
+import { Matrix4 } from "../../Math/Matrix4";
+import { ArrayBuffer } from "../Buffer/ArrayBuffer";
 
-export class GLSLDataSender{
-    public static create(program:Program){
+export class GLSLDataSender {
+    public static create(program: Program) {
         var obj = new this(program);
 
         return obj;
     }
 
-    constructor(private _program:Program){}
+    constructor(private _program: Program) { }
 
-    private _getUniformLocationCache:Object = {};
-    private _toSendBufferArr:ArrayBuffer[] = [];
+    private _getUniformLocationCache: Object = {};
+    private _toSendBufferArr: ArrayBuffer[] = [];
 
-    public addBufferToSendList(name:string,buffer:ArrayBuffer){
+    public addBufferToSendList(name: string, buffer: ArrayBuffer) {
         this._toSendBufferArr[name] = buffer;
     }
 
-    public sendAllBufferData(){
-        for(let pos = 0,len = this._toSendBufferArr;pos < len;pos++){
-            this.sendBuffer(pos,this._toSendBufferArr[pos]);
+    public sendAllBufferData() {
+        for (let pos = 0, len = this._toSendBufferArr.length; pos < len; pos++) {
+            this.sendBuffer(pos, this._toSendBufferArr[pos]);
         }
     }
 
-    public sendBuffer(pos:number,buffer:ArrayBuffer){
-        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER,buffer.buffer);
+    public sendBuffer(pos: number, buffer: ArrayBuffer) {
+        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
     }
 
 
 
-    public sendFloat1(name:string,data:any){
+    public sendFloat1(name: string, data: any) {
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform1f(uniform,data);
+        this._getGl().uniform1f(uniform, data);
     }
 
-    public sendFloat2(name:string,data:any){
-
-        let uniform = this.getUniformLocation(name);
-
-        this._getGl().uniform2f(uniform,data[0],data[1]);
-    }
-
-    public sendFloat3(name:string,data:any){
+    public sendFloat2(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform3f(uniform,data[0],data[1],data[2]);
+        this._getGl().uniform2f(uniform, data[0], data[1]);
     }
 
-    public sendFloat4(name:string,data:any){
+    public sendFloat3(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform4f(uniform,data[0],data[1],data[2],data[3]);
+        this._getGl().uniform3f(uniform, data[0], data[1], data[2]);
     }
 
-    public sendVector2(name:string,data:any){
+    public sendFloat4(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform2f(uniform,data.x,data.y);
+        this._getGl().uniform4f(uniform, data[0], data[1], data[2], data[3]);
     }
 
-    public sendVector3(name:string,data:any){
+    public sendVector2(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform3f(uniform,data.x,data.y,data.z);
+        this._getGl().uniform2f(uniform, data.x, data.y);
     }
 
-    public sendVector4(name:string,data:any){
+    public sendVector3(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform4f(uniform,data.x,data.y,data.z,data.w);
+        this._getGl().uniform3f(uniform, data.x, data.y, data.z);
     }
 
-    public sendNum1(name:string,data:number){
+    public sendVector4(name: string, data: any) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniform1i(uniform,data);
+        this._getGl().uniform4f(uniform, data.x, data.y, data.z, data.w);
     }
 
-    public sendMatrix4(name:string,data:Matrix4){
+    public sendNum1(name: string, data: number) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniformMatrix4fv(uniform,false,data.elements);
+        this._getGl().uniform1i(uniform, data);
     }
 
-    public sendMatrix4Array(name:string,data:any){
+    public sendMatrix4(name: string, data: Matrix4) {
 
         let uniform = this.getUniformLocation(name);
 
-        this._getGl().uniformMatrix4fv(uniform,false,data);
+        this._getGl().uniformMatrix4fv(uniform, false, data.elements);
     }
 
-    public getUniformLocation(name:string){
-        if(this._getUniformLocationCache[name] != void 0){
+    public sendMatrix4Array(name: string, data: any) {
+
+        let uniform = this.getUniformLocation(name);
+
+        this._getGl().uniformMatrix4fv(uniform, false, data);
+    }
+
+    public getUniformLocation(name: string) {
+        if (this._getUniformLocationCache[name] != void 0) {
             return this._getUniformLocationCache[name];
         }
 
-        let uniform = this._getGl().getUniformLocation(this._program.glProgram,name);
+        let uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
 
         return uniform;
 
     }
 
-    private _getGl(){
+    private _getGl() {
         return Device.getInstance().gl;
     }
 }

@@ -1,5 +1,5 @@
-import {Transform} from "./Transform";
+import { Transform } from "./Transform";
 
-export class ThreeDTransform extends Transform{
+export class ThreeDTransform extends Transform {
 
 }

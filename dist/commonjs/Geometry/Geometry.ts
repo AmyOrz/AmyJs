@@ -1,5 +1,5 @@
-import {Component} from "../core/Component";
+import { Component } from "../core/Component";
 
-export class Geometry extends Component{
+export class Geometry extends Component {
 
 }

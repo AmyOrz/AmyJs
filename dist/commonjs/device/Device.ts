@@ -5,7 +5,7 @@ import { ContextConfigData } from "../core/ContextConfig";
 
 @singleton()
 export class Device {
-    public static getInstance() { }
+    public static getInstance(): any { }
 
     public gl: WebGLRenderingContext;
     public canvas: HTMLCanvasElement;
@@ -13,7 +13,7 @@ export class Device {
 
     private _parentEle: HTMLElement;
 
-    public createGL(canvasId: string, contextConfigData: ContextConfigData, parentId: string): void {
+    public createGL(canvasId: string, contextConfigData: ContextConfigData, parentId: string) {
         let canvas: HTMLCanvasElement = document.createElement("canvas");
         if (canvasId) {
             canvas.setAttribute("id", canvasId);
@@ -38,7 +38,7 @@ export class Device {
             alert("你的浏览器不支持webgl");
 
     }
-    public setScreen(): void {
+    public setScreen() {
         let width: number = 0,
             height: number = 0,
             x: number = 0,

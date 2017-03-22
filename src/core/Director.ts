@@ -5,7 +5,4 @@ import { Scene } from "../Scene/Scene";
 export class Director {
     public static getInstance() { }
 
-    public scene: Scene = Scene;
-
-
 }

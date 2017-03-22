@@ -30,6 +30,20 @@ require("./build/gulp_task/clean/clean");
 require("./build/gulp_task/test/test");
 
 
+var generateIndex = require("wonder-tool-generate_es2015_index").generate;
+var ts = require("typescript");
+
+gulp.task("generateIndex", function(done) {
+    var rootDir = path.join(process.cwd(), "src"),
+        destDir = "./src/";
+
+    generateIndex("/", rootDir, ["*.ts", "**/*.ts"], destDir, {
+        target: ts.ScriptTarget.ES5,
+        module: ts.ModuleKind.System
+    });
+
+    done();
+});
 
 gulp.task("compileTsES2015", function(done) {
     compileTs.compileTsES2015(path.join(process.cwd(), tsconfigFile), {
@@ -66,7 +80,7 @@ gulp.task("formatTs", function(done) {
 
 
 
-gulp.task("build", gulpSync.sync(["clean",/* "compileTsES2015", */"compileTsCommonjs", "rollup", "formatTs"]));
+gulp.task("build", gulpSync.sync(["clean","generateIndex",/* "compileTsES2015", */"compileTsCommonjs", "rollup", "formatTs"]));
 
 
 

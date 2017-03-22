@@ -5,7 +5,7 @@ export class Component extends Entity {
     get transform() {
         if (this.entityObject == void 0) return null;
 
-        return this.entityObject.transform;
+        // return this.entityObject.transform;
     }
 
     public entityObject: EntityObject = null;
@@ -19,7 +19,7 @@ export class Component extends Entity {
     }
 
     public addToObject(entityObject: EntityObject) {
-        if (this.entityObject) this.entityObject.removeComponent(this);
+        // if (this.entityObject) this.entityObject.removeComponent(this);
 
         this.entityObject = entityObject;
 

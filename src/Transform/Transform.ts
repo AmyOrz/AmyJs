@@ -1,5 +1,5 @@
-import {Component} from "../core/Component";
+import { Component } from "../core/Component";
 
-export class Transform extends Component{
+export class Transform extends Component {
 
 }

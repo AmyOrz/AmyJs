@@ -9,7 +9,7 @@ export class GameObject extends EntityObject {
         return obj;
     }
     public initWhenCreate() {
-        super.initWhencreate();
+        // super.initWhencreate();
         this.name = `GameObject${this.uid}`;
     }
 }

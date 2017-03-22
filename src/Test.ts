@@ -1,27 +1,27 @@
 import { Main } from "./core/Main";
 import { Device } from "./device/Device";
-import {TriangleData} from "./Geometry/Data/TriangleData";
-import {Matrix4} from "./Math/Matrix4";
+import { TriangleData } from "./Geometry/Data/TriangleData";
+import { Matrix4 } from "./Math/Matrix4";
 
 
 export class Test {
     private vs: string =
-        "attribute vec4 a_Position;" +
-        "attribute vec4 a_Color;" +
-        "uniform mat4 u_MvpMatrix;" +
-        "varying vec4 v_Color;" +
-        "void main(){" +
-        "   gl_Position = u_MvpMatrix * a_Position;" +
-        "   v_Color = a_Color;" +
-        "}";
+    "attribute vec4 a_Position;" +
+    "attribute vec4 a_Color;" +
+    "uniform mat4 u_MvpMatrix;" +
+    "varying vec4 v_Color;" +
+    "void main(){" +
+    "   gl_Position = u_MvpMatrix * a_Position;" +
+    "   v_Color = a_Color;" +
+    "}";
     private fs: string =
-        '#ifdef GL_ES\n' +
-        'precision mediump float;\n' +
-        '#endif\n' +
-        "varying vec4 v_Color;" +
-        "void main(){" +
-        "   gl_FragColor = v_Color;" +
-        "}";
+    '#ifdef GL_ES\n' +
+    'precision mediump float;\n' +
+    '#endif\n' +
+    "varying vec4 v_Color;" +
+    "void main(){" +
+    "   gl_FragColor = v_Color;" +
+    "}";
 
     private _gl: WebGLRenderingContext = null;
     private _program: WebGLProgram = null;
@@ -31,7 +31,7 @@ export class Test {
 
         this._gl = Device.getInstance().gl;
         this._program = this.initShader(this.vs, this.fs);
-        if(!this._program)alert("program error");
+        if (!this._program) alert("program error");
 
         this._gl.useProgram(this._program);
 
@@ -41,22 +41,22 @@ export class Test {
         var a_Color: number = this._gl.getAttribLocation(this._program, "a_Color");
 
 
-        var u_MvpMatrix = this._gl.getUniformLocation(this._program,"u_MvpMatrix");
+        var u_MvpMatrix = this._gl.getUniformLocation(this._program, "u_MvpMatrix");
         var modelMatrix = new Matrix4();
         var viewMatrix = new Matrix4();
         var projMatrix = new Matrix4();
         var mvpMatrix = new Matrix4();
 
-        modelMatrix.setRotate(60,1,1,0);
-        viewMatrix.lookAt(0,0,-8,0,0,0,0,1,0);
-        projMatrix.perspective(45,1,1,100);
+        modelMatrix.setRotate(60, 1, 1, 0);
+        viewMatrix.lookAt(0, 0, -8, 0, 0, 0, 0, 1, 0);
+        projMatrix.perspective(45, 1, 1, 100);
 
         mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
-        this._gl.uniformMatrix4fv(u_MvpMatrix,false,mvpMatrix.elements);
+        this._gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
 
         var buffer = this._gl.createBuffer();
-        if(!buffer)alert('buffer error');
+        if (!buffer) alert('buffer error');
 
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.vertices, this._gl.STATIC_DRAW);
@@ -64,11 +64,11 @@ export class Test {
         this._gl.enableVertexAttribArray(a_Position);
 
         var buffer = this._gl.createBuffer();
-        if(!buffer)alert('buffer error');
+        if (!buffer) alert('buffer error');
 
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER,TriangleData.color,this._gl.STATIC_DRAW);
-        this._gl.vertexAttribPointer(a_Color,3,this._gl.FLOAT,false,0,0);
+        this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.color, this._gl.STATIC_DRAW);
+        this._gl.vertexAttribPointer(a_Color, 3, this._gl.FLOAT, false, 0, 0);
         this._gl.enableVertexAttribArray(a_Color);
 
         this._gl.clear(this._gl.COLOR_BUFFER_BIT);

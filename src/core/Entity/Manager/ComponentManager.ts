@@ -1,7 +1,7 @@
 import { EntityObject } from "../EntityObject";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
-import {Geometry} from "../../../Geometry/Geometry";
-import {Transform} from "../../../Transform/Transform";
+import { Geometry } from "../../../Geometry/Geometry";
+import { Transform } from "../../../Transform/Transform";
 
 export class ComponentManager {
     public static create(entityObject: EntityObject) {
@@ -15,7 +15,7 @@ export class ComponentManager {
     public transform: Transform = null;
 
     private _componentList: Collection<any> = new Collection<any>();
-    private _rendererComponent: RendererComponent = null;
+    // private _rendererComponent: RendererComponent = null;
     private _geometry: Geometry = null;
 
     public init() {

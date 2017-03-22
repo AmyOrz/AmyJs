@@ -23,7 +23,8 @@
     "rollup-plugin-node-resolve": "^2.0.0",
     "typescript": "^2.3.0-dev.20170224",
     "wonder-package": "^0.1.25",
-    "wonder-rollup-plugin-typescript": "^0.1.1"
+    "wonder-rollup-plugin-typescript": "^0.1.1",
+    "wonder-tool-generate_es2015_index": "^0.1.2"
   },
   "dependencies": {
     "wonder-frp": "^0.1.16"

@@ -14,6 +14,7 @@
         'dist/amy.js',
 
         'test/helper/jasmine/**',
+        'test/helper/*.js',
         'test/helper/sinonJs/*.js',
 
         'test/unit/**',

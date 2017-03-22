@@ -1,48 +1,88 @@
-import { EntityDispatcher } from "./EntityDispatcher";
-import { ComponentManager } from "./Manager/ComponentManager";
+import { Entity } from "./Entity";
+import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 
-export abstract class EntityObject extends EntityDispatcher {
-    get transform() {
-        return this.componentManager.transform;
-    }
+export abstract class EntityObject extends Entity {
+    public name: string = null;
+    protected _entityManager: EntityManager = EntityManager.create(this);
 
-    public parent: EntityObject = null;
-    protected componentManager: ComponentManager = ComponentManager.create(this);
-
-    public initWhencreate() {
-        // this.componentManager.transform = ThreeDTransform.create();
-
+    public init() {
+        this._entityManager.init();
+        return this;
     }
     public dispose() {
-        if (this.parent) {
-            this.parent.removeChild(this);
-            this.parent = null;
-        }
-        super.dispose();
-        this.componentManager.dispose();
+        this.onDispose();
+        this._entityManager.dispose();
+        return this;
     }
+    public onEnter() {
+
+    }
+    public onExit() {
+
+    }
+
+    public onDispose() {
+
+    }
+
+    public hasChild(child: EntityObject): boolean {
+        return this._entityManager.hasChild(child);
+    }
+
     public addChild(child: EntityObject) {
-        if (child.parent) {
-            child.parent.removeChild(child);
-        }
-        child.parent = this;
-        child.transform.parent = this.transform;
-
-        super.addChild(child);
-    }
-
-    public addChildren(children: EntityDispatcher);
-    public addChildren(children: Array<EntityDispatcher>);
-    public addChildren(children: Collection<EntityDispatcher>);
-
-    public addChildren(...args) {
-        super.addChildren(args, this.addChild);
+        this._entityManager.addChild(child);
 
         return this;
     }
 
-    public getComponent<T>(_class: any): T {
-        return this.componentManager.getComponent<T>(_class);
+    public addChildren(children: EntityObject);
+    public addChildren(children: Array<EntityObject>);
+    public addChildren(children: Collection<EntityObject>);
+
+    public addChildren(...args) {
+        this._entityManager.addChildren(args);
+
+        return this;
+    }
+
+    public forEach(func: (child: EntityObject, index: number) => void) {
+        this._entityManager.forEach(func);
+        return this;
+    }
+
+    public filter(func: (child: EntityObject, index: number) => boolean) {
+        return this._entityManager.filter(func);
+    }
+
+    public getChildren() {
+        return this._entityManager.getChildren();
+    }
+
+    public getAllChildren() {
+        return this._entityManager.getAllChildren();
+    }
+
+    public getChild(index: number) {
+        return this._entityManager.getChild(index);
+    }
+
+    public findChildById(uid: number) {
+        return this._entityManager.findChildById(uid);
+    }
+
+    public findChildByName(name: string) {
+        return this._entityManager.findChildByName(name);
+    }
+
+    public findChildrenByName(name: string) {
+        return this._entityManager.findChildrenByName(name);
+    }
+
+    public removeChild(child: EntityObject) {
+        return this._entityManager.removeChild(child);
+    }
+    public removeAllChildren() {
+        this._entityManager.removeAllChildren();
     }
 }
