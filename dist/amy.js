@@ -871,14 +871,14 @@
 	        this._gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 	        var buffer = this._gl.createBuffer();
 	        if (!buffer)
-	            alert('buffer error');
+	            alert('bufferContainer error');
 	        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
 	        this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.vertices, this._gl.STATIC_DRAW);
 	        this._gl.vertexAttribPointer(a_Position, 3, this._gl.FLOAT, false, 0, 0);
 	        this._gl.enableVertexAttribArray(a_Position);
 	        var buffer = this._gl.createBuffer();
 	        if (!buffer)
-	            alert('buffer error');
+	            alert('bufferContainer error');
 	        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
 	        this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.color, this._gl.STATIC_DRAW);
 	        this._gl.vertexAttribPointer(a_Color, 3, this._gl.FLOAT, false, 0, 0);
@@ -1660,73 +1660,463 @@
 	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
 	})(exports.EScreenSize || (exports.EScreenSize = {}));
 
-	var CubeData = (function () {
-	    function CubeData() {
-	    }
-	    return CubeData;
-	}());
-	CubeData.vertices = new Float32Array([
-	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
-	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
-	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
-	]);
-	CubeData.texCoords = new Float32Array([
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
-	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
-	]);
-	CubeData.indices = new Uint8Array([
-	    0, 1, 2, 0, 2, 3,
-	    4, 5, 6, 4, 6, 7,
-	    8, 9, 10, 8, 10, 11,
-	    12, 13, 14, 12, 14, 15,
-	    16, 17, 18, 16, 18, 19,
-	    20, 21, 22, 20, 22, 23
-	]);
-	CubeData.normals = new Float32Array([
-	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
-	]);
-	CubeData.color = new Float32Array([
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
-	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
-	]);
+	(function (EBufferDataType) {
+	    EBufferDataType[EBufferDataType["VERTICE"] = "VERTICE"] = "VERTICE";
+	    EBufferDataType[EBufferDataType["INDICE"] = "INDICE"] = "INDICE";
+	    EBufferDataType[EBufferDataType["NORMAL"] = "NORMAL"] = "NORMAL";
+	    EBufferDataType[EBufferDataType["TEXCOORD"] = "TEXCOORD"] = "TEXCOORD";
+	    EBufferDataType[EBufferDataType["COLOR"] = "COLOR"] = "COLOR";
+	})(exports.EBufferDataType || (exports.EBufferDataType = {}));
 
-	var PlaneData = (function () {
-	    function PlaneData() {
-	    }
-	    return PlaneData;
-	}());
-	PlaneData.vertices = new Float32Array([
-	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
-	]);
-	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
-	PlaneData.color = new Float32Array([
-	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-	]);
-	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
+	var root;
+	if (JudgeUtils.isNodeJs() && typeof global != "undefined") {
+	    root = global;
+	}
+	else {
+	    root = window;
+	}
 
-	var Geometry = (function (_super) {
-	    __extends(Geometry, _super);
-	    function Geometry() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	var Log = (function () {
+	    function Log() {
 	    }
-	    return Geometry;
-	}(Component));
+	    Log.log = function () {
+	        var messages = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            messages[_i] = arguments[_i];
+	        }
+	        if (!this._exec("log", messages)) {
+	            root.alert(messages.join(","));
+	        }
+	        this._exec("trace", messages);
+	    };
+	    Log.assert = function (cond) {
+	        var messages = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            messages[_i - 1] = arguments[_i];
+	        }
+	        if (cond) {
+	            if (!this._exec("assert", arguments, 1)) {
+	                this.log.apply(this, Array.prototype.slice.call(arguments, 1));
+	            }
+	        }
+	    };
+	    Log.error = function (cond) {
+	        var message = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            message[_i - 1] = arguments[_i];
+	        }
+	        if (cond) {
+	            throw new Error(Array.prototype.slice.call(arguments, 1).join("\n"));
+	        }
+	    };
+	    Log.warn = function () {
+	        var message = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            message[_i] = arguments[_i];
+	        }
+	        var result = this._exec("warn", arguments);
+	        if (!result) {
+	            this.log.apply(this, arguments);
+	        }
+	        else {
+	            this._exec("trace", ["warn trace"]);
+	        }
+	    };
+	    Log._exec = function (consoleMethod, args, sliceBegin) {
+	        if (sliceBegin === void 0) { sliceBegin = 0; }
+	        if (root.console && root.console[consoleMethod]) {
+	            root.console[consoleMethod].apply(root.console, Array.prototype.slice.call(args, sliceBegin));
+	            return true;
+	        }
+	        return false;
+	    };
+	    return Log;
+	}());
+	Log.info = {
+	    INVALID_PARAM: "invalid parameter",
+	    helperFunc: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var result = "";
+	        args.forEach(function (val) {
+	            result += String(val) + " ";
+	        });
+	        return result.slice(0, -1);
+	    },
+	    assertion: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        if (args.length === 2) {
+	            return this.helperFunc(args[0], args[1]);
+	        }
+	        else if (args.length === 3) {
+	            return this.helperFunc(args[1], args[0], args[2]);
+	        }
+	        else {
+	            throw new Error("args.length must <= 3");
+	        }
+	    },
+	    FUNC_INVALID: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("invalid");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_BE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must be");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_NOT_BE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must not be");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SHOULD: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("should");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SHOULD_NOT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("should not");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SUPPORT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("support");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_NOT_SUPPORT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("not support");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_DEFINE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must define");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_NOT_DEFINE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must not define");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_UNKNOW: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("unknow");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_EXPECT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("expect");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_UNEXPECT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("unexpect");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_EXIST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("exist");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_NOT_EXIST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("not exist");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_ONLY: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("only");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_CAN_NOT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("can't");
+	        return this.assertion.apply(this, args);
+	    }
+	};
+
+	var Hash = (function () {
+	    function Hash(children) {
+	        if (children === void 0) { children = {}; }
+	        this._children = null;
+	        this._children = children;
+	    }
+	    Hash.create = function (children) {
+	        if (children === void 0) { children = {}; }
+	        var obj = new this(children);
+	        return obj;
+	    };
+	    Hash.prototype.getChildren = function () {
+	        return this._children;
+	    };
+	    Hash.prototype.getCount = function () {
+	        var result = 0, children = this._children, key = null;
+	        for (key in children) {
+	            if (children.hasOwnProperty(key)) {
+	                result++;
+	            }
+	        }
+	        return result;
+	    };
+	    Hash.prototype.getKeys = function () {
+	        var result = Collection.create(), children = this._children, key = null;
+	        for (key in children) {
+	            if (children.hasOwnProperty(key)) {
+	                result.addChild(key);
+	            }
+	        }
+	        return result;
+	    };
+	    Hash.prototype.getValues = function () {
+	        var result = Collection.create(), children = this._children, key = null;
+	        for (key in children) {
+	            if (children.hasOwnProperty(key)) {
+	                result.addChild(children[key]);
+	            }
+	        }
+	        return result;
+	    };
+	    Hash.prototype.getChild = function (key) {
+	        return this._children[key];
+	    };
+	    Hash.prototype.setValue = function (key, value) {
+	        this._children[key] = value;
+	        return this;
+	    };
+	    Hash.prototype.addChild = function (key, value) {
+	        this._children[key] = value;
+	        return this;
+	    };
+	    Hash.prototype.addChildren = function (arg) {
+	        var i = null, children = null;
+	        if (arg instanceof Hash) {
+	            children = arg.getChildren();
+	        }
+	        else {
+	            children = arg;
+	        }
+	        for (i in children) {
+	            if (children.hasOwnProperty(i)) {
+	                this.addChild(i, children[i]);
+	            }
+	        }
+	        return this;
+	    };
+	    Hash.prototype.appendChild = function (key, value) {
+	        if (this._children[key] instanceof Collection) {
+	            var c = (this._children[key]);
+	            c.addChild(value);
+	        }
+	        else {
+	            this._children[key] = (Collection.create().addChild(value));
+	        }
+	        return this;
+	    };
+	    Hash.prototype.setChildren = function (children) {
+	        this._children = children;
+	    };
+	    Hash.prototype.removeChild = function (arg) {
+	        var result = [];
+	        if (JudgeUtils.isString(arg)) {
+	            var key = arg;
+	            result.push(this._children[key]);
+	            this._children[key] = void 0;
+	            delete this._children[key];
+	        }
+	        else if (JudgeUtils.isFunction(arg)) {
+	            var func_1 = arg, self_1 = this;
+	            this.forEach(function (val, key) {
+	                if (func_1(val, key)) {
+	                    result.push(self_1._children[key]);
+	                    self_1._children[key] = void 0;
+	                    delete self_1._children[key];
+	                }
+	            });
+	        }
+	        return Collection.create(result);
+	    };
+	    Hash.prototype.removeAllChildren = function () {
+	        this._children = {};
+	    };
+	    Hash.prototype.hasChild = function (key) {
+	        return this._children[key] !== void 0;
+	    };
+	    Hash.prototype.hasChildWithFunc = function (func) {
+	        var result = false;
+	        this.forEach(function (val, key) {
+	            if (func(val, key)) {
+	                result = true;
+	                return $BREAK;
+	            }
+	        });
+	        return result;
+	    };
+	    Hash.prototype.forEach = function (func, context) {
+	        var children = this._children;
+	        for (var i in children) {
+	            if (children.hasOwnProperty(i)) {
+	                if (func.call(context, children[i], i) === $BREAK) {
+	                    break;
+	                }
+	            }
+	        }
+	        return this;
+	    };
+	    Hash.prototype.filter = function (func) {
+	        var result = {}, children = this._children, value = null;
+	        for (var key in children) {
+	            if (children.hasOwnProperty(key)) {
+	                value = children[key];
+	                if (func.call(children, value, key)) {
+	                    result[key] = value;
+	                }
+	            }
+	        }
+	        return Hash.create(result);
+	    };
+	    Hash.prototype.findOne = function (func) {
+	        var result = [], self = this, scope = this._children;
+	        this.forEach(function (val, key) {
+	            if (!func.call(scope, val, key)) {
+	                return;
+	            }
+	            result = [key, self.getChild(key)];
+	            return $BREAK;
+	        });
+	        return result;
+	    };
+	    Hash.prototype.map = function (func) {
+	        var resultMap = {};
+	        this.forEach(function (val, key) {
+	            var result = func(val, key);
+	            if (result !== $REMOVE) {
+	                Log.error(!JudgeUtils.isArray(result) || result.length !== 2, Log.info.FUNC_MUST_BE("iterator", "[key, value]"));
+	                resultMap[result[0]] = result[1];
+	            }
+	        });
+	        return Hash.create(resultMap);
+	    };
+	    Hash.prototype.toCollection = function () {
+	        var result = Collection.create();
+	        this.forEach(function (val, key) {
+	            if (val instanceof Collection) {
+	                result.addChildren(val);
+	            }
+	            else {
+	                result.addChild(val);
+	            }
+	        });
+	        return result;
+	    };
+	    Hash.prototype.toArray = function () {
+	        var result = [];
+	        this.forEach(function (val, key) {
+	            if (val instanceof Collection) {
+	                result = result.concat(val.getChildren());
+	            }
+	            else {
+	                result.push(val);
+	            }
+	        });
+	        return result;
+	    };
+	    Hash.prototype.clone = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var target = null, isDeep = null;
+	        if (args.length === 0) {
+	            isDeep = false;
+	            target = Hash.create();
+	        }
+	        else if (args.length === 1) {
+	            if (JudgeUtils.isBoolean(args[0])) {
+	                target = Hash.create();
+	                isDeep = args[0];
+	            }
+	            else {
+	                target = args[0];
+	                isDeep = false;
+	            }
+	        }
+	        else {
+	            target = args[0];
+	            isDeep = args[1];
+	        }
+	        if (isDeep === true) {
+	            target.setChildren(ExtendUtils.extendDeep(this._children));
+	        }
+	        else {
+	            target.setChildren(ExtendUtils.extend({}, this._children));
+	        }
+	        return target;
+	    };
+	    return Hash;
+	}());
 
 	var Buffer = (function () {
 	    function Buffer() {
@@ -1775,11 +2165,13 @@
 	    ArrayBuffer.prototype.initWhenCreate = function (data, size, type, usage) {
 	        if (type === void 0) { type = exports.EBufferType.FLOAT; }
 	        if (usage === void 0) { usage = exports.EBufferUseage.STATIC_DRAW; }
+	        if (data == void 0)
+	            return null;
 	        var gl = exports.Device.getInstance().gl;
 	        var typeData = new Float32Array(data);
 	        this.buffer = gl.createBuffer();
 	        if (!this.buffer) {
-	            console.log("the buffer create error");
+	            console.log("the bufferContainer create error");
 	            return null;
 	        }
 	        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -1795,6 +2187,416 @@
 	    };
 	    return ArrayBuffer;
 	}(Buffer));
+
+	var BufferContainer = (function () {
+	    function BufferContainer() {
+	        this.geometryData = null;
+	        this._bufferList = new Hash();
+	    }
+	    BufferContainer.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    BufferContainer.prototype.init = function () {
+	        this.addChild("verticeBuffer", this._getBufferByType(exports.EBufferDataType.VERTICE));
+	        this.addChild("colorBuffer", this._getBufferByType(exports.EBufferDataType.COLOR));
+	    };
+	    BufferContainer.prototype.addChild = function (bufferName, buffer) {
+	        this._bufferList.addChild(bufferName, buffer);
+	    };
+	    BufferContainer.prototype.getChild = function (bufferName) {
+	        return this._bufferList.getChild(bufferName);
+	    };
+	    BufferContainer.prototype.hasChild = function (bufferName) {
+	        return this._bufferList.hasChild(bufferName);
+	    };
+	    BufferContainer.prototype.getChildren = function () {
+	        return this._bufferList.getChildren();
+	    };
+	    BufferContainer.prototype._getBufferByType = function (type) {
+	        var buffer = null;
+	        switch (type) {
+	            case exports.EBufferDataType.VERTICE:
+	                buffer = this._getVerticeBuffer();
+	                break;
+	            case exports.EBufferDataType.COLOR:
+	                buffer = this._getColorBuffer();
+	                break;
+	        }
+	        return buffer;
+	    };
+	    BufferContainer.prototype._getVerticeBuffer = function () {
+	        return ArrayBuffer.create(this.geometryData.vertice, 3);
+	    };
+	    BufferContainer.prototype._getColorBuffer = function () {
+	        return ArrayBuffer.create(this.geometryData.color, 3);
+	    };
+	    BufferContainer.prototype._getNormalBuffer = function () {
+	    };
+	    BufferContainer.prototype._getIndiceBuffer = function () {
+	    };
+	    BufferContainer.prototype._getTexCoordBuffer = function () {
+	    };
+	    return BufferContainer;
+	}());
+
+	var CubeData = (function () {
+	    function CubeData() {
+	    }
+	    return CubeData;
+	}());
+	CubeData.vertices = new Float32Array([
+	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
+	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
+	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
+	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
+	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
+	]);
+	CubeData.texCoords = new Float32Array([
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
+	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
+	]);
+	CubeData.indices = new Uint8Array([
+	    0, 1, 2, 0, 2, 3,
+	    4, 5, 6, 4, 6, 7,
+	    8, 9, 10, 8, 10, 11,
+	    12, 13, 14, 12, 14, 15,
+	    16, 17, 18, 16, 18, 19,
+	    20, 21, 22, 20, 22, 23
+	]);
+	CubeData.normals = new Float32Array([
+	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
+	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
+	]);
+	CubeData.color = new Float32Array([
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
+	]);
+
+	var GeometryData = (function () {
+	    function GeometryData() {
+	        this.vertice = null;
+	        this.color = null;
+	    }
+	    GeometryData.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    return GeometryData;
+	}());
+
+	var PlaneData = (function () {
+	    function PlaneData() {
+	    }
+	    return PlaneData;
+	}());
+	PlaneData.vertices = new Float32Array([
+	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
+	]);
+	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
+	PlaneData.color = new Float32Array([
+	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+	]);
+	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
+
+	var Geometry = (function (_super) {
+	    __extends(Geometry, _super);
+	    function Geometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this._bufferContainer = null;
+	        return _this;
+	    }
+	    Object.defineProperty(Geometry.prototype, "geometryData", {
+	        get: function () {
+	            return this._bufferContainer.geometryData;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Geometry.prototype.init = function () {
+	        var computeData = this.computeData();
+	        this._bufferContainer = BufferContainer.create();
+	        this._bufferContainer.geometryData = this.createGeometryData(computeData);
+	        this._bufferContainer.init();
+	    };
+	    Geometry.prototype.createGeometryData = function (computeData) {
+	        var vertice = computeData.vertice, color = computeData.color;
+	        var geometryData = GeometryData.create();
+	        geometryData.vertice = vertice;
+	        geometryData.color = color;
+	        return geometryData;
+	    };
+	    return Geometry;
+	}(Component));
+
+	var TriangleGeometry = (function (_super) {
+	    __extends(TriangleGeometry, _super);
+	    function TriangleGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.width = 0;
+	        _this.height = 0;
+	        return _this;
+	    }
+	    TriangleGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    TriangleGeometry.prototype.computeData = function () {
+	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertices = null, texCoords = null, indices = null, color = null, normals = null;
+	        vertices = [
+	            0.0, up, 0,
+	            left, down, 0,
+	            right, down, 0
+	        ];
+	        indices = [
+	            0, 1, 2
+	        ];
+	        texCoords = [
+	            0.5, 1.0,
+	            0.0, 0.0,
+	            1.0, 0.0
+	        ];
+	        normals = [
+	            0, 0, 1,
+	            0, 0, 1,
+	            0, 0, 1
+	        ];
+	        color = [
+	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
+	        ];
+	        return {
+	            vertice: vertices,
+	            color: color
+	        };
+	    };
+	    return TriangleGeometry;
+	}(Geometry));
+
+	function singleton$1(isInitWhenCreate) {
+	    if (isInitWhenCreate === void 0) { isInitWhenCreate = false; }
+	    return function (target) {
+	        target._instance = null;
+	        if (isInitWhenCreate) {
+	            target.getInstance = function () {
+	                if (target._instance == null) {
+	                    var instance = new target();
+	                    target._instance = instance;
+	                    instance.initWhenCreate();
+	                }
+	                return target._instance;
+	            };
+	        }
+	        else {
+	            target.getInstance = function () {
+	                if (target._instance == null) {
+	                    target._instance = new target();
+	                }
+	                return target._instance;
+	            };
+	        }
+	    };
+	}
+
+	var View$1 = (function () {
+	    function View(_dom) {
+	        this._dom = _dom;
+	    }
+	    View.create = function (view) {
+	        var obj = new this(view);
+	        return obj;
+	    };
+	    Object.defineProperty(View.prototype, "offset", {
+	        get: function () {
+	            var view = this._dom, offset = { x: view.offsetLeft, y: view.offsetTop };
+	            while (view = view.offsetParent) {
+	                offset.x += view.offsetLeft;
+	                offset.y += view.offsetTop;
+	            }
+	            return offset;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "dom", {
+	        get: function () {
+	            return this._dom;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "x", {
+	        get: function () {
+	            return this._dom.style.x;
+	        },
+	        set: function (val) {
+	            this._dom.style.x = val + "px";
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "y", {
+	        get: function () {
+	            return this.dom.style.y;
+	        },
+	        set: function (val) {
+	            this._dom.style.y = val + "px";
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "width", {
+	        get: function () {
+	            return this.dom.clientWidth;
+	        },
+	        set: function (width) {
+	            this._dom.width = width;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "height", {
+	        get: function () {
+	            return this.dom.clientHeight;
+	        },
+	        set: function (height) {
+	            this._dom.height = height;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "styleWidth", {
+	        get: function () {
+	            return this._dom.style.width;
+	        },
+	        set: function (width) {
+	            this._dom.style.width = width;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(View.prototype, "styleHeight", {
+	        get: function () {
+	            return this._dom.style.height;
+	        },
+	        set: function (height) {
+	            this._dom.style.height = height;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    View.prototype.getContext = function (contextConfig) {
+	        var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
+	        var gl;
+	        for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
+	            var item = names_1[_i];
+	            try {
+	                gl = this._dom.getContext(item, contextConfig);
+	            }
+	            catch (e) {
+	            }
+	            if (gl) {
+	                break;
+	            }
+	        }
+	        return gl;
+	    };
+	    View.prototype.initCanvas = function () {
+	        this._dom.style.cssText = "position:absolute;left:0;top:0;";
+	    };
+	    return View;
+	}());
+
+	var Device$1 = (function () {
+	    function Device() {
+	    }
+	    Device.getInstance = function () { };
+	    Device.prototype.createGL = function (canvasId, contextConfigData, parentId) {
+	        var canvas = document.createElement("canvas");
+	        if (canvasId) {
+	            canvas.setAttribute("id", canvasId);
+	        }
+	        if (parentId) {
+	            this._parentEle = document.getElementById(parentId);
+	            if (this._parentEle == void 0)
+	                alert("找不到指定parentId的dom节点");
+	        }
+	        if (this._parentEle)
+	            this._parentEle.appendChild(canvas);
+	        else {
+	            var body = document.createElement("body");
+	            body.style.margin = "0";
+	            body.appendChild(canvas);
+	            document.querySelector("html").appendChild(body);
+	        }
+	        this.canvas = canvas;
+	        this.view = View$1.create(this.canvas);
+	        this.gl = this.view.getContext(contextConfigData);
+	        if (!this.gl)
+	            alert("你的浏览器不支持webgl");
+	    };
+	    Device.prototype.setScreen = function () {
+	        var width = 0, height = 0, x = 0, y = 0, styleWidth = null, styleHeight = null;
+	        if (this._parentEle) {
+	            x = this._parentEle.offsetLeft;
+	            y = this._parentEle.offsetTop;
+	            width = this._parentEle.offsetWidth;
+	            height = this._parentEle.offsetHeight;
+	            styleWidth = width + "px";
+	            styleHeight = height + "px";
+	        }
+	        else {
+	            width = window.innerWidth;
+	            height = window.innerHeight;
+	            styleWidth = "100%";
+	            styleHeight = "100%";
+	        }
+	        this.view.initCanvas();
+	        this.view.x = x;
+	        this.view.y = y;
+	        this.view.width = width;
+	        this.view.height = height;
+	        this.view.styleWidth = styleWidth;
+	        this.view.styleHeight = styleHeight;
+	        this.gl.viewport(0, 0, width, height);
+	        this._parentEle = null;
+	    };
+	    return Device;
+	}());
+	Device$1 = __decorate([
+	    singleton$1()
+	], Device$1);
+
+	var Buffer$1 = (function () {
+	    function Buffer() {
+	        this.buffer = null;
+	    }
+	    Buffer.prototype.dispose = function () {
+	        Device$1.getInstance().gl.deleteBuffer(this.buffer);
+	        delete this.buffer;
+	    };
+	    return Buffer;
+	}());
+
+	var ElementArrayBuffer = (function (_super) {
+	    __extends(ElementArrayBuffer, _super);
+	    function ElementArrayBuffer() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    return ElementArrayBuffer;
+	}(Buffer$1));
 
 	var GLSLDataSender = (function () {
 	    function GLSLDataSender(_program) {
@@ -1918,15 +2720,19 @@
 	exports.EntityManager = EntityManager;
 	exports.Main = Main;
 	exports.View = View;
+	exports.BufferContainer = BufferContainer;
 	exports.CubeData = CubeData;
+	exports.GeometryData = GeometryData;
 	exports.PlaneData = PlaneData;
 	exports.TriangleData = TriangleData;
 	exports.Geometry = Geometry;
+	exports.TriangleGeometry = TriangleGeometry;
 	exports.Matrix4 = Matrix4;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
+	exports.ElementArrayBuffer = ElementArrayBuffer;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
 	exports.ThreeDTransform = ThreeDTransform;

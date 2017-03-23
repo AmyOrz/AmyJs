@@ -3,7 +3,7 @@ import { EntityObject } from "../core/Entity/EntityObject";
 
 @singleton()
 export class Scene extends EntityObject {
-    public static getInstance():any{ }
+    public static getInstance(): any { }
 
 
 }

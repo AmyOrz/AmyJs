@@ -56,7 +56,7 @@ export class Test {
 
 
         var buffer = this._gl.createBuffer();
-        if (!buffer) alert('buffer error');
+        if (!buffer) alert('bufferContainer error');
 
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.vertices, this._gl.STATIC_DRAW);
@@ -64,7 +64,7 @@ export class Test {
         this._gl.enableVertexAttribArray(a_Position);
 
         var buffer = this._gl.createBuffer();
-        if (!buffer) alert('buffer error');
+        if (!buffer) alert('bufferContainer error');
 
         this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
         this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.color, this._gl.STATIC_DRAW);

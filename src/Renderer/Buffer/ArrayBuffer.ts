@@ -17,13 +17,13 @@ export class ArrayBuffer extends Buffer {
     public usage: EBufferUseage = null;
 
     public initWhenCreate(data: number[], size: number, type: EBufferType = EBufferType.FLOAT, usage: EBufferUseage = EBufferUseage.STATIC_DRAW) {
-
+        if (data == void 0) return null;
         let gl = Device.getInstance().gl;
         let typeData = new Float32Array(data);
 
         this.buffer = gl.createBuffer();
         if (!this.buffer) {
-            console.log("the buffer create error");
+            console.log("the bufferContainer create error");
             return null;
         }
 
