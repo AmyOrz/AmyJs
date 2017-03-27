@@ -6,8 +6,8 @@ export class TriangleGeometry extends Geometry {
 
         return obj;
     }
-    public width: number = 0;
-    public height: number = 0;
+    public width: number = 1;
+    public height: number = 1;
 
     public computeData(): GeometryDataType {
         var width = this.width,
@@ -49,7 +49,7 @@ export class TriangleGeometry extends Geometry {
         return {
             vertice: vertices,
             // texCoord: texCoords,
-            color:color
+            color: color
         };
     }
 }

@@ -1,11 +1,13 @@
 import { Component } from "../core/Component";
 import { GeometryData } from "./Data/GeometryData";
 import { BufferContainer } from "./BufferContainer/BufferContainer";
+import { Buffer } from "../Renderer/Buffer/Buffer";
 export type GeometryDataType = {
     vertice: number[];
     color?: number[];
     texCoord?: number[];
 }
+
 export abstract class Geometry extends Component {
     get geometryData() {
         return this._bufferContainer.geometryData;
@@ -22,6 +24,10 @@ export abstract class Geometry extends Component {
 
         this._bufferContainer.init();
 
+    }
+
+    public getChild(name: string): Buffer {
+        return this._bufferContainer.getChild(name);
     }
 
     protected abstract computeData(): GeometryDataType;

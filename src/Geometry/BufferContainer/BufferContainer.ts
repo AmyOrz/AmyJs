@@ -22,6 +22,7 @@ export class BufferContainer {
         // this.addChild("indiceBuffer", this._getBufferByType(EBufferDataType.INDICE));
         // this.addChild("normalBuffer", this._getBufferByType(EBufferDataType.NORMAL));
         // this.addChild("texCoordBuffer", this._getBufferByType(EBufferDataType.TEXCOORD));
+
     }
 
     public addChild(bufferName: string, buffer: Buffer) {

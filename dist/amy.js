@@ -236,19 +236,6 @@
 	}());
 	Main._parentId = null;
 
-	var TriangleData = (function () {
-	    function TriangleData() {
-	    }
-	    return TriangleData;
-	}());
-	TriangleData.vertices = new Float32Array([
-	    -0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0
-	]);
-	TriangleData.indices = new Uint8Array([0, 1, 2]);
-	TriangleData.color = new Float32Array([
-	    1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-	]);
-
 	var Vector3 = (function () {
 	    function Vector3(opt_src) {
 	        var v = new Float32Array(3);
@@ -829,9 +816,9 @@
 	    return Matrix4;
 	}());
 
-	var Test = (function () {
-	    function Test() {
-	        this.vs = "attribute vec4 a_Position;" +
+	var Shader = (function () {
+	    function Shader() {
+	        this.VSource = "attribute vec4 a_Position;" +
 	            "attribute vec4 a_Color;" +
 	            "uniform mat4 u_MvpMatrix;" +
 	            "varying vec4 v_Color;" +
@@ -839,170 +826,20 @@
 	            "   gl_Position = u_MvpMatrix * a_Position;" +
 	            "   v_Color = a_Color;" +
 	            "}";
-	        this.fs = '#ifdef GL_ES\n' +
-	            'precision mediump float;\n' +
-	            '#endif\n' +
+	        this.FSource = "#ifdef GL_ES\n" +
+	            "precision mediump float;\n" +
+	            "#endif\n" +
 	            "varying vec4 v_Color;" +
 	            "void main(){" +
 	            "   gl_FragColor = v_Color;" +
 	            "}";
-	        this._gl = null;
-	        this._program = null;
 	    }
-	    Test.prototype.testCanvas = function () {
-	        Main.setCanvas("webgl").init();
-	        this._gl = exports.Device.getInstance().gl;
-	        this._program = this.initShader(this.vs, this.fs);
-	        if (!this._program)
-	            alert("program error");
-	        this._gl.useProgram(this._program);
-	        this._gl.clearColor(0, 0, 0, 1);
-	        var a_Position = this._gl.getAttribLocation(this._program, "a_Position");
-	        var a_Color = this._gl.getAttribLocation(this._program, "a_Color");
-	        var u_MvpMatrix = this._gl.getUniformLocation(this._program, "u_MvpMatrix");
-	        var modelMatrix = new Matrix4();
-	        var viewMatrix = new Matrix4();
-	        var projMatrix = new Matrix4();
-	        var mvpMatrix = new Matrix4();
-	        modelMatrix.setRotate(60, 1, 1, 0);
-	        viewMatrix.lookAt(0, 0, -8, 0, 0, 0, 0, 1, 0);
-	        projMatrix.perspective(45, 1, 1, 100);
-	        mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
-	        this._gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-	        var buffer = this._gl.createBuffer();
-	        if (!buffer)
-	            alert('bufferContainer error');
-	        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
-	        this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.vertices, this._gl.STATIC_DRAW);
-	        this._gl.vertexAttribPointer(a_Position, 3, this._gl.FLOAT, false, 0, 0);
-	        this._gl.enableVertexAttribArray(a_Position);
-	        var buffer = this._gl.createBuffer();
-	        if (!buffer)
-	            alert('bufferContainer error');
-	        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, buffer);
-	        this._gl.bufferData(this._gl.ARRAY_BUFFER, TriangleData.color, this._gl.STATIC_DRAW);
-	        this._gl.vertexAttribPointer(a_Color, 3, this._gl.FLOAT, false, 0, 0);
-	        this._gl.enableVertexAttribArray(a_Color);
-	        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-	        this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
+	    Shader.create = function () {
+	        var obj = new this();
+	        return obj;
 	    };
-	    Test.prototype.initShader = function (vs, fs) {
-	        var program = this._gl.createProgram();
-	        var vshader = this._loadShader(this._gl.VERTEX_SHADER, vs);
-	        var fshader = this._loadShader(this._gl.FRAGMENT_SHADER, fs);
-	        if (!vshader || !fshader) {
-	            return;
-	        }
-	        this._gl.attachShader(program, vshader);
-	        this._gl.attachShader(program, fshader);
-	        this._gl.linkProgram(program);
-	        var linked = this._gl.getProgramParameter(program, this._gl.LINK_STATUS);
-	        if (!linked) {
-	            var err = this._gl.getProgramInfoLog(program);
-	            console.log("faild to link _program:" + err);
-	            this._gl.deleteProgram(program);
-	            this._gl.deleteShader(vshader);
-	            this._gl.deleteShader(vshader);
-	            return;
-	        }
-	        if (!program)
-	            console.log("program error");
-	        return program;
-	    };
-	    Test.prototype._loadShader = function (type, value) {
-	        var shader = this._gl.createShader(type);
-	        if (shader == null) {
-	            console.log("unable to create shader");
-	            return;
-	        }
-	        this._gl.shaderSource(shader, value);
-	        this._gl.compileShader(shader);
-	        var compiled = this._gl.getShaderParameter(shader, this._gl.COMPILE_STATUS);
-	        if (!compiled) {
-	            var error = this._gl.getShaderInfoLog(shader);
-	            console.log("faild to compile shader:" + error);
-	            this._gl.deleteShader(shader);
-	            return;
-	        }
-	        return shader;
-	    };
-	    Test.prototype._createTriangle = function () {
-	    };
-	    return Test;
+	    return Shader;
 	}());
-	var a = new Test();
-	a.testCanvas();
-
-	var Entity = (function () {
-	    function Entity(uidPre) {
-	        this._uid = null;
-	        this._uid = uidPre + String(Entity.UID++);
-	    }
-	    Object.defineProperty(Entity.prototype, "uid", {
-	        get: function () {
-	            return this._uid;
-	        },
-	        set: function (uid) {
-	            this._uid = uid;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    return Entity;
-	}());
-	Entity.UID = 1;
-
-	var Component = (function (_super) {
-	    __extends(Component, _super);
-	    function Component() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.entityObject = null;
-	        return _this;
-	    }
-	    Object.defineProperty(Component.prototype, "transform", {
-	        get: function () {
-	            if (this.entityObject == void 0)
-	                return null;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Component.prototype.init = function () { };
-	    Component.prototype.dispose = function () { };
-	    Component.prototype.clone = function () {
-	    };
-	    Component.prototype.addToObject = function (entityObject) {
-	        this.entityObject = entityObject;
-	        this.addToComponentContainer();
-	    };
-	    Component.prototype.addToComponentContainer = function () {
-	    };
-	    Component.prototype.removeFromObject = function (entityObject) {
-	        this.removeFromComponentContainer();
-	    };
-	    Component.prototype.removeFromComponentContainer = function () {
-	    };
-	    return Component;
-	}(Entity));
-
-	exports.Director = (function () {
-	    function Director() {
-	    }
-	    Director.getInstance = function () { };
-	    return Director;
-	}());
-	exports.Director = __decorate([
-	    singleton()
-	], exports.Director);
-
-	var Entity$1 = (function () {
-	    function Entity() {
-	        this.uid = Entity._count;
-	        Entity._count++;
-	    }
-	    return Entity;
-	}());
-	Entity$1._count = 1;
 
 	var JudgeUtils = (function () {
 	    function JudgeUtils() {
@@ -1372,301 +1209,6 @@
 	    };
 	    return Collection;
 	}(List));
-
-	var JudgeUtils$2 = (function () {
-	    function JudgeUtils() {
-	    }
-	    JudgeUtils.isArray = function (arr) {
-	        var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-	        var length = arr && arr.length;
-	        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
-	    };
-	    JudgeUtils.isArrayExactly = function (arr) {
-	        return Object.prototype.toString.call(arr) === "[object Array]";
-	    };
-	    JudgeUtils.isNumber = function (num) {
-	        return typeof num == "number";
-	    };
-	    JudgeUtils.isNumberExactly = function (num) {
-	        return Object.prototype.toString.call(num) === "[object Number]";
-	    };
-	    JudgeUtils.isString = function (str) {
-	        return typeof str == "string";
-	    };
-	    JudgeUtils.isStringExactly = function (str) {
-	        return Object.prototype.toString.call(str) === "[object String]";
-	    };
-	    JudgeUtils.isBoolean = function (bool) {
-	        return bool === true || bool === false || toString.call(bool) === '[boolect Boolean]';
-	    };
-	    JudgeUtils.isDom = function (obj) {
-	        return !!(obj && obj.nodeType === 1);
-	    };
-	    JudgeUtils.isObject = function (obj) {
-	        var type = typeof obj;
-	        return type === 'function' || type === 'object' && !!obj;
-	    };
-	    JudgeUtils.isDirectObject = function (obj) {
-	        return Object.prototype.toString.call(obj) === "[object Object]";
-	    };
-	    JudgeUtils.isHostMethod = function (object, property) {
-	        var type = typeof object[property];
-	        return type === "function" ||
-	            (type === "object" && !!object[property]);
-	    };
-	    JudgeUtils.isNodeJs = function () {
-	        return ((typeof global != "undefined" && global.module) || (typeof module != "undefined")) && typeof module.exports != "undefined";
-	    };
-	    JudgeUtils.isFunction = function (func) {
-	        return true;
-	    };
-	    return JudgeUtils;
-	}());
-	if (typeof /./ != 'function' && typeof Int8Array != 'object') {
-	    JudgeUtils$2.isFunction = function (func) {
-	        return typeof func == 'function';
-	    };
-	}
-	else {
-	    JudgeUtils$2.isFunction = function (func) {
-	        return Object.prototype.toString.call(func) === "[object Function]";
-	    };
-	}
-
-	var JudgeUtils$1 = (function (_super) {
-	    __extends(JudgeUtils$$1, _super);
-	    function JudgeUtils$$1() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    JudgeUtils$$1.isPromise = function (obj) {
-	        return !!obj
-	            && !_super.isFunction.call(this, obj.subscribe)
-	            && _super.isFunction.call(this, obj.then);
-	    };
-	    JudgeUtils$$1.isEqual = function (ob1, ob2) {
-	        return ob1.uid === ob2.uid;
-	    };
-	    JudgeUtils$$1.isIObserver = function (i) {
-	        return i.next && i.error && i.completed;
-	    };
-	    return JudgeUtils$$1;
-	}(JudgeUtils$2));
-
-	var EntityManager = (function (_super) {
-	    __extends(EntityManager, _super);
-	    function EntityManager(_entityDispatcher) {
-	        var _this = _super.call(this) || this;
-	        _this._entityDispatcher = _entityDispatcher;
-	        _this._objectList = new Collection();
-	        return _this;
-	    }
-	    EntityManager.create = function (entityDispatcher) {
-	        var obj = new this(entityDispatcher);
-	        return obj;
-	    };
-	    EntityManager.prototype.init = function () {
-	        this.forEach(function (child) {
-	            child.init();
-	        });
-	    };
-	    EntityManager.prototype.dispose = function () {
-	        this.forEach(function (child) {
-	            child.init();
-	        });
-	    };
-	    EntityManager.prototype.hasChild = function (child) {
-	        return this._objectList.hasChild(child);
-	    };
-	    EntityManager.prototype.addChild = function (child) {
-	        this._objectList.addChild(child);
-	        child.onEnter();
-	        return this;
-	    };
-	    EntityManager.prototype.addChildren = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var addChild = args[1] == void 0 ? this.addChild : args[1];
-	        if (JudgeUtils$1.isArray(args[0])) {
-	            var children = args[0];
-	            for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
-	                var child = children_1[_a];
-	                addChild(child);
-	            }
-	        }
-	        else
-	            addChild(args[0]);
-	        return this;
-	    };
-	    EntityManager.prototype.forEach = function (func) {
-	        this._objectList.forEach(func);
-	        return this;
-	    };
-	    EntityManager.prototype.filter = function (func) {
-	        return this._objectList.filter(func);
-	    };
-	    EntityManager.prototype.getChildren = function () {
-	        return this._objectList;
-	    };
-	    EntityManager.prototype.getAllChildren = function () {
-	        var res = Collection.create();
-	        var getChildren = function (children) {
-	            res.addChildren(children.getChildren());
-	            children.forEach(function (child) {
-	                getChildren(child);
-	            });
-	        };
-	        getChildren(this._entityDispatcher);
-	        return res;
-	    };
-	    EntityManager.prototype.getChild = function (index) {
-	        return this._objectList.getChild(index);
-	    };
-	    EntityManager.prototype.findChildById = function (uid) {
-	        return this._objectList.findOne(function (child) {
-	            return child.uid == uid;
-	        });
-	    };
-	    EntityManager.prototype.findChildByName = function (name) {
-	        return this._objectList.findOne(function (child) {
-	            return child.name.search(name) > -1;
-	        });
-	    };
-	    EntityManager.prototype.findChildrenByName = function (name) {
-	        return this.filter(function (child) {
-	            return child.name.search(name) > -1;
-	        });
-	    };
-	    EntityManager.prototype.removeChild = function (child) {
-	        child.onExit();
-	        this._objectList.removeChild(child);
-	        return this;
-	    };
-	    EntityManager.prototype.removeAllChildren = function () {
-	        var _this = this;
-	        this._objectList.forEach(function (child) {
-	            _this.removeChild(child);
-	        }, this);
-	    };
-	    return EntityManager;
-	}(Entity$1));
-
-	var EntityObject = (function (_super) {
-	    __extends(EntityObject, _super);
-	    function EntityObject() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.name = null;
-	        _this._entityManager = EntityManager.create(_this);
-	        return _this;
-	    }
-	    EntityObject.prototype.init = function () {
-	        this._entityManager.init();
-	        return this;
-	    };
-	    EntityObject.prototype.dispose = function () {
-	        this.onDispose();
-	        this._entityManager.dispose();
-	        return this;
-	    };
-	    EntityObject.prototype.onEnter = function () {
-	    };
-	    EntityObject.prototype.onExit = function () {
-	    };
-	    EntityObject.prototype.onDispose = function () {
-	    };
-	    EntityObject.prototype.hasChild = function (child) {
-	        return this._entityManager.hasChild(child);
-	    };
-	    EntityObject.prototype.addChild = function (child) {
-	        this._entityManager.addChild(child);
-	        return this;
-	    };
-	    EntityObject.prototype.addChildren = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        this._entityManager.addChildren(args);
-	        return this;
-	    };
-	    EntityObject.prototype.forEach = function (func) {
-	        this._entityManager.forEach(func);
-	        return this;
-	    };
-	    EntityObject.prototype.filter = function (func) {
-	        return this._entityManager.filter(func);
-	    };
-	    EntityObject.prototype.getChildren = function () {
-	        return this._entityManager.getChildren();
-	    };
-	    EntityObject.prototype.getAllChildren = function () {
-	        return this._entityManager.getAllChildren();
-	    };
-	    EntityObject.prototype.getChild = function (index) {
-	        return this._entityManager.getChild(index);
-	    };
-	    EntityObject.prototype.findChildById = function (uid) {
-	        return this._entityManager.findChildById(uid);
-	    };
-	    EntityObject.prototype.findChildByName = function (name) {
-	        return this._entityManager.findChildByName(name);
-	    };
-	    EntityObject.prototype.findChildrenByName = function (name) {
-	        return this._entityManager.findChildrenByName(name);
-	    };
-	    EntityObject.prototype.removeChild = function (child) {
-	        return this._entityManager.removeChild(child);
-	    };
-	    EntityObject.prototype.removeAllChildren = function () {
-	        this._entityManager.removeAllChildren();
-	    };
-	    return EntityObject;
-	}(Entity$1));
-
-	var GameObject = (function (_super) {
-	    __extends(GameObject, _super);
-	    function GameObject() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    GameObject.create = function () {
-	        var obj = new this();
-	        obj.initWhenCreate();
-	        return obj;
-	    };
-	    GameObject.prototype.initWhenCreate = function () {
-	        this.name = "GameObject" + this.uid;
-	    };
-	    return GameObject;
-	}(EntityObject));
-
-	var ComponentManager = (function () {
-	    function ComponentManager(_entityObject) {
-	        this._entityObject = _entityObject;
-	        this.transform = null;
-	        this._componentList = new Collection();
-	        this._geometry = null;
-	    }
-	    ComponentManager.create = function (entityObject) {
-	        var obj = new this(entityObject);
-	        return obj;
-	    };
-	    ComponentManager.prototype.init = function () {
-	    };
-	    return ComponentManager;
-	}());
-
-	(function (EScreenSize) {
-	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
-	})(exports.EScreenSize || (exports.EScreenSize = {}));
-
-	(function (EBufferDataType) {
-	    EBufferDataType[EBufferDataType["VERTICE"] = "VERTICE"] = "VERTICE";
-	    EBufferDataType[EBufferDataType["INDICE"] = "INDICE"] = "INDICE";
-	    EBufferDataType[EBufferDataType["NORMAL"] = "NORMAL"] = "NORMAL";
-	    EBufferDataType[EBufferDataType["TEXCOORD"] = "TEXCOORD"] = "TEXCOORD";
-	    EBufferDataType[EBufferDataType["COLOR"] = "COLOR"] = "COLOR";
-	})(exports.EBufferDataType || (exports.EBufferDataType = {}));
 
 	var root;
 	if (JudgeUtils.isNodeJs() && typeof global != "undefined") {
@@ -2118,6 +1660,322 @@
 	    return Hash;
 	}());
 
+	(function (EVariableType) {
+	    EVariableType[EVariableType["FLOAT_1"] = "FLOAT_1"] = "FLOAT_1";
+	    EVariableType[EVariableType["FLOAT_2"] = "FLOAT_2"] = "FLOAT_2";
+	    EVariableType[EVariableType["FLOAT_3"] = "FLOAT_3"] = "FLOAT_3";
+	    EVariableType[EVariableType["FLOAT_4"] = "FLOAT_4"] = "FLOAT_4";
+	    EVariableType[EVariableType["VECTOR_2"] = "VECTOR_2"] = "VECTOR_2";
+	    EVariableType[EVariableType["VECTOR_3"] = "VECTOR_3"] = "VECTOR_3";
+	    EVariableType[EVariableType["VECTOR_4"] = "VECTOR_4"] = "VECTOR_4";
+	    EVariableType[EVariableType["COLOR_3"] = "COLOR_3"] = "COLOR_3";
+	    EVariableType[EVariableType["FLOAT_MAT3"] = "FLOAT_MAT3"] = "FLOAT_MAT3";
+	    EVariableType[EVariableType["FLOAT_MAT4"] = "FLOAT_MAT4"] = "FLOAT_MAT4";
+	    EVariableType[EVariableType["BUFFER"] = "BUFFER"] = "BUFFER";
+	    EVariableType[EVariableType["SAMPLER_CUBE"] = "SAMPLER_CUBE"] = "SAMPLER_CUBE";
+	    EVariableType[EVariableType["SAMPLER_2D"] = "SAMPLER_2D"] = "SAMPLER_2D";
+	    EVariableType[EVariableType["NUMBER_1"] = "NUMBER_1"] = "NUMBER_1";
+	    EVariableType[EVariableType["STRUCTURE"] = "STRUCTURE"] = "STRUCTURE";
+	    EVariableType[EVariableType["STRUCTURES"] = "STRUCTURES"] = "STRUCTURES";
+	    EVariableType[EVariableType["SAMPLER_ARRAY"] = "SAMPLER_ARRAY"] = "SAMPLER_ARRAY";
+	    EVariableType[EVariableType["FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY";
+	})(exports.EVariableType || (exports.EVariableType = {}));
+
+	var GLSLDataSender = (function () {
+	    function GLSLDataSender(_program) {
+	        this._program = _program;
+	        this._getUniformLocationCache = {};
+	        this._toSendBufferArr = [];
+	    }
+	    GLSLDataSender.create = function (program) {
+	        var obj = new this(program);
+	        return obj;
+	    };
+	    GLSLDataSender.prototype.addBufferToSendList = function (pos, buffer) {
+	        this._toSendBufferArr[pos] = buffer;
+	    };
+	    GLSLDataSender.prototype.sendAllBufferData = function () {
+	        for (var pos = 0, len = this._toSendBufferArr.length; pos < len; pos++) {
+	            this.sendBuffer(pos, this._toSendBufferArr[pos]);
+	        }
+	    };
+	    GLSLDataSender.prototype.sendBuffer = function (pos, buffer) {
+	        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
+	        this._getGl().vertexAttribPointer(pos, buffer.size, this._getGl()[buffer.type], false, 0, 0);
+	        this._getGl().enableVertexAttribArray(pos);
+	    };
+	    GLSLDataSender.prototype.sendFloat1 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform1f(uniform, data);
+	    };
+	    GLSLDataSender.prototype.sendFloat2 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform2f(uniform, data[0], data[1]);
+	    };
+	    GLSLDataSender.prototype.sendFloat3 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform3f(uniform, data[0], data[1], data[2]);
+	    };
+	    GLSLDataSender.prototype.sendFloat4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform4f(uniform, data[0], data[1], data[2], data[3]);
+	    };
+	    GLSLDataSender.prototype.sendVector2 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform2f(uniform, data.x, data.y);
+	    };
+	    GLSLDataSender.prototype.sendVector3 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform3f(uniform, data.x, data.y, data.z);
+	    };
+	    GLSLDataSender.prototype.sendVector4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform4f(uniform, data.x, data.y, data.z, data.w);
+	    };
+	    GLSLDataSender.prototype.sendNum1 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform1i(uniform, data);
+	    };
+	    GLSLDataSender.prototype.sendMatrix4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniformMatrix4fv(uniform, false, data.elements);
+	    };
+	    GLSLDataSender.prototype.sendMatrix4Array = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniformMatrix4fv(uniform, false, data);
+	    };
+	    GLSLDataSender.prototype.getUniformLocation = function (name) {
+	        if (this._getUniformLocationCache[name] != void 0) {
+	            return this._getUniformLocationCache[name];
+	        }
+	        var uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
+	        this._getUniformLocationCache[name] = uniform;
+	        return uniform;
+	    };
+	    GLSLDataSender.prototype._getGl = function () {
+	        return exports.Device.getInstance().gl;
+	    };
+	    return GLSLDataSender;
+	}());
+
+	var Program = (function () {
+	    function Program() {
+	        this.glProgram = null;
+	        this._attributeList = new Hash();
+	        this._glslSend = GLSLDataSender.create(this);
+	    }
+	    Program.create = function () {
+	        var obj = new this();
+	        obj.initWhenCreate();
+	        return obj;
+	    };
+	    Program.prototype.initWhenCreate = function () {
+	        this.initProgramWithShader(Shader.create());
+	    };
+	    Program.prototype.use = function () {
+	        this._getGl().useProgram(this.glProgram);
+	    };
+	    Program.prototype.getAttribLocation = function (name) {
+	        var pos = this._attributeList.getChild(name);
+	        if (pos !== void 0)
+	            return pos;
+	        var attribute = this._getGl().getAttribLocation(this.glProgram, name);
+	        this._attributeList.addChild(name, attribute);
+	        return attribute;
+	    };
+	    Program.prototype.getUniformLocation = function (name) {
+	        return this._glslSend.getUniformLocation(name);
+	    };
+	    Program.prototype.sendAttributeBuffer = function (name, buffer) {
+	        var pos = this.getAttribLocation(name);
+	        if (pos == -1)
+	            return;
+	        this._glslSend.addBufferToSendList(pos, buffer);
+	    };
+	    Program.prototype.sendAllBufferData = function () {
+	        this._glslSend.sendAllBufferData();
+	    };
+	    Program.prototype.sendUniformData = function (name, type, data) {
+	        if (data === null) {
+	            return;
+	        }
+	        switch (type) {
+	            case exports.EVariableType.FLOAT_1:
+	                this._glslSend.sendFloat1(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_2:
+	                this._glslSend.sendFloat2(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_3:
+	                this._glslSend.sendFloat3(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_4:
+	                this._glslSend.sendFloat4(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_2:
+	                this._glslSend.sendVector2(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_3:
+	                this._glslSend.sendVector3(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_4:
+	                this._glslSend.sendVector4(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_MAT4:
+	                this._glslSend.sendMatrix4(name, data);
+	                break;
+	            case exports.EVariableType.NUMBER_1:
+	            case exports.EVariableType.SAMPLER_CUBE:
+	            case exports.EVariableType.SAMPLER_2D:
+	                this._glslSend.sendNum1(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_MAT4_ARRAY:
+	                this._glslSend.sendMatrix4Array(name, data);
+	                break;
+	            default:
+	                console.log("the type is not find");
+	                break;
+	        }
+	    };
+	    Program.prototype.sendFloat1 = function (name, data) {
+	        this._glslSend.sendFloat1(name, data);
+	    };
+	    Program.prototype.sendFloat2 = function (name, data) {
+	        this._glslSend.sendFloat2(name, data);
+	    };
+	    Program.prototype.sendFloat3 = function (name, data) {
+	        this._glslSend.sendFloat3(name, data);
+	    };
+	    Program.prototype.sendFloat4 = function (name, data) {
+	        this._glslSend.sendFloat4(name, data);
+	    };
+	    Program.prototype.sendVector2 = function (name, data) {
+	        this._glslSend.sendVector2(name, data);
+	    };
+	    Program.prototype.sendVector3 = function (name, data) {
+	        this._glslSend.sendVector3(name, data);
+	    };
+	    Program.prototype.sendVector4 = function (name, data) {
+	        this._glslSend.sendVector4(name, data);
+	    };
+	    Program.prototype.sendNum1 = function (name, data) {
+	        this._glslSend.sendNum1(name, data);
+	    };
+	    Program.prototype.sendMatrix4 = function (name, data) {
+	        this._glslSend.sendMatrix4(name, data);
+	    };
+	    Program.prototype.sendMatrix4Array = function (name, data) {
+	        this._glslSend.sendMatrix4Array(name, data);
+	    };
+	    Program.prototype.initProgramWithShader = function (shader) {
+	        var gl = exports.Device.getInstance().gl;
+	        var program = gl.createProgram();
+	        var vshader = this._loadShader(gl, gl.VERTEX_SHADER, shader.VSource);
+	        var fshader = this._loadShader(gl, gl.FRAGMENT_SHADER, shader.FSource);
+	        if (!vshader || !fshader) {
+	            return;
+	        }
+	        gl.attachShader(program, vshader);
+	        gl.attachShader(program, fshader);
+	        gl.linkProgram(program);
+	        var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+	        if (!linked) {
+	            var err = gl.getProgramInfoLog(program);
+	            console.log("faild to link _program:" + err);
+	            gl.deleteProgram(program);
+	            gl.deleteShader(vshader);
+	            gl.deleteShader(vshader);
+	            return;
+	        }
+	        if (!program)
+	            console.log("program error");
+	        this.glProgram = program;
+	    };
+	    Program.prototype._loadShader = function (gl, type, value) {
+	        var shader = gl.createShader(type);
+	        if (shader == null) {
+	            console.log("unable to create shader");
+	            return;
+	        }
+	        gl.shaderSource(shader, value);
+	        gl.compileShader(shader);
+	        var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+	        if (!compiled) {
+	            var error = gl.getShaderInfoLog(shader);
+	            console.log("faild to compile shader:" + error);
+	            gl.deleteShader(shader);
+	            return;
+	        }
+	        return shader;
+	    };
+	    Program.prototype._getGl = function () {
+	        return exports.Device.getInstance().gl;
+	    };
+	    return Program;
+	}());
+
+	var Entity = (function () {
+	    function Entity() {
+	        this.uid = Entity._count;
+	        Entity._count++;
+	    }
+	    return Entity;
+	}());
+	Entity._count = 1;
+
+	var Component = (function (_super) {
+	    __extends(Component, _super);
+	    function Component() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.entityObject = null;
+	        return _this;
+	    }
+	    Object.defineProperty(Component.prototype, "transform", {
+	        get: function () {
+	            if (this.entityObject == void 0)
+	                return null;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Component.prototype.init = function () { };
+	    Component.prototype.dispose = function () { };
+	    Component.prototype.clone = function () {
+	    };
+	    Component.prototype.addToObject = function (entityObject) {
+	        this.entityObject = entityObject;
+	        this.addToComponentContainer();
+	    };
+	    Component.prototype.addToComponentContainer = function () {
+	    };
+	    Component.prototype.removeFromObject = function (entityObject) {
+	        this.removeFromComponentContainer();
+	    };
+	    Component.prototype.removeFromComponentContainer = function () {
+	    };
+	    return Component;
+	}(Entity));
+
+	var GeometryData = (function () {
+	    function GeometryData() {
+	        this.vertice = null;
+	        this.color = null;
+	    }
+	    GeometryData.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    return GeometryData;
+	}());
+
+	(function (EBufferDataType) {
+	    EBufferDataType[EBufferDataType["VERTICE"] = "VERTICE"] = "VERTICE";
+	    EBufferDataType[EBufferDataType["INDICE"] = "INDICE"] = "INDICE";
+	    EBufferDataType[EBufferDataType["NORMAL"] = "NORMAL"] = "NORMAL";
+	    EBufferDataType[EBufferDataType["TEXCOORD"] = "TEXCOORD"] = "TEXCOORD";
+	    EBufferDataType[EBufferDataType["COLOR"] = "COLOR"] = "COLOR";
+	})(exports.EBufferDataType || (exports.EBufferDataType = {}));
+
 	var Buffer = (function () {
 	    function Buffer() {
 	        this.buffer = null;
@@ -2240,6 +2098,416 @@
 	    return BufferContainer;
 	}());
 
+	var Geometry = (function (_super) {
+	    __extends(Geometry, _super);
+	    function Geometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this._bufferContainer = null;
+	        return _this;
+	    }
+	    Object.defineProperty(Geometry.prototype, "geometryData", {
+	        get: function () {
+	            return this._bufferContainer.geometryData;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Geometry.prototype.init = function () {
+	        var computeData = this.computeData();
+	        this._bufferContainer = BufferContainer.create();
+	        this._bufferContainer.geometryData = this.createGeometryData(computeData);
+	        this._bufferContainer.init();
+	    };
+	    Geometry.prototype.getChild = function (name) {
+	        return this._bufferContainer.getChild(name);
+	    };
+	    Geometry.prototype.createGeometryData = function (computeData) {
+	        var vertice = computeData.vertice, color = computeData.color;
+	        var geometryData = GeometryData.create();
+	        geometryData.vertice = vertice;
+	        geometryData.color = color;
+	        return geometryData;
+	    };
+	    return Geometry;
+	}(Component));
+
+	var TriangleGeometry = (function (_super) {
+	    __extends(TriangleGeometry, _super);
+	    function TriangleGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.width = 1;
+	        _this.height = 1;
+	        return _this;
+	    }
+	    TriangleGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    TriangleGeometry.prototype.computeData = function () {
+	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertices = null, texCoords = null, indices = null, color = null, normals = null;
+	        vertices = [
+	            0.0, up, 0,
+	            left, down, 0,
+	            right, down, 0
+	        ];
+	        indices = [
+	            0, 1, 2
+	        ];
+	        texCoords = [
+	            0.5, 1.0,
+	            0.0, 0.0,
+	            1.0, 0.0
+	        ];
+	        normals = [
+	            0, 0, 1,
+	            0, 0, 1,
+	            0, 0, 1
+	        ];
+	        color = [
+	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
+	        ];
+	        return {
+	            vertice: vertices,
+	            color: color
+	        };
+	    };
+	    return TriangleGeometry;
+	}(Geometry));
+
+	var Test = (function () {
+	    function Test() {
+	        this._gl = null;
+	        this._program = null;
+	    }
+	    Test.prototype.testCanvas = function () {
+	        Main.setCanvas("webgl").init();
+	        this._gl = exports.Device.getInstance().gl;
+	        this._program = Program.create();
+	        this._program.use();
+	        this._gl.clearColor(0, 0, 0, 1);
+	        var modelMatrix = new Matrix4();
+	        var viewMatrix = new Matrix4();
+	        var projMatrix = new Matrix4();
+	        var mvpMatrix = new Matrix4();
+	        modelMatrix.setRotate(90, 0, 0, 1);
+	        viewMatrix.lookAt(0, 0, -8, 0, 0, 0, 0, 1, 0);
+	        projMatrix.perspective(45, 1, 1, 100);
+	        mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
+	        this._program.sendMatrix4("u_MvpMatrix", mvpMatrix);
+	        var triangle = TriangleGeometry.create();
+	        triangle.init();
+	        var verticeBuffer = triangle.getChild("verticeBuffer");
+	        var colorBuffer = triangle.getChild("colorBuffer");
+	        this._program.sendAttributeBuffer("a_Position", verticeBuffer);
+	        this._program.sendAttributeBuffer("a_Color", colorBuffer);
+	        this._program.sendAllBufferData();
+	        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+	        this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
+	    };
+	    Test.prototype._createTriangle = function () {
+	    };
+	    return Test;
+	}());
+	var a = new Test();
+	a.testCanvas();
+
+	exports.Director = (function () {
+	    function Director() {
+	    }
+	    Director.getInstance = function () { };
+	    return Director;
+	}());
+	exports.Director = __decorate([
+	    singleton()
+	], exports.Director);
+
+	var JudgeUtils$2 = (function () {
+	    function JudgeUtils() {
+	    }
+	    JudgeUtils.isArray = function (arr) {
+	        var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+	        var length = arr && arr.length;
+	        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+	    };
+	    JudgeUtils.isArrayExactly = function (arr) {
+	        return Object.prototype.toString.call(arr) === "[object Array]";
+	    };
+	    JudgeUtils.isNumber = function (num) {
+	        return typeof num == "number";
+	    };
+	    JudgeUtils.isNumberExactly = function (num) {
+	        return Object.prototype.toString.call(num) === "[object Number]";
+	    };
+	    JudgeUtils.isString = function (str) {
+	        return typeof str == "string";
+	    };
+	    JudgeUtils.isStringExactly = function (str) {
+	        return Object.prototype.toString.call(str) === "[object String]";
+	    };
+	    JudgeUtils.isBoolean = function (bool) {
+	        return bool === true || bool === false || toString.call(bool) === '[boolect Boolean]';
+	    };
+	    JudgeUtils.isDom = function (obj) {
+	        return !!(obj && obj.nodeType === 1);
+	    };
+	    JudgeUtils.isObject = function (obj) {
+	        var type = typeof obj;
+	        return type === 'function' || type === 'object' && !!obj;
+	    };
+	    JudgeUtils.isDirectObject = function (obj) {
+	        return Object.prototype.toString.call(obj) === "[object Object]";
+	    };
+	    JudgeUtils.isHostMethod = function (object, property) {
+	        var type = typeof object[property];
+	        return type === "function" ||
+	            (type === "object" && !!object[property]);
+	    };
+	    JudgeUtils.isNodeJs = function () {
+	        return ((typeof global != "undefined" && global.module) || (typeof module != "undefined")) && typeof module.exports != "undefined";
+	    };
+	    JudgeUtils.isFunction = function (func) {
+	        return true;
+	    };
+	    return JudgeUtils;
+	}());
+	if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+	    JudgeUtils$2.isFunction = function (func) {
+	        return typeof func == 'function';
+	    };
+	}
+	else {
+	    JudgeUtils$2.isFunction = function (func) {
+	        return Object.prototype.toString.call(func) === "[object Function]";
+	    };
+	}
+
+	var JudgeUtils$1 = (function (_super) {
+	    __extends(JudgeUtils$$1, _super);
+	    function JudgeUtils$$1() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    JudgeUtils$$1.isPromise = function (obj) {
+	        return !!obj
+	            && !_super.isFunction.call(this, obj.subscribe)
+	            && _super.isFunction.call(this, obj.then);
+	    };
+	    JudgeUtils$$1.isEqual = function (ob1, ob2) {
+	        return ob1.uid === ob2.uid;
+	    };
+	    JudgeUtils$$1.isIObserver = function (i) {
+	        return i.next && i.error && i.completed;
+	    };
+	    return JudgeUtils$$1;
+	}(JudgeUtils$2));
+
+	var EntityManager = (function (_super) {
+	    __extends(EntityManager, _super);
+	    function EntityManager(_entityDispatcher) {
+	        var _this = _super.call(this) || this;
+	        _this._entityDispatcher = _entityDispatcher;
+	        _this._objectList = new Collection();
+	        return _this;
+	    }
+	    EntityManager.create = function (entityDispatcher) {
+	        var obj = new this(entityDispatcher);
+	        return obj;
+	    };
+	    EntityManager.prototype.init = function () {
+	        this.forEach(function (child) {
+	            child.init();
+	        });
+	    };
+	    EntityManager.prototype.dispose = function () {
+	        this.forEach(function (child) {
+	            child.init();
+	        });
+	    };
+	    EntityManager.prototype.hasChild = function (child) {
+	        return this._objectList.hasChild(child);
+	    };
+	    EntityManager.prototype.addChild = function (child) {
+	        this._objectList.addChild(child);
+	        child.onEnter();
+	        return this;
+	    };
+	    EntityManager.prototype.addChildren = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var addChild = args[1] == void 0 ? this.addChild : args[1];
+	        if (JudgeUtils$1.isArray(args[0])) {
+	            var children = args[0];
+	            for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
+	                var child = children_1[_a];
+	                addChild(child);
+	            }
+	        }
+	        else
+	            addChild(args[0]);
+	        return this;
+	    };
+	    EntityManager.prototype.forEach = function (func) {
+	        this._objectList.forEach(func);
+	        return this;
+	    };
+	    EntityManager.prototype.filter = function (func) {
+	        return this._objectList.filter(func);
+	    };
+	    EntityManager.prototype.getChildren = function () {
+	        return this._objectList;
+	    };
+	    EntityManager.prototype.getAllChildren = function () {
+	        var res = Collection.create();
+	        var getChildren = function (children) {
+	            res.addChildren(children.getChildren());
+	            children.forEach(function (child) {
+	                getChildren(child);
+	            });
+	        };
+	        getChildren(this._entityDispatcher);
+	        return res;
+	    };
+	    EntityManager.prototype.getChild = function (index) {
+	        return this._objectList.getChild(index);
+	    };
+	    EntityManager.prototype.findChildById = function (uid) {
+	        return this._objectList.findOne(function (child) {
+	            return child.uid == uid;
+	        });
+	    };
+	    EntityManager.prototype.findChildByName = function (name) {
+	        return this._objectList.findOne(function (child) {
+	            return child.name.search(name) > -1;
+	        });
+	    };
+	    EntityManager.prototype.findChildrenByName = function (name) {
+	        return this.filter(function (child) {
+	            return child.name.search(name) > -1;
+	        });
+	    };
+	    EntityManager.prototype.removeChild = function (child) {
+	        child.onExit();
+	        this._objectList.removeChild(child);
+	        return this;
+	    };
+	    EntityManager.prototype.removeAllChildren = function () {
+	        var _this = this;
+	        this._objectList.forEach(function (child) {
+	            _this.removeChild(child);
+	        }, this);
+	    };
+	    return EntityManager;
+	}(Entity));
+
+	var EntityObject = (function (_super) {
+	    __extends(EntityObject, _super);
+	    function EntityObject() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.name = null;
+	        _this._entityManager = EntityManager.create(_this);
+	        return _this;
+	    }
+	    EntityObject.prototype.init = function () {
+	        this._entityManager.init();
+	        return this;
+	    };
+	    EntityObject.prototype.dispose = function () {
+	        this.onDispose();
+	        this._entityManager.dispose();
+	        return this;
+	    };
+	    EntityObject.prototype.onEnter = function () {
+	    };
+	    EntityObject.prototype.onExit = function () {
+	    };
+	    EntityObject.prototype.onDispose = function () {
+	    };
+	    EntityObject.prototype.hasChild = function (child) {
+	        return this._entityManager.hasChild(child);
+	    };
+	    EntityObject.prototype.addChild = function (child) {
+	        this._entityManager.addChild(child);
+	        return this;
+	    };
+	    EntityObject.prototype.addChildren = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        this._entityManager.addChildren(args);
+	        return this;
+	    };
+	    EntityObject.prototype.forEach = function (func) {
+	        this._entityManager.forEach(func);
+	        return this;
+	    };
+	    EntityObject.prototype.filter = function (func) {
+	        return this._entityManager.filter(func);
+	    };
+	    EntityObject.prototype.getChildren = function () {
+	        return this._entityManager.getChildren();
+	    };
+	    EntityObject.prototype.getAllChildren = function () {
+	        return this._entityManager.getAllChildren();
+	    };
+	    EntityObject.prototype.getChild = function (index) {
+	        return this._entityManager.getChild(index);
+	    };
+	    EntityObject.prototype.findChildById = function (uid) {
+	        return this._entityManager.findChildById(uid);
+	    };
+	    EntityObject.prototype.findChildByName = function (name) {
+	        return this._entityManager.findChildByName(name);
+	    };
+	    EntityObject.prototype.findChildrenByName = function (name) {
+	        return this._entityManager.findChildrenByName(name);
+	    };
+	    EntityObject.prototype.removeChild = function (child) {
+	        return this._entityManager.removeChild(child);
+	    };
+	    EntityObject.prototype.removeAllChildren = function () {
+	        this._entityManager.removeAllChildren();
+	    };
+	    return EntityObject;
+	}(Entity));
+
+	var GameObject = (function (_super) {
+	    __extends(GameObject, _super);
+	    function GameObject() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    GameObject.create = function () {
+	        var obj = new this();
+	        obj.initWhenCreate();
+	        return obj;
+	    };
+	    GameObject.prototype.initWhenCreate = function () {
+	        this.name = "GameObject" + this.uid;
+	    };
+	    return GameObject;
+	}(EntityObject));
+
+	var ComponentManager = (function () {
+	    function ComponentManager(_entityObject) {
+	        this._entityObject = _entityObject;
+	        this.transform = null;
+	        this._componentList = new Collection();
+	        this._geometry = null;
+	    }
+	    ComponentManager.create = function (entityObject) {
+	        var obj = new this(entityObject);
+	        return obj;
+	    };
+	    ComponentManager.prototype.init = function () {
+	    };
+	    return ComponentManager;
+	}());
+
+	(function (EScreenSize) {
+	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
+	})(exports.EScreenSize || (exports.EScreenSize = {}));
+
 	var CubeData = (function () {
 	    function CubeData() {
 	    }
@@ -2286,18 +2554,6 @@
 	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
 	]);
 
-	var GeometryData = (function () {
-	    function GeometryData() {
-	        this.vertice = null;
-	        this.color = null;
-	    }
-	    GeometryData.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    return GeometryData;
-	}());
-
 	var PlaneData = (function () {
 	    function PlaneData() {
 	    }
@@ -2312,78 +2568,18 @@
 	]);
 	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
 
-	var Geometry = (function (_super) {
-	    __extends(Geometry, _super);
-	    function Geometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this._bufferContainer = null;
-	        return _this;
+	var TriangleData = (function () {
+	    function TriangleData() {
 	    }
-	    Object.defineProperty(Geometry.prototype, "geometryData", {
-	        get: function () {
-	            return this._bufferContainer.geometryData;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Geometry.prototype.init = function () {
-	        var computeData = this.computeData();
-	        this._bufferContainer = BufferContainer.create();
-	        this._bufferContainer.geometryData = this.createGeometryData(computeData);
-	        this._bufferContainer.init();
-	    };
-	    Geometry.prototype.createGeometryData = function (computeData) {
-	        var vertice = computeData.vertice, color = computeData.color;
-	        var geometryData = GeometryData.create();
-	        geometryData.vertice = vertice;
-	        geometryData.color = color;
-	        return geometryData;
-	    };
-	    return Geometry;
-	}(Component));
-
-	var TriangleGeometry = (function (_super) {
-	    __extends(TriangleGeometry, _super);
-	    function TriangleGeometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.width = 0;
-	        _this.height = 0;
-	        return _this;
-	    }
-	    TriangleGeometry.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    TriangleGeometry.prototype.computeData = function () {
-	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertices = null, texCoords = null, indices = null, color = null, normals = null;
-	        vertices = [
-	            0.0, up, 0,
-	            left, down, 0,
-	            right, down, 0
-	        ];
-	        indices = [
-	            0, 1, 2
-	        ];
-	        texCoords = [
-	            0.5, 1.0,
-	            0.0, 0.0,
-	            1.0, 0.0
-	        ];
-	        normals = [
-	            0, 0, 1,
-	            0, 0, 1,
-	            0, 0, 1
-	        ];
-	        color = [
-	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-	        ];
-	        return {
-	            vertice: vertices,
-	            color: color
-	        };
-	    };
-	    return TriangleGeometry;
-	}(Geometry));
+	    return TriangleData;
+	}());
+	TriangleData.vertices = new Float32Array([
+	    -0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0
+	]);
+	TriangleData.indices = new Uint8Array([0, 1, 2]);
+	TriangleData.color = new Float32Array([
+	    1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
+	]);
 
 	function singleton$1(isInitWhenCreate) {
 	    if (isInitWhenCreate === void 0) { isInitWhenCreate = false; }
@@ -2598,91 +2794,6 @@
 	    return ElementArrayBuffer;
 	}(Buffer$1));
 
-	var GLSLDataSender = (function () {
-	    function GLSLDataSender(_program) {
-	        this._program = _program;
-	        this._getUniformLocationCache = {};
-	        this._toSendBufferArr = [];
-	    }
-	    GLSLDataSender.create = function (program) {
-	        var obj = new this(program);
-	        return obj;
-	    };
-	    GLSLDataSender.prototype.addBufferToSendList = function (name, buffer) {
-	        this._toSendBufferArr[name] = buffer;
-	    };
-	    GLSLDataSender.prototype.sendAllBufferData = function () {
-	        for (var pos = 0, len = this._toSendBufferArr.length; pos < len; pos++) {
-	            this.sendBuffer(pos, this._toSendBufferArr[pos]);
-	        }
-	    };
-	    GLSLDataSender.prototype.sendBuffer = function (pos, buffer) {
-	        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
-	    };
-	    GLSLDataSender.prototype.sendFloat1 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform1f(uniform, data);
-	    };
-	    GLSLDataSender.prototype.sendFloat2 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform2f(uniform, data[0], data[1]);
-	    };
-	    GLSLDataSender.prototype.sendFloat3 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform3f(uniform, data[0], data[1], data[2]);
-	    };
-	    GLSLDataSender.prototype.sendFloat4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform4f(uniform, data[0], data[1], data[2], data[3]);
-	    };
-	    GLSLDataSender.prototype.sendVector2 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform2f(uniform, data.x, data.y);
-	    };
-	    GLSLDataSender.prototype.sendVector3 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform3f(uniform, data.x, data.y, data.z);
-	    };
-	    GLSLDataSender.prototype.sendVector4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform4f(uniform, data.x, data.y, data.z, data.w);
-	    };
-	    GLSLDataSender.prototype.sendNum1 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform1i(uniform, data);
-	    };
-	    GLSLDataSender.prototype.sendMatrix4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniformMatrix4fv(uniform, false, data.elements);
-	    };
-	    GLSLDataSender.prototype.sendMatrix4Array = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniformMatrix4fv(uniform, false, data);
-	    };
-	    GLSLDataSender.prototype.getUniformLocation = function (name) {
-	        if (this._getUniformLocationCache[name] != void 0) {
-	            return this._getUniformLocationCache[name];
-	        }
-	        var uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
-	        return uniform;
-	    };
-	    GLSLDataSender.prototype._getGl = function () {
-	        return exports.Device.getInstance().gl;
-	    };
-	    return GLSLDataSender;
-	}());
-
-	var Program = (function () {
-	    function Program() {
-	        this.glProgram = null;
-	    }
-	    Program.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    return Program;
-	}());
-
 	exports.Scene = (function (_super) {
 	    __extends(Scene, _super);
 	    function Scene() {
@@ -2698,8 +2809,23 @@
 	var Transform = (function (_super) {
 	    __extends(Transform, _super);
 	    function Transform() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.mMatrix = new Matrix4();
+	        return _this;
 	    }
+	    Transform.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Transform.prototype.rotate = function (angle, x, y, z) {
+	        this.mMatrix.rotate(angle, x, y, z);
+	    };
+	    Transform.prototype.scale = function (x, y, z) {
+	        this.mMatrix.scale(x, y, z);
+	    };
+	    Transform.prototype.translate = function (x, y, z) {
+	        this.mMatrix.translate(x, y, z);
+	    };
 	    return Transform;
 	}(Component));
 
@@ -2713,7 +2839,7 @@
 
 	exports.Test = Test;
 	exports.Component = Component;
-	exports.Entity = Entity$1;
+	exports.Entity = Entity;
 	exports.EntityObject = EntityObject;
 	exports.GameObject = GameObject;
 	exports.ComponentManager = ComponentManager;
@@ -2735,6 +2861,7 @@
 	exports.ElementArrayBuffer = ElementArrayBuffer;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
+	exports.Shader = Shader;
 	exports.ThreeDTransform = ThreeDTransform;
 	exports.Transform = Transform;
 	exports.singleton = singleton;

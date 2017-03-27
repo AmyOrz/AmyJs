@@ -15,8 +15,8 @@ export class GLSLDataSender {
     private _getUniformLocationCache: Object = {};
     private _toSendBufferArr: ArrayBuffer[] = [];
 
-    public addBufferToSendList(name: string, buffer: ArrayBuffer) {
-        this._toSendBufferArr[name] = buffer;
+    public addBufferToSendList(pos: number, buffer: ArrayBuffer) {
+        this._toSendBufferArr[pos] = buffer;
     }
 
     public sendAllBufferData() {
@@ -27,9 +27,9 @@ export class GLSLDataSender {
 
     public sendBuffer(pos: number, buffer: ArrayBuffer) {
         this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
+        this._getGl().vertexAttribPointer(pos, buffer.size, this._getGl()[buffer.type], false, 0, 0);
+        this._getGl().enableVertexAttribArray(pos);
     }
-
-
 
     public sendFloat1(name: string, data: any) {
         let uniform = this.getUniformLocation(name);
@@ -107,6 +107,7 @@ export class GLSLDataSender {
 
         let uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
 
+        this._getUniformLocationCache[name] = uniform;
         return uniform;
 
     }
