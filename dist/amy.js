@@ -2189,9 +2189,9 @@
 	        var viewMatrix = new Matrix4();
 	        var projMatrix = new Matrix4();
 	        var mvpMatrix = new Matrix4();
-	        modelMatrix.setRotate(90, 0, 0, 1);
-	        viewMatrix.lookAt(0, 0, -8, 0, 0, 0, 0, 1, 0);
-	        projMatrix.perspective(45, 1, 1, 100);
+	        modelMatrix.setRotate(0, 0, 0, 1);
+	        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+	        projMatrix.perspective(45, exports.Device.getInstance().canvas.width / exports.Device.getInstance().canvas.height, 1, 100);
 	        mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 	        this._program.sendMatrix4("u_MvpMatrix", mvpMatrix);
 	        var triangle = TriangleGeometry.create();
@@ -2568,19 +2568,6 @@
 	]);
 	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
 
-	var TriangleData = (function () {
-	    function TriangleData() {
-	    }
-	    return TriangleData;
-	}());
-	TriangleData.vertices = new Float32Array([
-	    -0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0
-	]);
-	TriangleData.indices = new Uint8Array([0, 1, 2]);
-	TriangleData.color = new Float32Array([
-	    1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-	]);
-
 	function singleton$1(isInitWhenCreate) {
 	    if (isInitWhenCreate === void 0) { isInitWhenCreate = false; }
 	    return function (target) {
@@ -2850,7 +2837,6 @@
 	exports.CubeData = CubeData;
 	exports.GeometryData = GeometryData;
 	exports.PlaneData = PlaneData;
-	exports.TriangleData = TriangleData;
 	exports.Geometry = Geometry;
 	exports.TriangleGeometry = TriangleGeometry;
 	exports.Matrix4 = Matrix4;

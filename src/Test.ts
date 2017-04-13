@@ -2,7 +2,7 @@ import { Main } from "./core/Main";
 import { Device } from "./device/Device";
 import { Matrix4 } from "./Math/Matrix4";
 import { Program } from "./Renderer/Program/Program";
-import {TriangleGeometry} from "./Geometry/TriangleGeometry";
+import { TriangleGeometry } from "./Geometry/TriangleGeometry";
 
 
 export class Test {
@@ -24,9 +24,9 @@ export class Test {
         var projMatrix = new Matrix4();
         var mvpMatrix = new Matrix4();
 
-        modelMatrix.setRotate(90, 0, 0, 1);
-        viewMatrix.lookAt(0, 0, -8, 0, 0, 0, 0, 1, 0);
-        projMatrix.perspective(45, 1, 1, 100);
+        modelMatrix.setRotate(0, 0, 0, 1);
+        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        projMatrix.perspective(45, Device.getInstance().canvas.width/Device.getInstance().canvas.height, 1, 100);
 
         mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 
@@ -38,8 +38,8 @@ export class Test {
         var verticeBuffer = triangle.getChild("verticeBuffer") as ArrayBuffer;
         var colorBuffer = triangle.getChild("colorBuffer") as ArrayBuffer;
 
-        this._program.sendAttributeBuffer("a_Position",verticeBuffer);
-        this._program.sendAttributeBuffer("a_Color",colorBuffer);
+        this._program.sendAttributeBuffer("a_Position", verticeBuffer);
+        this._program.sendAttributeBuffer("a_Color", colorBuffer);
 
         this._program.sendAllBufferData();
 

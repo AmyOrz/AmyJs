@@ -15,7 +15,6 @@ export { EBufferDataType } from "./Geometry/BufferContainer/EBufferDataType";
 export { CubeData } from "./Geometry/Data/CubeData";
 export { GeometryData } from "./Geometry/Data/GeometryData";
 export { PlaneData } from "./Geometry/Data/PlaneData";
-export { TriangleData } from "./Geometry/Data/TriangleData";
 export { Geometry } from "./Geometry/Geometry";
 export { TriangleGeometry } from "./Geometry/TriangleGeometry";
 export { Matrix4 } from "./Math/Matrix4";
