@@ -19,7 +19,7 @@ var Geometry = (function (_super) {
     function Geometry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this._bufferContainer = null;
-        _this._shader = TriangleShader_1.TriangleShader.create();
+        _this._shader = TriangleShader_1.TriangleShader.create(_this);
         return _this;
     }
     Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -41,7 +41,7 @@ var Geometry = (function (_super) {
         this._bufferContainer = BufferContainer_1.BufferContainer.create();
         this._bufferContainer.geometryData = this.createGeometryData(computeData);
         this._bufferContainer.init();
-        this._shader.init(this);
+        this._shader.init();
     };
     Geometry.prototype.getChild = function (name) {
         return this._bufferContainer.getChild(name);

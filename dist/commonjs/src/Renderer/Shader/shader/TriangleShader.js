@@ -11,18 +11,20 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Shader_1 = require("./Shader");
+var Matrix4_1 = require("../../../Math/Matrix4");
+var Device_1 = require("../../../device/Device");
 var TriangleShader = (function (_super) {
     __extends(TriangleShader, _super);
     function TriangleShader() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.VSource = "attribute vec4 a_Position;" +
             "attribute vec4 a_Color;" +
-            "uniform mat4 u_m;" +
-            "uniform mat4 u_v;" +
-            "uniform mat4 u_p;" +
+            "uniform mat4 u_mMatrix;" +
+            "uniform mat4 u_vMatrix;" +
+            "uniform mat4 u_pMatrix;" +
             "varying vec4 v_Color;" +
             "void main(){" +
-            "   gl_Position = u_p * u_v * u_m * a_Position;" +
+            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
             "   v_Color = a_Color;" +
             "}";
         _this.FSource = "#ifdef GL_ES\n" +
@@ -34,20 +36,31 @@ var TriangleShader = (function (_super) {
             "}";
         return _this;
     }
-    TriangleShader.create = function () {
+    TriangleShader.create = function (geometry) {
         var obj = new this();
+        obj.geometry = geometry;
         return obj;
     };
-    TriangleShader.prototype.initProgram = function (geometry) {
+    TriangleShader.prototype.initProgram = function () {
         this.program.initProgramWithShader(this);
-        this.geometry = geometry;
     };
-    TriangleShader.prototype.sendShaderVariables = function () {
+    TriangleShader.prototype.sendShaderAttribute = function () {
         var verticeBuffer = this.geometry.getChild("verticeBuffer");
         var colorBuffer = this.geometry.getChild("colorBuffer");
         this.sendAttributeBuffer("a_Position", verticeBuffer);
         this.sendAttributeBuffer("a_Color", colorBuffer);
         this.program.sendAllBufferData();
+    };
+    TriangleShader.prototype.sendShaderUniform = function () {
+        var modelMatrix = new Matrix4_1.Matrix4();
+        var viewMatrix = new Matrix4_1.Matrix4();
+        var projMatrix = new Matrix4_1.Matrix4();
+        modelMatrix.setRotate(30, 0, 0, 1);
+        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        projMatrix.perspective(45, Device_1.Device.getInstance().canvas.width / Device_1.Device.getInstance().canvas.height, 1, 100);
+        this.sendUniformData("u_mMatrix", modelMatrix);
+        this.sendUniformData("u_vMatrix", viewMatrix);
+        this.sendUniformData("u_pMatrix", projMatrix);
     };
     return TriangleShader;
 }(Shader_1.Shader));

@@ -1,6 +1,5 @@
 import { Program } from "../../Program/Program";
 import { VariableLib } from "../VariableLib";
-import { Geometry } from "../../../Geometry/Geometry";
 export abstract class Shader {
 
     public VSource: string;
@@ -8,17 +7,21 @@ export abstract class Shader {
 
     public program: Program = Program.create();
 
-    public init(geometry: Geometry) {
-        this.initProgram(geometry);
+    public init() {
+        this.initProgram();
+        this.sendShaderAttribute();
+        this.program.use();
+        this.sendShaderUniform();
     }
 
     protected sendAttributeBuffer(name: string, data: any) {
         this.program.sendAttributeBuffer(name, data);
     }
-    protected sendUniformBData(name: string, data: any) {
+    protected sendUniformData(name: string, data: any) {
         this.program.sendUniformData(name, VariableLib[name].type, data);
     }
 
-    protected abstract initProgram(geometry: Geometry);
-    protected abstract sendShaderVariables();
+    protected abstract initProgram();
+    protected abstract sendShaderAttribute();
+    protected abstract sendShaderUniform();
 }

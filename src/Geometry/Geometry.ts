@@ -21,7 +21,7 @@ export abstract class Geometry extends Component {
     }
 
     private _bufferContainer: BufferContainer = null;
-    private _shader: Shader = TriangleShader.create();
+    private _shader: Shader = TriangleShader.create(this);
 
     public init() {
         var computeData: GeometryDataType = this.computeData();
@@ -32,7 +32,7 @@ export abstract class Geometry extends Component {
 
         this._bufferContainer.init();
 
-        this._shader.init(this);
+        this._shader.init();
     }
 
     public getChild(name: string): Buffer {

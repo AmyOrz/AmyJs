@@ -6,13 +6,16 @@ var Shader = (function () {
     function Shader() {
         this.program = Program_1.Program.create();
     }
-    Shader.prototype.init = function (geometry) {
-        this.initProgram(geometry);
+    Shader.prototype.init = function () {
+        this.initProgram();
+        this.sendShaderAttribute();
+        this.program.use();
+        this.sendShaderUniform();
     };
     Shader.prototype.sendAttributeBuffer = function (name, data) {
         this.program.sendAttributeBuffer(name, data);
     };
-    Shader.prototype.sendUniformBData = function (name, data) {
+    Shader.prototype.sendUniformData = function (name, data) {
         this.program.sendUniformData(name, VariableLib_1.VariableLib[name].type, data);
     };
     return Shader;

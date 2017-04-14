@@ -1,10 +1,11 @@
 import { Shader } from "./Shader";
 import { Geometry } from "../../../Geometry/Geometry";
 export declare class TriangleShader extends Shader {
-    static create(): TriangleShader;
+    static create(geometry: Geometry): TriangleShader;
     private geometry;
     VSource: string;
     FSource: string;
-    initProgram(geometry: Geometry): void;
-    sendShaderVariables(): void;
+    initProgram(): void;
+    sendShaderAttribute(): void;
+    sendShaderUniform(): void;
 }

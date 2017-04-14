@@ -14,36 +14,11 @@ export class Test {
 
         this._gl = Device.getInstance().gl;
 
-        var triangle = TriangleGeometry.create();
-        triangle.init();
-        this._program = triangle.program;
-        this._program.use();
-
         this._gl.clearColor(0, 0, 0, 1);
 
-        var modelMatrix = new Matrix4();
-        var viewMatrix = new Matrix4();
-        var projMatrix = new Matrix4();
-
-        modelMatrix.setRotate(0, 0, 0, 1);
-        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
-        projMatrix.perspective(45, Device.getInstance().canvas.width / Device.getInstance().canvas.height, 1, 100);
-
-        // mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
-
-        this._program.sendMatrix4("u_m", modelMatrix);
-        this._program.sendMatrix4("u_v", viewMatrix);
-        this._program.sendMatrix4("u_p", projMatrix);
-
-
-        // var verticeBuffer = triangle.getChild("verticeBuffer") as ArrayBuffer;
-        // var colorBuffer = triangle.getChild("colorBuffer") as ArrayBuffer;
-        //
-        // this._program.sendAttributeBuffer("a_Position", verticeBuffer);
-        // this._program.sendAttributeBuffer("a_Color", colorBuffer);
-        //
-        // this._program.sendAllBufferData();
-
+        var triangle = TriangleGeometry.create();
+        triangle.init();
+        
         this._gl.clear(this._gl.COLOR_BUFFER_BIT);
         this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
 
