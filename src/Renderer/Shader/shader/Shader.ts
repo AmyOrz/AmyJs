@@ -1,26 +1,24 @@
-export class Shader {
-    public static create() {
-        var obj = new this();
+import { Program } from "../../Program/Program";
+import { VariableLib } from "../VariableLib";
+import { Geometry } from "../../../Geometry/Geometry";
+export abstract class Shader {
 
-        return obj;
+    public VSource: string;
+    public FSource: string;
+
+    public program: Program = Program.create();
+
+    public init(geometry: Geometry) {
+        this.initProgram(geometry);
     }
 
-    public VSource: string =
-    "attribute vec4 a_Position;" +
-    "attribute vec4 a_Color;" +
-    "uniform mat4 u_MvpMatrix;" +
-    "varying vec4 v_Color;" +
-    "void main(){" +
-    "   gl_Position = u_MvpMatrix * a_Position;" +
-    "   v_Color = a_Color;" +
-    "}";
-    public FSource: string =
-    "#ifdef GL_ES\n" +
-    "precision mediump float;\n" +
-    "#endif\n" +
-    "varying vec4 v_Color;" +
-    "void main(){" +
-    "   gl_FragColor = v_Color;" +
-    "}";
+    protected sendAttributeBuffer(name: string, data: any) {
+        this.program.sendAttributeBuffer(name, data);
+    }
+    protected sendUniformBData(name: string, data: any) {
+        this.program.sendUniformData(name, VariableLib[name].type, data);
+    }
 
+    protected abstract initProgram(geometry: Geometry);
+    protected abstract sendShaderVariables();
 }

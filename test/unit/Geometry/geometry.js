@@ -13,11 +13,8 @@ describe("geometry", function () {
 
     describe("test class TriangleGeometry", function () {
         it("triangleGeometry create method should have geometryData",function () {
-            geometry = amy.TriangleGeometry.create();
-            geometry.init();
-            for(var data in geometry.geometryData){
-                expect(geometry.geometryData[data]).not.toBeNull();
-            }
+            geometry = new amy.Geometry();
+
         });
     });
 });

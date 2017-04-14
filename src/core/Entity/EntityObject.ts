@@ -3,8 +3,8 @@ import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 
 export abstract class EntityObject extends Entity {
-    get transform(){
-        return ;
+    get transform() {
+        return;
     }
 
     public name: string = null;

@@ -816,30 +816,68 @@
 	    return Matrix4;
 	}());
 
-	var Shader = (function () {
-	    function Shader() {
-	        this.VSource = "attribute vec4 a_Position;" +
-	            "attribute vec4 a_Color;" +
-	            "uniform mat4 u_MvpMatrix;" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_Position = u_MvpMatrix * a_Position;" +
-	            "   v_Color = a_Color;" +
-	            "}";
-	        this.FSource = "#ifdef GL_ES\n" +
-	            "precision mediump float;\n" +
-	            "#endif\n" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_FragColor = v_Color;" +
-	            "}";
+	var Entity = (function () {
+	    function Entity() {
+	        this.uid = Entity._count;
+	        Entity._count++;
 	    }
-	    Shader.create = function () {
+	    return Entity;
+	}());
+	Entity._count = 1;
+
+	var Component = (function (_super) {
+	    __extends(Component, _super);
+	    function Component() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.entityObject = null;
+	        return _this;
+	    }
+	    Object.defineProperty(Component.prototype, "transform", {
+	        get: function () {
+	            if (this.entityObject == void 0)
+	                return null;
+	            return this.entityObject.transform;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Component.prototype.init = function () { };
+	    Component.prototype.dispose = function () { };
+	    Component.prototype.clone = function () {
+	    };
+	    Component.prototype.addToObject = function (entityObject) {
+	        this.entityObject = entityObject;
+	        this.addToComponentContainer();
+	    };
+	    Component.prototype.addToComponentContainer = function () {
+	    };
+	    Component.prototype.removeFromObject = function (entityObject) {
+	        this.removeFromComponentContainer();
+	    };
+	    Component.prototype.removeFromComponentContainer = function () {
+	    };
+	    return Component;
+	}(Entity));
+
+	var GeometryData = (function () {
+	    function GeometryData() {
+	        this.vertice = null;
+	        this.color = null;
+	    }
+	    GeometryData.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
-	    return Shader;
+	    return GeometryData;
 	}());
+
+	(function (EBufferDataType) {
+	    EBufferDataType[EBufferDataType["VERTICE"] = "VERTICE"] = "VERTICE";
+	    EBufferDataType[EBufferDataType["INDICE"] = "INDICE"] = "INDICE";
+	    EBufferDataType[EBufferDataType["NORMAL"] = "NORMAL"] = "NORMAL";
+	    EBufferDataType[EBufferDataType["TEXCOORD"] = "TEXCOORD"] = "TEXCOORD";
+	    EBufferDataType[EBufferDataType["COLOR"] = "COLOR"] = "COLOR";
+	})(exports.EBufferDataType || (exports.EBufferDataType = {}));
 
 	var JudgeUtils = (function () {
 	    function JudgeUtils() {
@@ -1660,6 +1698,128 @@
 	    return Hash;
 	}());
 
+	var Buffer = (function () {
+	    function Buffer() {
+	        this.buffer = null;
+	    }
+	    Buffer.prototype.dispose = function () {
+	        exports.Device.getInstance().gl.deleteBuffer(this.buffer);
+	        delete this.buffer;
+	    };
+	    return Buffer;
+	}());
+
+	(function (EBufferType) {
+	    EBufferType[EBufferType["BYTE"] = "BYTE"] = "BYTE";
+	    EBufferType[EBufferType["UNSIGNED_BYTE"] = "UNSIGNED_BYTE"] = "UNSIGNED_BYTE";
+	    EBufferType[EBufferType["SHORT"] = "SHORT"] = "SHORT";
+	    EBufferType[EBufferType["UNSIGNED_SHORT"] = "UNSIGNED_SHORT"] = "UNSIGNED_SHORT";
+	    EBufferType[EBufferType["INT"] = "INT"] = "INT";
+	    EBufferType[EBufferType["UNSIGNED_INT"] = "UNSIGNED_INT"] = "UNSIGNED_INT";
+	    EBufferType[EBufferType["FLOAT"] = "FLOAT"] = "FLOAT";
+	})(exports.EBufferType || (exports.EBufferType = {}));
+
+	(function (EBufferUseage) {
+	    EBufferUseage[EBufferUseage["STREAM_DRAW"] = "STREAM_DRAW"] = "STREAM_DRAW";
+	    EBufferUseage[EBufferUseage["STATIC_DRAW"] = "STATIC_DRAW"] = "STATIC_DRAW";
+	    EBufferUseage[EBufferUseage["DYNAMIC_DRAW"] = "DYNAMIC_DRAW"] = "DYNAMIC_DRAW";
+	})(exports.EBufferUseage || (exports.EBufferUseage = {}));
+
+	var ArrayBuffer = (function (_super) {
+	    __extends(ArrayBuffer, _super);
+	    function ArrayBuffer() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.size = null;
+	        _this.data = null;
+	        _this.type = null;
+	        _this.usage = null;
+	        return _this;
+	    }
+	    ArrayBuffer.create = function (data, size, type, usage) {
+	        if (type === void 0) { type = exports.EBufferType.FLOAT; }
+	        if (usage === void 0) { usage = exports.EBufferUseage.STATIC_DRAW; }
+	        var obj = new this();
+	        obj.initWhenCreate(data, size, type, usage);
+	        return obj;
+	    };
+	    ArrayBuffer.prototype.initWhenCreate = function (data, size, type, usage) {
+	        if (type === void 0) { type = exports.EBufferType.FLOAT; }
+	        if (usage === void 0) { usage = exports.EBufferUseage.STATIC_DRAW; }
+	        if (data == void 0)
+	            return null;
+	        var gl = exports.Device.getInstance().gl;
+	        var typeData = new Float32Array(data);
+	        this.buffer = gl.createBuffer();
+	        if (!this.buffer) {
+	            console.log("the bufferContainer create error");
+	            return null;
+	        }
+	        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+	        gl.bufferData(gl.ARRAY_BUFFER, typeData, gl[usage]);
+	        this._saveData(typeData, size, type, usage);
+	        return this.buffer;
+	    };
+	    ArrayBuffer.prototype._saveData = function (data, size, type, usage) {
+	        this.data = data;
+	        this.size = size;
+	        this.type = type;
+	        this.usage = usage;
+	    };
+	    return ArrayBuffer;
+	}(Buffer));
+
+	var BufferContainer = (function () {
+	    function BufferContainer() {
+	        this.geometryData = null;
+	        this._bufferList = new Hash();
+	    }
+	    BufferContainer.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    BufferContainer.prototype.init = function () {
+	        this.addChild("verticeBuffer", this._getBufferByType(exports.EBufferDataType.VERTICE));
+	        this.addChild("colorBuffer", this._getBufferByType(exports.EBufferDataType.COLOR));
+	    };
+	    BufferContainer.prototype.addChild = function (bufferName, buffer) {
+	        this._bufferList.addChild(bufferName, buffer);
+	    };
+	    BufferContainer.prototype.getChild = function (bufferName) {
+	        return this._bufferList.getChild(bufferName);
+	    };
+	    BufferContainer.prototype.hasChild = function (bufferName) {
+	        return this._bufferList.hasChild(bufferName);
+	    };
+	    BufferContainer.prototype.getChildren = function () {
+	        return this._bufferList.getChildren();
+	    };
+	    BufferContainer.prototype._getBufferByType = function (type) {
+	        var buffer = null;
+	        switch (type) {
+	            case exports.EBufferDataType.VERTICE:
+	                buffer = this._getVerticeBuffer();
+	                break;
+	            case exports.EBufferDataType.COLOR:
+	                buffer = this._getColorBuffer();
+	                break;
+	        }
+	        return buffer;
+	    };
+	    BufferContainer.prototype._getVerticeBuffer = function () {
+	        return ArrayBuffer.create(this.geometryData.vertice, 3);
+	    };
+	    BufferContainer.prototype._getColorBuffer = function () {
+	        return ArrayBuffer.create(this.geometryData.color, 3);
+	    };
+	    BufferContainer.prototype._getNormalBuffer = function () {
+	    };
+	    BufferContainer.prototype._getIndiceBuffer = function () {
+	    };
+	    BufferContainer.prototype._getTexCoordBuffer = function () {
+	    };
+	    return BufferContainer;
+	}());
+
 	(function (EVariableType) {
 	    EVariableType[EVariableType["FLOAT_1"] = "FLOAT_1"] = "FLOAT_1";
 	    EVariableType[EVariableType["FLOAT_2"] = "FLOAT_2"] = "FLOAT_2";
@@ -1766,11 +1926,7 @@
 	    }
 	    Program.create = function () {
 	        var obj = new this();
-	        obj.initWhenCreate();
 	        return obj;
-	    };
-	    Program.prototype.initWhenCreate = function () {
-	        this.initProgramWithShader(Shader.create());
 	    };
 	    Program.prototype.use = function () {
 	        this._getGl().useProgram(this.glProgram);
@@ -1914,195 +2070,93 @@
 	    return Program;
 	}());
 
-	var Entity = (function () {
-	    function Entity() {
-	        this.uid = Entity._count;
-	        Entity._count++;
+	var VariableLib = (function () {
+	    function VariableLib() {
 	    }
-	    return Entity;
+	    return VariableLib;
 	}());
-	Entity._count = 1;
+	VariableLib.a_Position = {
+	    type: exports.EVariableType.FLOAT_3
+	};
+	VariableLib.a_Color = {
+	    type: exports.EVariableType.FLOAT_3
+	};
+	VariableLib.u_mMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	};
+	VariableLib.u_vMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	};
+	VariableLib.u_pMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	};
+	VariableLib.u_mvpMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	};
 
-	var Component = (function (_super) {
-	    __extends(Component, _super);
-	    function Component() {
+	var Shader = (function () {
+	    function Shader() {
+	        this.program = Program.create();
+	    }
+	    Shader.prototype.init = function (geometry) {
+	        this.initProgram(geometry);
+	    };
+	    Shader.prototype.sendAttributeBuffer = function (name, data) {
+	        this.program.sendAttributeBuffer(name, data);
+	    };
+	    Shader.prototype.sendUniformBData = function (name, data) {
+	        this.program.sendUniformData(name, VariableLib[name].type, data);
+	    };
+	    return Shader;
+	}());
+
+	var TriangleShader = (function (_super) {
+	    __extends(TriangleShader, _super);
+	    function TriangleShader() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.entityObject = null;
+	        _this.VSource = "attribute vec4 a_Position;" +
+	            "attribute vec4 a_Color;" +
+	            "uniform mat4 u_m;" +
+	            "uniform mat4 u_v;" +
+	            "uniform mat4 u_p;" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_Position = u_p * u_v * u_m * a_Position;" +
+	            "   v_Color = a_Color;" +
+	            "}";
+	        _this.FSource = "#ifdef GL_ES\n" +
+	            "precision mediump float;\n" +
+	            "#endif\n" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_FragColor = v_Color;" +
+	            "}";
 	        return _this;
 	    }
-	    Object.defineProperty(Component.prototype, "transform", {
-	        get: function () {
-	            if (this.entityObject == void 0)
-	                return null;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Component.prototype.init = function () { };
-	    Component.prototype.dispose = function () { };
-	    Component.prototype.clone = function () {
-	    };
-	    Component.prototype.addToObject = function (entityObject) {
-	        this.entityObject = entityObject;
-	        this.addToComponentContainer();
-	    };
-	    Component.prototype.addToComponentContainer = function () {
-	    };
-	    Component.prototype.removeFromObject = function (entityObject) {
-	        this.removeFromComponentContainer();
-	    };
-	    Component.prototype.removeFromComponentContainer = function () {
-	    };
-	    return Component;
-	}(Entity));
-
-	var GeometryData = (function () {
-	    function GeometryData() {
-	        this.vertice = null;
-	        this.color = null;
-	    }
-	    GeometryData.create = function () {
+	    TriangleShader.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
-	    return GeometryData;
-	}());
-
-	(function (EBufferDataType) {
-	    EBufferDataType[EBufferDataType["VERTICE"] = "VERTICE"] = "VERTICE";
-	    EBufferDataType[EBufferDataType["INDICE"] = "INDICE"] = "INDICE";
-	    EBufferDataType[EBufferDataType["NORMAL"] = "NORMAL"] = "NORMAL";
-	    EBufferDataType[EBufferDataType["TEXCOORD"] = "TEXCOORD"] = "TEXCOORD";
-	    EBufferDataType[EBufferDataType["COLOR"] = "COLOR"] = "COLOR";
-	})(exports.EBufferDataType || (exports.EBufferDataType = {}));
-
-	var Buffer = (function () {
-	    function Buffer() {
-	        this.buffer = null;
-	    }
-	    Buffer.prototype.dispose = function () {
-	        exports.Device.getInstance().gl.deleteBuffer(this.buffer);
-	        delete this.buffer;
+	    TriangleShader.prototype.initProgram = function (geometry) {
+	        this.program.initProgramWithShader(this);
+	        this.geometry = geometry;
 	    };
-	    return Buffer;
-	}());
-
-	(function (EBufferType) {
-	    EBufferType[EBufferType["BYTE"] = "BYTE"] = "BYTE";
-	    EBufferType[EBufferType["UNSIGNED_BYTE"] = "UNSIGNED_BYTE"] = "UNSIGNED_BYTE";
-	    EBufferType[EBufferType["SHORT"] = "SHORT"] = "SHORT";
-	    EBufferType[EBufferType["UNSIGNED_SHORT"] = "UNSIGNED_SHORT"] = "UNSIGNED_SHORT";
-	    EBufferType[EBufferType["INT"] = "INT"] = "INT";
-	    EBufferType[EBufferType["UNSIGNED_INT"] = "UNSIGNED_INT"] = "UNSIGNED_INT";
-	    EBufferType[EBufferType["FLOAT"] = "FLOAT"] = "FLOAT";
-	})(exports.EBufferType || (exports.EBufferType = {}));
-
-	(function (EBufferUseage) {
-	    EBufferUseage[EBufferUseage["STREAM_DRAW"] = "STREAM_DRAW"] = "STREAM_DRAW";
-	    EBufferUseage[EBufferUseage["STATIC_DRAW"] = "STATIC_DRAW"] = "STATIC_DRAW";
-	    EBufferUseage[EBufferUseage["DYNAMIC_DRAW"] = "DYNAMIC_DRAW"] = "DYNAMIC_DRAW";
-	})(exports.EBufferUseage || (exports.EBufferUseage = {}));
-
-	var ArrayBuffer = (function (_super) {
-	    __extends(ArrayBuffer, _super);
-	    function ArrayBuffer() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.size = null;
-	        _this.data = null;
-	        _this.type = null;
-	        _this.usage = null;
-	        return _this;
-	    }
-	    ArrayBuffer.create = function (data, size, type, usage) {
-	        if (type === void 0) { type = exports.EBufferType.FLOAT; }
-	        if (usage === void 0) { usage = exports.EBufferUseage.STATIC_DRAW; }
-	        var obj = new this();
-	        obj.initWhenCreate(data, size, type, usage);
-	        return obj;
+	    TriangleShader.prototype.sendShaderVariables = function () {
+	        var verticeBuffer = this.geometry.getChild("verticeBuffer");
+	        var colorBuffer = this.geometry.getChild("colorBuffer");
+	        this.sendAttributeBuffer("a_Position", verticeBuffer);
+	        this.sendAttributeBuffer("a_Color", colorBuffer);
+	        this.program.sendAllBufferData();
 	    };
-	    ArrayBuffer.prototype.initWhenCreate = function (data, size, type, usage) {
-	        if (type === void 0) { type = exports.EBufferType.FLOAT; }
-	        if (usage === void 0) { usage = exports.EBufferUseage.STATIC_DRAW; }
-	        if (data == void 0)
-	            return null;
-	        var gl = exports.Device.getInstance().gl;
-	        var typeData = new Float32Array(data);
-	        this.buffer = gl.createBuffer();
-	        if (!this.buffer) {
-	            console.log("the bufferContainer create error");
-	            return null;
-	        }
-	        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-	        gl.bufferData(gl.ARRAY_BUFFER, typeData, gl[usage]);
-	        this._saveData(typeData, size, type, usage);
-	        return this.buffer;
-	    };
-	    ArrayBuffer.prototype._saveData = function (data, size, type, usage) {
-	        this.data = data;
-	        this.size = size;
-	        this.type = type;
-	        this.usage = usage;
-	    };
-	    return ArrayBuffer;
-	}(Buffer));
-
-	var BufferContainer = (function () {
-	    function BufferContainer() {
-	        this.geometryData = null;
-	        this._bufferList = new Hash();
-	    }
-	    BufferContainer.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    BufferContainer.prototype.init = function () {
-	        this.addChild("verticeBuffer", this._getBufferByType(exports.EBufferDataType.VERTICE));
-	        this.addChild("colorBuffer", this._getBufferByType(exports.EBufferDataType.COLOR));
-	    };
-	    BufferContainer.prototype.addChild = function (bufferName, buffer) {
-	        this._bufferList.addChild(bufferName, buffer);
-	    };
-	    BufferContainer.prototype.getChild = function (bufferName) {
-	        return this._bufferList.getChild(bufferName);
-	    };
-	    BufferContainer.prototype.hasChild = function (bufferName) {
-	        return this._bufferList.hasChild(bufferName);
-	    };
-	    BufferContainer.prototype.getChildren = function () {
-	        return this._bufferList.getChildren();
-	    };
-	    BufferContainer.prototype._getBufferByType = function (type) {
-	        var buffer = null;
-	        switch (type) {
-	            case exports.EBufferDataType.VERTICE:
-	                buffer = this._getVerticeBuffer();
-	                break;
-	            case exports.EBufferDataType.COLOR:
-	                buffer = this._getColorBuffer();
-	                break;
-	        }
-	        return buffer;
-	    };
-	    BufferContainer.prototype._getVerticeBuffer = function () {
-	        return ArrayBuffer.create(this.geometryData.vertice, 3);
-	    };
-	    BufferContainer.prototype._getColorBuffer = function () {
-	        return ArrayBuffer.create(this.geometryData.color, 3);
-	    };
-	    BufferContainer.prototype._getNormalBuffer = function () {
-	    };
-	    BufferContainer.prototype._getIndiceBuffer = function () {
-	    };
-	    BufferContainer.prototype._getTexCoordBuffer = function () {
-	    };
-	    return BufferContainer;
-	}());
+	    return TriangleShader;
+	}(Shader));
 
 	var Geometry = (function (_super) {
 	    __extends(Geometry, _super);
 	    function Geometry() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this._bufferContainer = null;
+	        _this._shader = TriangleShader.create();
 	        return _this;
 	    }
 	    Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -2112,11 +2166,19 @@
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Object.defineProperty(Geometry.prototype, "program", {
+	        get: function () {
+	            return this._shader.program;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    Geometry.prototype.init = function () {
 	        var computeData = this.computeData();
 	        this._bufferContainer = BufferContainer.create();
 	        this._bufferContainer.geometryData = this.createGeometryData(computeData);
 	        this._bufferContainer.init();
+	        this._shader.init(this);
 	    };
 	    Geometry.prototype.getChild = function (name) {
 	        return this._bufferContainer.getChild(name);
@@ -2182,25 +2244,20 @@
 	    Test.prototype.testCanvas = function () {
 	        Main.setCanvas("webgl").init();
 	        this._gl = exports.Device.getInstance().gl;
-	        this._program = Program.create();
+	        var triangle = TriangleGeometry.create();
+	        triangle.init();
+	        this._program = triangle.program;
 	        this._program.use();
 	        this._gl.clearColor(0, 0, 0, 1);
 	        var modelMatrix = new Matrix4();
 	        var viewMatrix = new Matrix4();
 	        var projMatrix = new Matrix4();
-	        var mvpMatrix = new Matrix4();
 	        modelMatrix.setRotate(0, 0, 0, 1);
 	        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
 	        projMatrix.perspective(45, exports.Device.getInstance().canvas.width / exports.Device.getInstance().canvas.height, 1, 100);
-	        mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
-	        this._program.sendMatrix4("u_MvpMatrix", mvpMatrix);
-	        var triangle = TriangleGeometry.create();
-	        triangle.init();
-	        var verticeBuffer = triangle.getChild("verticeBuffer");
-	        var colorBuffer = triangle.getChild("colorBuffer");
-	        this._program.sendAttributeBuffer("a_Position", verticeBuffer);
-	        this._program.sendAttributeBuffer("a_Color", colorBuffer);
-	        this._program.sendAllBufferData();
+	        this._program.sendMatrix4("u_m", modelMatrix);
+	        this._program.sendMatrix4("u_v", viewMatrix);
+	        this._program.sendMatrix4("u_p", projMatrix);
 	        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 	        this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
 	    };
@@ -2408,6 +2465,13 @@
 	        _this._entityManager = EntityManager.create(_this);
 	        return _this;
 	    }
+	    Object.defineProperty(EntityObject.prototype, "transform", {
+	        get: function () {
+	            return;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    EntityObject.prototype.init = function () {
 	        this._entityManager.init();
 	        return this;
@@ -2848,6 +2912,8 @@
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
 	exports.Shader = Shader;
+	exports.TriangleShader = TriangleShader;
+	exports.VariableLib = VariableLib;
 	exports.ThreeDTransform = ThreeDTransform;
 	exports.Transform = Transform;
 	exports.singleton = singleton;

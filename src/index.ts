@@ -29,6 +29,8 @@ export { EVariableType } from "./Renderer/Program/EVariableType";
 export { GLSLDataSender } from "./Renderer/Program/GLSLDataSender";
 export { Program } from "./Renderer/Program/Program";
 export { Shader } from "./Renderer/Shader/shader/Shader";
+export { TriangleShader } from "./Renderer/Shader/shader/TriangleShader";
+export { VariableLib } from "./Renderer/Shader/VariableLib";
 export { Scene } from "./Scene/Scene";
 export { ThreeDTransform } from "./Transform/ThreeDTransform";
 export { Transform } from "./Transform/Transform";

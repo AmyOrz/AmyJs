@@ -14,15 +14,27 @@ describe("BufferContains", function () {
     });
 
     describe("test method getChild", function () {
-        it("method getChildren is get vertice and color,the len is 2",function () {
+        it("method init should add two child",function () {
             var geometryData = new amy.GeometryData();
             bufferContainer.geometryData = geometryData;
+
+            sandbox.stub(bufferContainer,"addChild");
+
             bufferContainer.init();
-            var count = 0;
-            for(var name in bufferContainer.getChildren()){
-                count++;
-            }
-            expect(2).toEqual(count);
+
+            expect(bufferContainer.addChild).toCalledTwice();
         });
+        it("_getChildByType should addChild by type",function () {
+            var geometryData = new amy.GeometryData();
+            bufferContainer.geometryData = geometryData;
+
+            sandbox.stub(bufferContainer,"_getBufferByType");
+
+            bufferContainer.init();
+
+            expect(bufferContainer._getBufferByType.callCount).toEqual(2);
+            expect(bufferContainer._getBufferByType.getCall(0)).toCalledWith(amy.EBufferDataType.VERTICE);
+            expect(bufferContainer._getBufferByType.getCall(1)).toCalledWith(amy.EBufferDataType.COLOR);
+        })
     });
 });

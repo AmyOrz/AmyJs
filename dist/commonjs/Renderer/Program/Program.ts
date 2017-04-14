@@ -9,17 +9,12 @@ export class Program {
     public static create() {
         var obj = new this();
 
-        obj.initWhenCreate();
         return obj;
     }
 
     public glProgram: any = null;
     private _attributeList: Hash<number> = new Hash<number>();
     private _glslSend: GLSLDataSender = GLSLDataSender.create(this);
-
-    public initWhenCreate() {
-        this.initProgramWithShader(Shader.create());
-    }
 
     public use() {
         this._getGl().useProgram(this.glProgram);
