@@ -1,7 +1,8 @@
 import { EntityObject } from "../EntityObject";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
-import { Geometry } from "../../../Geometry/Geometry";
-import { Transform } from "../../../Transform/Transform";
+import { Geometry } from "../../../Component/Geometry/Geometry";
+import { Component } from "../../Component";
+import { Transform } from "../../../Component/Transform/Transform";
 
 export class ComponentManager {
     public static create(entityObject: EntityObject) {
@@ -15,11 +16,21 @@ export class ComponentManager {
     public transform: Transform = null;
 
     private _componentList: Collection<any> = new Collection<any>();
-    // private _rendererComponent: RendererComponent = null;
     private _geometry: Geometry = null;
+
 
     public init() {
 
+    }
+
+    public addComponent(component: Component) {
+        if (component instanceof Geometry) {
+            this._geometry = component;
+        }
+        if (component instanceof Transform) {
+            this.transform = component;
+        }
+        this._componentList.addChild(component);
     }
 
 }

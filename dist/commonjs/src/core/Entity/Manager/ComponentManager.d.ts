@@ -1,5 +1,6 @@
 import { EntityObject } from "../EntityObject";
-import { Transform } from "../../../Transform/Transform";
+import { Component } from "../../Component";
+import { Transform } from "../../../Component/Transform/Transform";
 export declare class ComponentManager {
     private _entityObject;
     static create(entityObject: EntityObject): ComponentManager;
@@ -8,4 +9,5 @@ export declare class ComponentManager {
     private _componentList;
     private _geometry;
     init(): void;
+    addComponent(component: Component): void;
 }

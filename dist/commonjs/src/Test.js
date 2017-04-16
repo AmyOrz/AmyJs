@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Main_1 = require("./core/Main");
-var Device_1 = require("./device/Device");
-var TriangleGeometry_1 = require("./Geometry/TriangleGeometry");
+var Device_1 = require("./core/device/Device");
+var TriangleGeometry_1 = require("./Component/Geometry/TriangleGeometry");
 var Test = (function () {
     function Test() {
         this._gl = null;
-        this._program = null;
     }
     Test.prototype.testCanvas = function () {
         Main_1.Main.setCanvas("webgl").init();

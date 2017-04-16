@@ -40,7 +40,6 @@ var EntityManager = (function (_super) {
     };
     EntityManager.prototype.addChild = function (child) {
         this._objectList.addChild(child);
-        child.onEnter();
         return this;
     };
     EntityManager.prototype.addChildren = function () {
@@ -100,7 +99,6 @@ var EntityManager = (function (_super) {
         });
     };
     EntityManager.prototype.removeChild = function (child) {
-        child.onExit();
         this._objectList.removeChild(child);
         return this;
     };

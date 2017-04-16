@@ -1,4 +1,4 @@
-import { Device } from "../device/Device";
+import { Device } from "./device/Device";
 import { ContextConfigData } from "./ContextConfig";
 export class Main {
 

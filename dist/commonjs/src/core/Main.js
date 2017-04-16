@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Device_1 = require("../device/Device");
+var Device_1 = require("./device/Device");
 var Main = (function () {
     function Main() {
     }

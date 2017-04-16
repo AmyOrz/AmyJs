@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Collection_1 = require("wonder-commonlib/dist/commonjs/Collection");
+var Geometry_1 = require("../../../Component/Geometry/Geometry");
+var Transform_1 = require("../../../Component/Transform/Transform");
 var ComponentManager = (function () {
     function ComponentManager(_entityObject) {
         this._entityObject = _entityObject;
@@ -13,6 +15,15 @@ var ComponentManager = (function () {
         return obj;
     };
     ComponentManager.prototype.init = function () {
+    };
+    ComponentManager.prototype.addComponent = function (component) {
+        if (component instanceof Geometry_1.Geometry) {
+            this._geometry = component;
+        }
+        if (component instanceof Transform_1.Transform) {
+            this.transform = component;
+        }
+        this._componentList.addChild(component);
     };
     return ComponentManager;
 }());

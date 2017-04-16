@@ -1,13 +1,10 @@
 import { Main } from "./core/Main";
-import { Device } from "./device/Device";
-import { Matrix4 } from "./Math/Matrix4";
-import { Program } from "./Renderer/Program/Program";
-import { TriangleGeometry } from "./Geometry/TriangleGeometry";
+import { Device } from "./core/device/Device";
+import { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
 
 export class Test {
 
     private _gl: WebGLRenderingContext = null;
-    private _program: Program = null;
 
     public testCanvas() {
         Main.setCanvas("webgl").init();
@@ -18,7 +15,7 @@ export class Test {
 
         var triangle = TriangleGeometry.create();
         triangle.init();
-        
+
         this._gl.clear(this._gl.COLOR_BUFFER_BIT);
         this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
 

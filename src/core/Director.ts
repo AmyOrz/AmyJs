@@ -1,5 +1,5 @@
 import { singleton } from "../until/singleton";
-import { Scene } from "../Scene/Scene";
+import { Scene } from "./Scene";
 
 @singleton()
 export class Director {

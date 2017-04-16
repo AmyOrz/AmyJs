@@ -12,4 +12,5 @@ export class GameObject extends EntityObject {
         // super.initWhencreate();
         this.name = `GameObject${this.uid}`;
     }
+
 }

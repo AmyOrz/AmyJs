@@ -12,14 +12,8 @@ export class Component extends Entity {
 
     public init() { }
 
-    public dispose() { }
-
-    public clone(): any {
-
-    }
 
     public addToObject(entityObject: EntityObject) {
-        // if (this.entityObject) this.entityObject.removeComponent(this);
 
         this.entityObject = entityObject;
 
@@ -30,11 +24,4 @@ export class Component extends Entity {
 
     }
 
-    public removeFromObject(entityObject: EntityObject) {
-        this.removeFromComponentContainer();
-    }
-
-    public removeFromComponentContainer() {
-
-    }
 }

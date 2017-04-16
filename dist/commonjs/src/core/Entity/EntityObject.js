@@ -12,12 +12,14 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Entity_1 = require("./Entity");
 var EntityManager_1 = require("./Manager/EntityManager");
+var ComponentManager_1 = require("./Manager/ComponentManager");
 var EntityObject = (function (_super) {
     __extends(EntityObject, _super);
     function EntityObject() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.name = null;
         _this._entityManager = EntityManager_1.EntityManager.create(_this);
+        _this._componentManager = ComponentManager_1.ComponentManager.create(_this);
         return _this;
     }
     Object.defineProperty(EntityObject.prototype, "transform", {
@@ -32,15 +34,8 @@ var EntityObject = (function (_super) {
         return this;
     };
     EntityObject.prototype.dispose = function () {
-        this.onDispose();
         this._entityManager.dispose();
         return this;
-    };
-    EntityObject.prototype.onEnter = function () {
-    };
-    EntityObject.prototype.onExit = function () {
-    };
-    EntityObject.prototype.onDispose = function () {
     };
     EntityObject.prototype.hasChild = function (child) {
         return this._entityManager.hasChild(child);
@@ -87,6 +82,9 @@ var EntityObject = (function (_super) {
     };
     EntityObject.prototype.removeAllChildren = function () {
         this._entityManager.removeAllChildren();
+    };
+    EntityObject.prototype.addComponent = function (component) {
+        this._componentManager.addComponent(component);
     };
     return EntityObject;
 }(Entity_1.Entity));

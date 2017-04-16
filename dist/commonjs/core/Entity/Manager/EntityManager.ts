@@ -32,8 +32,6 @@ export class EntityManager extends Entity {
     public addChild(child: EntityObject) {
         this._objectList.addChild(child);
 
-        child.onEnter();
-
         return this;
     }
     public addChildren(children: EntityObject);
@@ -101,7 +99,6 @@ export class EntityManager extends Entity {
     }
 
     public removeChild(child: EntityObject) {
-        child.onExit();
 
         this._objectList.removeChild(child);
 

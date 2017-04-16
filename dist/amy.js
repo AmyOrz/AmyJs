@@ -262,19 +262,11 @@
 	        configurable: true
 	    });
 	    Component.prototype.init = function () { };
-	    Component.prototype.dispose = function () { };
-	    Component.prototype.clone = function () {
-	    };
 	    Component.prototype.addToObject = function (entityObject) {
 	        this.entityObject = entityObject;
 	        this.addToComponentContainer();
 	    };
 	    Component.prototype.addToComponentContainer = function () {
-	    };
-	    Component.prototype.removeFromObject = function (entityObject) {
-	        this.removeFromComponentContainer();
-	    };
-	    Component.prototype.removeFromComponentContainer = function () {
 	    };
 	    return Component;
 	}(Entity));
@@ -1329,6 +1321,9 @@
 	            return this._getUniformLocationCache[name];
 	        }
 	        var uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
+	        if (uniform == void 0) {
+	            throw new TypeError("the uniform is not find");
+	        }
 	        this._getUniformLocationCache[name] = uniform;
 	        return uniform;
 	    };
@@ -1364,8 +1359,10 @@
 	    };
 	    Program.prototype.sendAttributeBuffer = function (name, buffer) {
 	        var pos = this.getAttribLocation(name);
-	        if (pos == -1)
-	            return;
+	        if (pos == -1) {
+	            throw new TypeError("the attribute is not find");
+	        }
+	        
 	        this._glslSend.addBufferToSendList(pos, buffer);
 	    };
 	    Program.prototype.sendAllBufferData = function () {
@@ -2253,7 +2250,6 @@
 	var Test = (function () {
 	    function Test() {
 	        this._gl = null;
-	        this._program = null;
 	    }
 	    Test.prototype.testCanvas = function () {
 	        Main.setCanvas("webgl").init();
@@ -2270,6 +2266,101 @@
 	}());
 	var a = new Test();
 	a.testCanvas();
+
+	var CubeData = (function () {
+	    function CubeData() {
+	    }
+	    return CubeData;
+	}());
+	CubeData.vertices = new Float32Array([
+	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
+	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
+	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
+	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
+	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
+	]);
+	CubeData.texCoords = new Float32Array([
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
+	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
+	]);
+	CubeData.indices = new Uint8Array([
+	    0, 1, 2, 0, 2, 3,
+	    4, 5, 6, 4, 6, 7,
+	    8, 9, 10, 8, 10, 11,
+	    12, 13, 14, 12, 14, 15,
+	    16, 17, 18, 16, 18, 19,
+	    20, 21, 22, 20, 22, 23
+	]);
+	CubeData.normals = new Float32Array([
+	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
+	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
+	]);
+	CubeData.color = new Float32Array([
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
+	]);
+
+	var PlaneData = (function () {
+	    function PlaneData() {
+	    }
+	    return PlaneData;
+	}());
+	PlaneData.vertices = new Float32Array([
+	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
+	]);
+	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
+	PlaneData.color = new Float32Array([
+	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+	]);
+	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
+
+	var Transform = (function (_super) {
+	    __extends(Transform, _super);
+	    function Transform() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.mMatrix = new Matrix4();
+	        return _this;
+	    }
+	    Transform.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Transform.prototype.rotate = function (angle, x, y, z) {
+	        this.mMatrix.rotate(angle, x, y, z);
+	    };
+	    Transform.prototype.scale = function (x, y, z) {
+	        this.mMatrix.scale(x, y, z);
+	    };
+	    Transform.prototype.translate = function (x, y, z) {
+	        this.mMatrix.translate(x, y, z);
+	    };
+	    return Transform;
+	}(Component));
+
+	var ThreeDTransform = (function (_super) {
+	    __extends(ThreeDTransform, _super);
+	    function ThreeDTransform() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    return ThreeDTransform;
+	}(Transform));
+
+	(function (EScreenSize) {
+	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
+	})(exports.EScreenSize || (exports.EScreenSize = {}));
 
 	exports.Director = (function () {
 	    function Director() {
@@ -2387,7 +2478,6 @@
 	    };
 	    EntityManager.prototype.addChild = function (child) {
 	        this._objectList.addChild(child);
-	        child.onEnter();
 	        return this;
 	    };
 	    EntityManager.prototype.addChildren = function () {
@@ -2447,7 +2537,6 @@
 	        });
 	    };
 	    EntityManager.prototype.removeChild = function (child) {
-	        child.onExit();
 	        this._objectList.removeChild(child);
 	        return this;
 	    };
@@ -2460,12 +2549,38 @@
 	    return EntityManager;
 	}(Entity));
 
+	var ComponentManager = (function () {
+	    function ComponentManager(_entityObject) {
+	        this._entityObject = _entityObject;
+	        this.transform = null;
+	        this._componentList = new Collection();
+	        this._geometry = null;
+	    }
+	    ComponentManager.create = function (entityObject) {
+	        var obj = new this(entityObject);
+	        return obj;
+	    };
+	    ComponentManager.prototype.init = function () {
+	    };
+	    ComponentManager.prototype.addComponent = function (component) {
+	        if (component instanceof Geometry) {
+	            this._geometry = component;
+	        }
+	        if (component instanceof Transform) {
+	            this.transform = component;
+	        }
+	        this._componentList.addChild(component);
+	    };
+	    return ComponentManager;
+	}());
+
 	var EntityObject = (function (_super) {
 	    __extends(EntityObject, _super);
 	    function EntityObject() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this.name = null;
 	        _this._entityManager = EntityManager.create(_this);
+	        _this._componentManager = ComponentManager.create(_this);
 	        return _this;
 	    }
 	    Object.defineProperty(EntityObject.prototype, "transform", {
@@ -2480,15 +2595,8 @@
 	        return this;
 	    };
 	    EntityObject.prototype.dispose = function () {
-	        this.onDispose();
 	        this._entityManager.dispose();
 	        return this;
-	    };
-	    EntityObject.prototype.onEnter = function () {
-	    };
-	    EntityObject.prototype.onExit = function () {
-	    };
-	    EntityObject.prototype.onDispose = function () {
 	    };
 	    EntityObject.prototype.hasChild = function (child) {
 	        return this._entityManager.hasChild(child);
@@ -2536,6 +2644,9 @@
 	    EntityObject.prototype.removeAllChildren = function () {
 	        this._entityManager.removeAllChildren();
 	    };
+	    EntityObject.prototype.addComponent = function (component) {
+	        this._componentManager.addComponent(component);
+	    };
 	    return EntityObject;
 	}(Entity));
 
@@ -2555,298 +2666,43 @@
 	    return GameObject;
 	}(EntityObject));
 
-	var ComponentManager = (function () {
-	    function ComponentManager(_entityObject) {
-	        this._entityObject = _entityObject;
-	        this.transform = null;
-	        this._componentList = new Collection();
-	        this._geometry = null;
+	(function (EDrawMode) {
+	    EDrawMode[EDrawMode["POINTS"] = "POINTS"] = "POINTS";
+	    EDrawMode[EDrawMode["LINES"] = "LINES"] = "LINES";
+	    EDrawMode[EDrawMode["LINE_LOOP"] = "LINE_LOOP"] = "LINE_LOOP";
+	    EDrawMode[EDrawMode["LINE_STRIP"] = "LINE_STRIP"] = "LINE_STRIP";
+	    EDrawMode[EDrawMode["TRIANGLES"] = "TRIANGLES"] = "TRIANGLES";
+	    EDrawMode[EDrawMode["TRIANGLE_STRIP"] = "TRIANGLE_STRIP"] = "TRIANGLE_STRIP";
+	    EDrawMode[EDrawMode["TRANGLE_FAN"] = "TRIANGLE_FAN"] = "TRANGLE_FAN";
+	})(exports.EDrawMode || (exports.EDrawMode = {}));
+
+	var RenderCommand = (function () {
+	    function RenderCommand() {
 	    }
-	    ComponentManager.create = function (entityObject) {
-	        var obj = new this(entityObject);
+	    RenderCommand.create = function () {
+	        var obj = new this();
 	        return obj;
 	    };
-	    ComponentManager.prototype.init = function () {
+	    RenderCommand.prototype.draw = function () {
+	        this._getGl().drawArrays();
 	    };
-	    return ComponentManager;
+	    RenderCommand.prototype._getGl = function () {
+	        return exports.Device.getInstance().gl;
+	    };
+	    return RenderCommand;
 	}());
 
-	(function (EScreenSize) {
-	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
-	})(exports.EScreenSize || (exports.EScreenSize = {}));
-
-	var CubeData = (function () {
-	    function CubeData() {
+	var Render = (function () {
+	    function Render() {
 	    }
-	    return CubeData;
-	}());
-	CubeData.vertices = new Float32Array([
-	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
-	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
-	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
-	]);
-	CubeData.texCoords = new Float32Array([
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
-	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
-	]);
-	CubeData.indices = new Uint8Array([
-	    0, 1, 2, 0, 2, 3,
-	    4, 5, 6, 4, 6, 7,
-	    8, 9, 10, 8, 10, 11,
-	    12, 13, 14, 12, 14, 15,
-	    16, 17, 18, 16, 18, 19,
-	    20, 21, 22, 20, 22, 23
-	]);
-	CubeData.normals = new Float32Array([
-	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
-	]);
-	CubeData.color = new Float32Array([
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
-	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
-	]);
-
-	var PlaneData = (function () {
-	    function PlaneData() {
-	    }
-	    return PlaneData;
-	}());
-	PlaneData.vertices = new Float32Array([
-	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
-	]);
-	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
-	PlaneData.color = new Float32Array([
-	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-	]);
-	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
-
-	function singleton$1(isInitWhenCreate) {
-	    if (isInitWhenCreate === void 0) { isInitWhenCreate = false; }
-	    return function (target) {
-	        target._instance = null;
-	        if (isInitWhenCreate) {
-	            target.getInstance = function () {
-	                if (target._instance == null) {
-	                    var instance = new target();
-	                    target._instance = instance;
-	                    instance.initWhenCreate();
-	                }
-	                return target._instance;
-	            };
-	        }
-	        else {
-	            target.getInstance = function () {
-	                if (target._instance == null) {
-	                    target._instance = new target();
-	                }
-	                return target._instance;
-	            };
-	        }
-	    };
-	}
-
-	var View$1 = (function () {
-	    function View(_dom) {
-	        this._dom = _dom;
-	    }
-	    View.create = function (view) {
-	        var obj = new this(view);
-	        return obj;
-	    };
-	    Object.defineProperty(View.prototype, "offset", {
-	        get: function () {
-	            var view = this._dom, offset = { x: view.offsetLeft, y: view.offsetTop };
-	            while (view = view.offsetParent) {
-	                offset.x += view.offsetLeft;
-	                offset.y += view.offsetTop;
-	            }
-	            return offset;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "dom", {
-	        get: function () {
-	            return this._dom;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "x", {
-	        get: function () {
-	            return this._dom.style.x;
-	        },
-	        set: function (val) {
-	            this._dom.style.x = val + "px";
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "y", {
-	        get: function () {
-	            return this.dom.style.y;
-	        },
-	        set: function (val) {
-	            this._dom.style.y = val + "px";
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "width", {
-	        get: function () {
-	            return this.dom.clientWidth;
-	        },
-	        set: function (width) {
-	            this._dom.width = width;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "height", {
-	        get: function () {
-	            return this.dom.clientHeight;
-	        },
-	        set: function (height) {
-	            this._dom.height = height;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "styleWidth", {
-	        get: function () {
-	            return this._dom.style.width;
-	        },
-	        set: function (width) {
-	            this._dom.style.width = width;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(View.prototype, "styleHeight", {
-	        get: function () {
-	            return this._dom.style.height;
-	        },
-	        set: function (height) {
-	            this._dom.style.height = height;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    View.prototype.getContext = function (contextConfig) {
-	        var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
-	        var gl;
-	        for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
-	            var item = names_1[_i];
-	            try {
-	                gl = this._dom.getContext(item, contextConfig);
-	            }
-	            catch (e) {
-	            }
-	            if (gl) {
-	                break;
-	            }
-	        }
-	        return gl;
-	    };
-	    View.prototype.initCanvas = function () {
-	        this._dom.style.cssText = "position:absolute;left:0;top:0;";
-	    };
-	    return View;
+	    return Render;
 	}());
 
-	var Device$1 = (function () {
-	    function Device() {
+	var WebglRender = (function () {
+	    function WebglRender() {
 	    }
-	    Device.getInstance = function () { };
-	    Device.prototype.createGL = function (canvasId, contextConfigData, parentId) {
-	        var canvas = document.createElement("canvas");
-	        if (canvasId) {
-	            canvas.setAttribute("id", canvasId);
-	        }
-	        if (parentId) {
-	            this._parentEle = document.getElementById(parentId);
-	            if (this._parentEle == void 0)
-	                alert("找不到指定parentId的dom节点");
-	        }
-	        if (this._parentEle)
-	            this._parentEle.appendChild(canvas);
-	        else {
-	            var body = document.createElement("body");
-	            body.style.margin = "0";
-	            body.appendChild(canvas);
-	            document.querySelector("html").appendChild(body);
-	        }
-	        this.canvas = canvas;
-	        this.view = View$1.create(this.canvas);
-	        this.gl = this.view.getContext(contextConfigData);
-	        if (!this.gl)
-	            alert("你的浏览器不支持webgl");
-	    };
-	    Device.prototype.setScreen = function () {
-	        var width = 0, height = 0, x = 0, y = 0, styleWidth = null, styleHeight = null;
-	        if (this._parentEle) {
-	            x = this._parentEle.offsetLeft;
-	            y = this._parentEle.offsetTop;
-	            width = this._parentEle.offsetWidth;
-	            height = this._parentEle.offsetHeight;
-	            styleWidth = width + "px";
-	            styleHeight = height + "px";
-	        }
-	        else {
-	            width = window.innerWidth;
-	            height = window.innerHeight;
-	            styleWidth = "100%";
-	            styleHeight = "100%";
-	        }
-	        this.view.initCanvas();
-	        this.view.x = x;
-	        this.view.y = y;
-	        this.view.width = width;
-	        this.view.height = height;
-	        this.view.styleWidth = styleWidth;
-	        this.view.styleHeight = styleHeight;
-	        this.gl.viewport(0, 0, width, height);
-	        this._parentEle = null;
-	    };
-	    return Device;
+	    return WebglRender;
 	}());
-	Device$1 = __decorate([
-	    singleton$1()
-	], Device$1);
-
-	var Buffer$1 = (function () {
-	    function Buffer() {
-	        this.buffer = null;
-	    }
-	    Buffer.prototype.dispose = function () {
-	        Device$1.getInstance().gl.deleteBuffer(this.buffer);
-	        delete this.buffer;
-	    };
-	    return Buffer;
-	}());
-
-	var ElementArrayBuffer = (function (_super) {
-	    __extends(ElementArrayBuffer, _super);
-	    function ElementArrayBuffer() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    return ElementArrayBuffer;
-	}(Buffer$1));
 
 	exports.Scene = (function (_super) {
 	    __extends(Scene, _super);
@@ -2860,58 +2716,15 @@
 	    singleton()
 	], exports.Scene);
 
-	var Transform = (function (_super) {
-	    __extends(Transform, _super);
-	    function Transform() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.mMatrix = new Matrix4();
-	        return _this;
-	    }
-	    Transform.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    Transform.prototype.rotate = function (angle, x, y, z) {
-	        this.mMatrix.rotate(angle, x, y, z);
-	    };
-	    Transform.prototype.scale = function (x, y, z) {
-	        this.mMatrix.scale(x, y, z);
-	    };
-	    Transform.prototype.translate = function (x, y, z) {
-	        this.mMatrix.translate(x, y, z);
-	    };
-	    return Transform;
-	}(Component));
-
-	var ThreeDTransform = (function (_super) {
-	    __extends(ThreeDTransform, _super);
-	    function ThreeDTransform() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    return ThreeDTransform;
-	}(Transform));
-
 	exports.Test = Test;
-	exports.Component = Component;
-	exports.Entity = Entity;
-	exports.EntityObject = EntityObject;
-	exports.GameObject = GameObject;
-	exports.ComponentManager = ComponentManager;
-	exports.EntityManager = EntityManager;
-	exports.Main = Main;
-	exports.View = View;
 	exports.BufferContainer = BufferContainer;
 	exports.CubeData = CubeData;
 	exports.GeometryData = GeometryData;
 	exports.PlaneData = PlaneData;
 	exports.Geometry = Geometry;
 	exports.TriangleGeometry = TriangleGeometry;
-	exports.Matrix4 = Matrix4;
-	exports.Vector3 = Vector3;
-	exports.Vector4 = Vector4;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
-	exports.ElementArrayBuffer = ElementArrayBuffer;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
 	exports.Shader = Shader;
@@ -2919,6 +2732,20 @@
 	exports.VariableLib = VariableLib;
 	exports.ThreeDTransform = ThreeDTransform;
 	exports.Transform = Transform;
+	exports.Component = Component;
+	exports.View = View;
+	exports.Entity = Entity;
+	exports.EntityObject = EntityObject;
+	exports.GameObject = GameObject;
+	exports.ComponentManager = ComponentManager;
+	exports.EntityManager = EntityManager;
+	exports.Main = Main;
+	exports.RenderCommand = RenderCommand;
+	exports.Render = Render;
+	exports.WebglRender = WebglRender;
+	exports.Matrix4 = Matrix4;
+	exports.Vector3 = Vector3;
+	exports.Vector4 = Vector4;
 	exports.singleton = singleton;
 
 	Object.defineProperty(exports, '__esModule', { value: true });

@@ -1,6 +1,8 @@
 import { Entity } from "./Entity";
 import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
+import { Component } from "../Component";
+import { ComponentManager } from "./Manager/ComponentManager";
 
 export abstract class EntityObject extends Entity {
     get transform() {
@@ -9,25 +11,16 @@ export abstract class EntityObject extends Entity {
 
     public name: string = null;
     protected _entityManager: EntityManager = EntityManager.create(this);
+    protected _componentManager: ComponentManager = ComponentManager.create(this);
 
     public init() {
         this._entityManager.init();
         return this;
     }
+
     public dispose() {
-        this.onDispose();
         this._entityManager.dispose();
         return this;
-    }
-    public onEnter() {
-
-    }
-    public onExit() {
-
-    }
-
-    public onDispose() {
-
     }
 
     public hasChild(child: EntityObject): boolean {
@@ -89,4 +82,9 @@ export abstract class EntityObject extends Entity {
     public removeAllChildren() {
         this._entityManager.removeAllChildren();
     }
+
+    public addComponent(component: Component) {
+        this._componentManager.addComponent(component);
+    }
+
 }

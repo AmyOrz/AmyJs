@@ -28,19 +28,11 @@ var Component = (function (_super) {
         configurable: true
     });
     Component.prototype.init = function () { };
-    Component.prototype.dispose = function () { };
-    Component.prototype.clone = function () {
-    };
     Component.prototype.addToObject = function (entityObject) {
         this.entityObject = entityObject;
         this.addToComponentContainer();
     };
     Component.prototype.addToComponentContainer = function () {
-    };
-    Component.prototype.removeFromObject = function (entityObject) {
-        this.removeFromComponentContainer();
-    };
-    Component.prototype.removeFromComponentContainer = function () {
     };
     return Component;
 }(Entity_1.Entity));
