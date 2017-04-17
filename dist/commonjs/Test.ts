@@ -1,24 +1,24 @@
 import { Main } from "./core/Main";
 import { Device } from "./core/device/Device";
 import { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
+import { Render } from "./core/renderer/render/Render";
+import { WebglRender } from "./core/renderer/render/WebglRender";
+import { RenderCommand } from "./core/renderer/command/RenderCommand";
 
 export class Test {
 
-    private _gl: WebGLRenderingContext = null;
-
+    private _render: Render;
     public testCanvas() {
         Main.setCanvas("webgl").init();
 
-        this._gl = Device.getInstance().gl;
-
-        this._gl.clearColor(0, 0, 0, 1);
+        this._render = WebglRender.create();
+        this._render.setClearColor(0, 0, 0, 1);
 
         var triangle = TriangleGeometry.create();
         triangle.init();
 
-        this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-        this._gl.drawArrays(this._gl.TRIANGLES, 0, 3);
-
+        this._render.addCommand(RenderCommand.create());
+        this._render.render(triangle.getChild("verticeBuffer"));
         /*        var director = Director.getInstance();
          director.scene.addChild(this._createTriangle());*/
     }

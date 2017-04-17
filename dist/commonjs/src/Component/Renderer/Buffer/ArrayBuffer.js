@@ -22,6 +22,7 @@ var ArrayBuffer = (function (_super) {
         _this.data = null;
         _this.type = null;
         _this.usage = null;
+        _this.count = null;
         return _this;
     }
     ArrayBuffer.create = function (data, size, type, usage) {
@@ -51,6 +52,7 @@ var ArrayBuffer = (function (_super) {
     ArrayBuffer.prototype._saveData = function (data, size, type, usage) {
         this.data = data;
         this.size = size;
+        this.count = data.length / size;
         this.type = type;
         this.usage = usage;
     };

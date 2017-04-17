@@ -1,4 +1,3 @@
-import { Buffer } from "../../Renderer/Buffer/Buffer";
 import { EBufferDataType } from "./EBufferDataType";
 import { GeometryData } from "../Data/GeometryData";
 import { Hash } from "../../../../node_modules/wonder-commonlib/dist/commonjs/Hash";
@@ -14,7 +13,7 @@ export class BufferContainer {
 
     public geometryData: GeometryData = null;
 
-    private _bufferList: Hash<Buffer> = new Hash<Buffer>();
+    private _bufferList: Hash<ArrayBuffer> = new Hash<ArrayBuffer>();
 
     public init() {
         this.addChild("verticeBuffer", this._getBufferByType(EBufferDataType.VERTICE));
@@ -25,7 +24,7 @@ export class BufferContainer {
 
     }
 
-    public addChild(bufferName: string, buffer: Buffer) {
+    public addChild(bufferName: string, buffer: ArrayBuffer) {
         this._bufferList.addChild(bufferName, buffer);
     }
 
@@ -41,8 +40,8 @@ export class BufferContainer {
         return this._bufferList.getChildren();
     }
 
-    private _getBufferByType(type: EBufferDataType): Buffer {
-        var buffer: Buffer = null;
+    private _getBufferByType(type: EBufferDataType): ArrayBuffer {
+        var buffer: ArrayBuffer = null;
         switch (type) {
             case EBufferDataType.VERTICE: buffer = this._getVerticeBuffer(); break;
             case EBufferDataType.COLOR: buffer = this._getColorBuffer(); break;
@@ -53,11 +52,11 @@ export class BufferContainer {
         return buffer;
     }
 
-    private _getVerticeBuffer(): Buffer {
+    private _getVerticeBuffer(): ArrayBuffer {
         return ArrayBuffer.create(this.geometryData.vertice, 3);
     }
 
-    private _getColorBuffer(): Buffer {
+    private _getColorBuffer(): ArrayBuffer {
         return ArrayBuffer.create(this.geometryData.color, 3);
     }
 

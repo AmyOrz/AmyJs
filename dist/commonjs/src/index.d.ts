@@ -33,6 +33,7 @@ export { EDrawMode } from "./core/renderer/command/EDrawMode";
 export { RenderCommand } from "./core/renderer/command/RenderCommand";
 export { Render } from "./core/renderer/render/Render";
 export { WebglRender } from "./core/renderer/render/WebglRender";
+export { WebglState } from "./core/renderer/state/WebglState";
 export { Scene } from "./core/Scene";
 export { Matrix4 } from "./Math/Matrix4";
 export { Vector3 } from "./Math/Vector3";

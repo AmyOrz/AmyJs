@@ -7,10 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var singleton_1 = require("../until/singleton");
+var WebglRender_1 = require("./renderer/render/WebglRender");
 var Director = (function () {
     function Director() {
     }
     Director.getInstance = function () { };
+    Director.prototype.init = function () {
+        this.render = WebglRender_1.WebglRender.create();
+    };
     return Director;
 }());
 Director = __decorate([

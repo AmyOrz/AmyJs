@@ -1,10 +1,10 @@
 import { Component } from "../../core/Component";
 import { GeometryData } from "./Data/GeometryData";
 import { BufferContainer } from "./BufferContainer/BufferContainer";
-import { Buffer } from "../Renderer/Buffer/Buffer";
 import { Shader } from "../Renderer/Shader/shader/Shader";
 import { TriangleShader } from "../Renderer/Shader/shader/TriangleShader";
 import { Program } from "../Renderer/Program/Program";
+import { ArrayBuffer } from "../Renderer/Buffer/ArrayBuffer";
 export type GeometryDataType = {
     vertice: number[];
     color?: number[];
@@ -35,7 +35,7 @@ export abstract class Geometry extends Component {
         this._shader.init();
     }
 
-    public getChild(name: string): Buffer {
+    public getChild(name: string): ArrayBuffer {
         return this._bufferContainer.getChild(name);
     }
 

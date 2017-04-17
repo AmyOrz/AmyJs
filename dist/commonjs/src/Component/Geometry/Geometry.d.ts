@@ -1,7 +1,7 @@
 import { Component } from "../../core/Component";
 import { GeometryData } from "./Data/GeometryData";
-import { Buffer } from "../Renderer/Buffer/Buffer";
 import { Program } from "../Renderer/Program/Program";
+import { ArrayBuffer } from "../Renderer/Buffer/ArrayBuffer";
 export declare type GeometryDataType = {
     vertice: number[];
     color?: number[];
@@ -13,7 +13,7 @@ export declare abstract class Geometry extends Component {
     private _bufferContainer;
     private _shader;
     init(): void;
-    getChild(name: string): Buffer;
+    getChild(name: string): ArrayBuffer;
     protected abstract computeData(): GeometryDataType;
     protected createGeometryData(computeData: GeometryDataType): GeometryData;
 }

@@ -1,5 +1,5 @@
 export declare class Test {
-    private _gl;
+    private _render;
     testCanvas(): void;
     private _createTriangle();
 }

@@ -15,6 +15,7 @@ export class ArrayBuffer extends Buffer {
     public data: Float32Array = null;
     public type: EBufferType = null;
     public usage: EBufferUseage = null;
+    public count: number = null;
 
     public initWhenCreate(data: number[], size: number, type: EBufferType = EBufferType.FLOAT, usage: EBufferUseage = EBufferUseage.STATIC_DRAW) {
         if (data == void 0) return null;
@@ -37,6 +38,7 @@ export class ArrayBuffer extends Buffer {
     private _saveData(data: Float32Array, size: number, type: EBufferType, usage: EBufferUseage) {
         this.data = data;
         this.size = size;
+        this.count = data.length / size;
         this.type = type;
         this.usage = usage;
     }

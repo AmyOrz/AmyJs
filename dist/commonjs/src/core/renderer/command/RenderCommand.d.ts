@@ -1,6 +1,6 @@
+import { ArrayBuffer } from "../../../Component/Renderer/Buffer/ArrayBuffer";
 export declare class RenderCommand {
     static create(): RenderCommand;
-    private drawMode;
-    draw(): void;
-    private _getGl();
+    private _drawMode;
+    draw(verticeBuffer: ArrayBuffer): void;
 }
