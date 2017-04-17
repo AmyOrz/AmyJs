@@ -11,6 +11,9 @@ export class RenderCommand {
     private _drawMode:EDrawMode = EDrawMode.TRIANGLES;
 
     public draw(verticeBuffer:ArrayBuffer) {
+
+
+
         var startOffset:number = 0,
             gl = Device.getInstance().gl;
 
