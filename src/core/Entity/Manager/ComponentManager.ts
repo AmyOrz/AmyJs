@@ -17,7 +17,7 @@ export class ComponentManager {
 
     private _componentList: Collection<any> = new Collection<any>();
     private _geometry: Geometry = null;
-
+    private _renderer;
 
     public init() {
 
@@ -27,9 +27,11 @@ export class ComponentManager {
         if (component instanceof Geometry) {
             this._geometry = component;
         }
-        if (component instanceof Transform) {
+        else if (component instanceof Transform) {
             this.transform = component;
         }
+        // else if (component instanceof MeshRender)
+
         this._componentList.addChild(component);
     }
 

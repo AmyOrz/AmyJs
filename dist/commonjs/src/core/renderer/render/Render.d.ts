@@ -7,4 +7,5 @@ export declare abstract class Render {
     setClearColor(r: number, g: number, b: number, a: number): void;
     abstract render(buffer: ArrayBuffer): any;
     abstract addCommand(renderCmd: RenderCommand): any;
+    abstract init(): any;
 }

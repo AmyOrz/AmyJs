@@ -13,6 +13,7 @@ var Test = (function () {
         this._render.setClearColor(0, 0, 0, 1);
         var triangle = TriangleGeometry_1.TriangleGeometry.create();
         triangle.init();
+        this._render.init();
         this._render.addCommand(RenderCommand_1.RenderCommand.create());
         this._render.render(triangle.getChild("verticeBuffer"));
     };

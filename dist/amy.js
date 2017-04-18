@@ -2528,8 +2528,10 @@
 	        var obj = new this();
 	        return obj;
 	    };
-	    WebglRender.prototype.render = function (buffer) {
+	    WebglRender.prototype.init = function () {
 	        this.webglState.init();
+	    };
+	    WebglRender.prototype.render = function (buffer) {
 	        this._commandQueue.forEach(function (renderCmd) {
 	            renderCmd.draw(buffer);
 	        });
@@ -2574,6 +2576,7 @@
 	        this._render.setClearColor(0, 0, 0, 1);
 	        var triangle = TriangleGeometry.create();
 	        triangle.init();
+	        this._render.init();
 	        this._render.addCommand(RenderCommand.create());
 	        this._render.render(triangle.getChild("verticeBuffer"));
 	    };
@@ -2683,13 +2686,15 @@
 	    function Director() {
 	    }
 	    Director.getInstance = function () { };
-	    Director.prototype.init = function () {
+	    Director.prototype.initWhenCreate = function () {
 	        this.render = WebglRender.create();
+	    };
+	    Director.prototype.init = function () {
 	    };
 	    return Director;
 	}());
 	exports.Director = __decorate([
-	    singleton()
+	    singleton(true)
 	], exports.Director);
 
 	var JudgeUtils$2 = (function (_super) {
@@ -2826,7 +2831,7 @@
 	        if (component instanceof Geometry) {
 	            this._geometry = component;
 	        }
-	        if (component instanceof Transform) {
+	        else if (component instanceof Transform) {
 	            this.transform = component;
 	        }
 	        this._componentList.addChild(component);

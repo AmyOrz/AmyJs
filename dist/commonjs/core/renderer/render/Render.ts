@@ -17,7 +17,8 @@ export abstract class Render {
         this._wegbglState.setClearColor(r, g, b, a);
     }
 
-    abstract render(buffer: ArrayBuffer);
-    abstract addCommand(renderCmd: RenderCommand);
+    public abstract render(buffer: ArrayBuffer);
+    public abstract addCommand(renderCmd: RenderCommand);
+    public abstract init();
 
 }

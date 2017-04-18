@@ -8,6 +8,7 @@ export declare class ComponentManager {
     transform: Transform;
     private _componentList;
     private _geometry;
+    private _renderer;
     init(): void;
     addComponent(component: Component): void;
 }

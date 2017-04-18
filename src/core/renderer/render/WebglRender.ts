@@ -9,14 +9,15 @@ export class WebglRender extends Render {
         return obj;
     }
 
-
     private _commandQueue: Queue<RenderCommand> = new Queue<RenderCommand>();
 
-    public render(buffer: ArrayBuffer) {
+    public init(){
         this.webglState.init();
+    }
 
-        this._commandQueue.forEach(function(renderCmd: RenderCommand) {
+    public render(buffer: ArrayBuffer) {
 
+        this._commandQueue.forEach((renderCmd: RenderCommand)=>{
             renderCmd.draw(buffer);
         })
     }

@@ -23,8 +23,10 @@ var WebglRender = (function (_super) {
         var obj = new this();
         return obj;
     };
-    WebglRender.prototype.render = function (buffer) {
+    WebglRender.prototype.init = function () {
         this.webglState.init();
+    };
+    WebglRender.prototype.render = function (buffer) {
         this._commandQueue.forEach(function (renderCmd) {
             renderCmd.draw(buffer);
         });

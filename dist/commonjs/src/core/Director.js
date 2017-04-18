@@ -12,13 +12,15 @@ var Director = (function () {
     function Director() {
     }
     Director.getInstance = function () { };
-    Director.prototype.init = function () {
+    Director.prototype.initWhenCreate = function () {
         this.render = WebglRender_1.WebglRender.create();
+    };
+    Director.prototype.init = function () {
     };
     return Director;
 }());
 Director = __decorate([
-    singleton_1.singleton()
+    singleton_1.singleton(true)
 ], Director);
 exports.Director = Director;
 //# sourceMappingURL=Director.js.map

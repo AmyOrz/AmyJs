@@ -17,6 +17,7 @@ export class Test {
         var triangle = TriangleGeometry.create();
         triangle.init();
 
+        this._render.init();
         this._render.addCommand(RenderCommand.create());
         this._render.render(triangle.getChild("verticeBuffer"));
         /*        var director = Director.getInstance();

@@ -20,7 +20,7 @@ var ComponentManager = (function () {
         if (component instanceof Geometry_1.Geometry) {
             this._geometry = component;
         }
-        if (component instanceof Transform_1.Transform) {
+        else if (component instanceof Transform_1.Transform) {
             this.transform = component;
         }
         this._componentList.addChild(component);
