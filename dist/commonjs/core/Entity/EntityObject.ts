@@ -3,20 +3,46 @@ import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Component } from "../Component";
 import { ComponentManager } from "./Manager/ComponentManager";
+import { Render } from "../renderer/render/Render";
+import { Geometry } from "../../Component/Geometry/Geometry";
+import { Transform } from "../../Component/Transform/Transform";
 
 export abstract class EntityObject extends Entity {
-    get transform() {
-        return;
+    get transform(): Transform {
+        return this._componentManager.transform;
     }
 
+    get geometry(): Geometry {
+        return this._componentManager.geometry;
+    }
+
+    public parent;
     public name: string = null;
     protected _entityManager: EntityManager = EntityManager.create(this);
     protected _componentManager: ComponentManager = ComponentManager.create(this);
 
+    public initWhenCreate() {
+        this._componentManager.addComponent(this.createTransform())
+    }
+
     public init() {
+        console.log(this)
+        this._componentManager.init();
         this._entityManager.init();
         return this;
     }
+
+    public render(render: Render) {
+        var renderComponent = this._componentManager.getRenderComponent();
+        if (renderComponent != void 0)
+            renderComponent.render(render, this);
+
+        this.getChildren().forEach((child:EntityObject) => {
+            child.render(render);
+        });
+    }
+
+    protected abstract createTransform();
 
     public dispose() {
         this._entityManager.dispose();

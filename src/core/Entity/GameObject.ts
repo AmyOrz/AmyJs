@@ -1,4 +1,5 @@
 import { EntityObject } from "./EntityObject";
+import { Transform } from "../../Component/Transform/Transform";
 
 export class GameObject extends EntityObject {
     public static create() {
@@ -9,8 +10,11 @@ export class GameObject extends EntityObject {
         return obj;
     }
     public initWhenCreate() {
-        // super.initWhencreate();
+        super.initWhenCreate();
         this.name = `GameObject${this.uid}`;
     }
 
+    public createTransform() {
+        return Transform.create();
+    }
 }

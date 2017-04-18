@@ -18,13 +18,13 @@ var Geometry = (function (_super) {
     __extends(Geometry, _super);
     function Geometry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this._bufferContainer = null;
+        _this.bufferContainer = null;
         _this._shader = TriangleShader_1.TriangleShader.create(_this);
         return _this;
     }
     Object.defineProperty(Geometry.prototype, "geometryData", {
         get: function () {
-            return this._bufferContainer.geometryData;
+            return this.bufferContainer.geometryData;
         },
         enumerable: true,
         configurable: true
@@ -38,13 +38,10 @@ var Geometry = (function (_super) {
     });
     Geometry.prototype.init = function () {
         var computeData = this.computeData();
-        this._bufferContainer = BufferContainer_1.BufferContainer.create();
-        this._bufferContainer.geometryData = this.createGeometryData(computeData);
-        this._bufferContainer.init();
+        this.bufferContainer = BufferContainer_1.BufferContainer.create();
+        this.bufferContainer.geometryData = this.createGeometryData(computeData);
+        this.bufferContainer.init();
         this._shader.init();
-    };
-    Geometry.prototype.getChild = function (name) {
-        return this._bufferContainer.getChild(name);
     };
     Geometry.prototype.createGeometryData = function (computeData) {
         var vertice = computeData.vertice, color = computeData.color;

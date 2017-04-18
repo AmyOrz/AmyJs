@@ -13,30 +13,26 @@ export type GeometryDataType = {
 
 export abstract class Geometry extends Component {
     get geometryData() {
-        return this._bufferContainer.geometryData;
+        return this.bufferContainer.geometryData;
     }
 
     get program(): Program {
         return this._shader.program;
     }
 
-    private _bufferContainer: BufferContainer = null;
+    public bufferContainer: BufferContainer = null;
     private _shader: Shader = TriangleShader.create(this);
 
     public init() {
         var computeData: GeometryDataType = this.computeData();
 
-        this._bufferContainer = BufferContainer.create();
+        this.bufferContainer = BufferContainer.create();
 
-        this._bufferContainer.geometryData = this.createGeometryData(computeData);
+        this.bufferContainer.geometryData = this.createGeometryData(computeData);
 
-        this._bufferContainer.init();
+        this.bufferContainer.init();
 
         this._shader.init();
-    }
-
-    public getChild(name: string): ArrayBuffer {
-        return this._bufferContainer.getChild(name);
     }
 
     protected abstract computeData(): GeometryDataType;

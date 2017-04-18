@@ -24,14 +24,34 @@ var EntityObject = (function (_super) {
     }
     Object.defineProperty(EntityObject.prototype, "transform", {
         get: function () {
-            return;
+            return this._componentManager.transform;
         },
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(EntityObject.prototype, "geometry", {
+        get: function () {
+            return this._componentManager.geometry;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EntityObject.prototype.initWhenCreate = function () {
+        this._componentManager.addComponent(this.createTransform());
+    };
     EntityObject.prototype.init = function () {
+        console.log(this);
+        this._componentManager.init();
         this._entityManager.init();
         return this;
+    };
+    EntityObject.prototype.render = function (render) {
+        var renderComponent = this._componentManager.getRenderComponent();
+        if (renderComponent != void 0)
+            renderComponent.render(render, this);
+        this.getChildren().forEach(function (child) {
+            child.render(render);
+        });
     };
     EntityObject.prototype.dispose = function () {
         this._entityManager.dispose();

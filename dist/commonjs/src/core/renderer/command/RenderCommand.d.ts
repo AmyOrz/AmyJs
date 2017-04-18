@@ -1,6 +1,7 @@
-import { ArrayBuffer } from "../../../Component/Renderer/Buffer/ArrayBuffer";
+import { BufferContainer } from "../../../Component/Geometry/BufferContainer/BufferContainer";
 export declare class RenderCommand {
     static create(): RenderCommand;
+    buffers: BufferContainer;
     private _drawMode;
-    draw(verticeBuffer: ArrayBuffer): void;
+    draw(): void;
 }

@@ -8,14 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var singleton_1 = require("../until/singleton");
 var WebglRender_1 = require("./renderer/render/WebglRender");
+var Scene_1 = require("./Scene/Scene");
 var Director = (function () {
     function Director() {
+        this.render = null;
+        this.scene = null;
     }
     Director.getInstance = function () { };
     Director.prototype.initWhenCreate = function () {
         this.render = WebglRender_1.WebglRender.create();
+        this.scene = Scene_1.Scene.create();
     };
     Director.prototype.init = function () {
+        this.render.init();
+        this.scene.gameObjectScene.init();
+    };
+    Director.prototype.Render = function () {
+        this.scene.gameObjectScene.render(this.render);
+        this.render.render();
+    };
+    Director.prototype.start = function () {
+        this.init();
+        this.Render();
     };
     return Director;
 }());

@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var EntityObject_1 = require("./EntityObject");
+var Transform_1 = require("../../Component/Transform/Transform");
 var GameObject = (function (_super) {
     __extends(GameObject, _super);
     function GameObject() {
@@ -22,7 +23,11 @@ var GameObject = (function (_super) {
         return obj;
     };
     GameObject.prototype.initWhenCreate = function () {
+        _super.prototype.initWhenCreate.call(this);
         this.name = "GameObject" + this.uid;
+    };
+    GameObject.prototype.createTransform = function () {
+        return Transform_1.Transform.create();
     };
     return GameObject;
 }(EntityObject_1.EntityObject));

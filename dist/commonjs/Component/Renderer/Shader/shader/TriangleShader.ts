@@ -37,8 +37,8 @@ export class TriangleShader extends Shader {
     }
 
     public sendShaderAttribute() {
-        var verticeBuffer = this.geometry.getChild("verticeBuffer");
-        var colorBuffer = this.geometry.getChild("colorBuffer");
+        var verticeBuffer = this.geometry.bufferContainer.getChild("verticeBuffer");
+        var colorBuffer = this.geometry.bufferContainer.getChild("colorBuffer");
 
         this.sendAttributeBuffer("a_Position", verticeBuffer);
         this.sendAttributeBuffer("a_Color", colorBuffer);

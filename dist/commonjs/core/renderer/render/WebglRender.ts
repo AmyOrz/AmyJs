@@ -1,7 +1,6 @@
 import { Queue } from "wonder-commonlib/dist/commonjs/Queue";
 import { RenderCommand } from "../command/RenderCommand";
 import { Render } from "./Render";
-import { ArrayBuffer } from "../../../Component/Renderer/Buffer/ArrayBuffer";
 export class WebglRender extends Render {
     public static create() {
         var obj = new this();
@@ -11,14 +10,13 @@ export class WebglRender extends Render {
 
     private _commandQueue: Queue<RenderCommand> = new Queue<RenderCommand>();
 
-    public init(){
+    public init() {
         this.webglState.init();
     }
 
-    public render(buffer: ArrayBuffer) {
-
-        this._commandQueue.forEach((renderCmd: RenderCommand)=>{
-            renderCmd.draw(buffer);
+    public render() {
+        this._commandQueue.forEach((renderCmd: RenderCommand) => {
+            renderCmd.draw();
         })
     }
     public addCommand(renderCmd: RenderCommand) {

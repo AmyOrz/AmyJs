@@ -1,9 +1,13 @@
 import { singleton } from "../until/singleton";
 import { EntityObject } from "./Entity/EntityObject";
 
-@singleton()
 export class Scene extends EntityObject {
-    public static getInstance(): any { }
+    public static create() {
+        var obj = new this();
 
-
+        return obj;
+    }
+    public createTransform() {
+        return null;
+    }
 }

@@ -1,4 +1,5 @@
 import { EntityObject } from "./Entity/EntityObject";
 export declare class Scene extends EntityObject {
-    static getInstance(): any;
+    static create(): Scene;
+    createTransform(): any;
 }

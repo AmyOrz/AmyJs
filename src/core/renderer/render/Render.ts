@@ -1,6 +1,5 @@
 import { RenderCommand } from "../command/RenderCommand";
 import { WebglState } from "../state/WebglState";
-import { ArrayBuffer } from "../../../Component/Renderer/Buffer/ArrayBuffer";
 export abstract class Render {
 
     get webglState() {
@@ -17,7 +16,7 @@ export abstract class Render {
         this._wegbglState.setClearColor(r, g, b, a);
     }
 
-    public abstract render(buffer: ArrayBuffer);
+    public abstract render();
     public abstract addCommand(renderCmd: RenderCommand);
     public abstract init();
 

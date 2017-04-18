@@ -1,8 +1,9 @@
 import { EntityObject } from "./Entity/EntityObject";
 import { Entity } from "./Entity/Entity";
+import { Transform } from "../Component/Transform/Transform";
 
 export class Component extends Entity {
-    get transform() {
+    get transform(): Transform {
         if (this.entityObject == void 0) return null;
 
         return this.entityObject.transform;
@@ -10,7 +11,9 @@ export class Component extends Entity {
 
     public entityObject: EntityObject = null;
 
-    public init() { }
+    public init() {
+
+    }
 
 
     public addToObject(entityObject: EntityObject) {

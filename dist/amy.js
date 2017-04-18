@@ -261,7 +261,8 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    Component.prototype.init = function () { };
+	    Component.prototype.init = function () {
+	    };
 	    Component.prototype.addToObject = function (entityObject) {
 	        this.entityObject = entityObject;
 	        this.addToComponentContainer();
@@ -2144,8 +2145,8 @@
 	        this.program.initProgramWithShader(this);
 	    };
 	    TriangleShader.prototype.sendShaderAttribute = function () {
-	        var verticeBuffer = this.geometry.getChild("verticeBuffer");
-	        var colorBuffer = this.geometry.getChild("colorBuffer");
+	        var verticeBuffer = this.geometry.bufferContainer.getChild("verticeBuffer");
+	        var colorBuffer = this.geometry.bufferContainer.getChild("colorBuffer");
 	        this.sendAttributeBuffer("a_Position", verticeBuffer);
 	        this.sendAttributeBuffer("a_Color", colorBuffer);
 	        this.program.sendAllBufferData();
@@ -2168,13 +2169,13 @@
 	    __extends(Geometry, _super);
 	    function Geometry() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this._bufferContainer = null;
+	        _this.bufferContainer = null;
 	        _this._shader = TriangleShader.create(_this);
 	        return _this;
 	    }
 	    Object.defineProperty(Geometry.prototype, "geometryData", {
 	        get: function () {
-	            return this._bufferContainer.geometryData;
+	            return this.bufferContainer.geometryData;
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -2188,13 +2189,10 @@
 	    });
 	    Geometry.prototype.init = function () {
 	        var computeData = this.computeData();
-	        this._bufferContainer = BufferContainer.create();
-	        this._bufferContainer.geometryData = this.createGeometryData(computeData);
-	        this._bufferContainer.init();
+	        this.bufferContainer = BufferContainer.create();
+	        this.bufferContainer.geometryData = this.createGeometryData(computeData);
+	        this.bufferContainer.init();
 	        this._shader.init();
-	    };
-	    Geometry.prototype.getChild = function (name) {
-	        return this._bufferContainer.getChild(name);
 	    };
 	    Geometry.prototype.createGeometryData = function (computeData) {
 	        var vertice = computeData.vertice, color = computeData.color;
@@ -2531,9 +2529,9 @@
 	    WebglRender.prototype.init = function () {
 	        this.webglState.init();
 	    };
-	    WebglRender.prototype.render = function (buffer) {
+	    WebglRender.prototype.render = function () {
 	        this._commandQueue.forEach(function (renderCmd) {
-	            renderCmd.draw(buffer);
+	            renderCmd.draw();
 	        });
 	    };
 	    WebglRender.prototype.addCommand = function (renderCmd) {
@@ -2541,161 +2539,6 @@
 	    };
 	    return WebglRender;
 	}(Render));
-
-	(function (EDrawMode) {
-	    EDrawMode[EDrawMode["POINTS"] = "POINTS"] = "POINTS";
-	    EDrawMode[EDrawMode["LINES"] = "LINES"] = "LINES";
-	    EDrawMode[EDrawMode["LINE_LOOP"] = "LINE_LOOP"] = "LINE_LOOP";
-	    EDrawMode[EDrawMode["LINE_STRIP"] = "LINE_STRIP"] = "LINE_STRIP";
-	    EDrawMode[EDrawMode["TRIANGLES"] = "TRIANGLES"] = "TRIANGLES";
-	    EDrawMode[EDrawMode["TRIANGLE_STRIP"] = "TRIANGLE_STRIP"] = "TRIANGLE_STRIP";
-	    EDrawMode[EDrawMode["TRANGLE_FAN"] = "TRIANGLE_FAN"] = "TRANGLE_FAN";
-	})(exports.EDrawMode || (exports.EDrawMode = {}));
-
-	var RenderCommand = (function () {
-	    function RenderCommand() {
-	        this._drawMode = exports.EDrawMode.TRIANGLES;
-	    }
-	    RenderCommand.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    RenderCommand.prototype.draw = function (verticeBuffer) {
-	        var startOffset = 0, gl = exports.Device.getInstance().gl;
-	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
-	    };
-	    return RenderCommand;
-	}());
-
-	var Test = (function () {
-	    function Test() {
-	    }
-	    Test.prototype.testCanvas = function () {
-	        Main.setCanvas("webgl").init();
-	        this._render = WebglRender.create();
-	        this._render.setClearColor(0, 0, 0, 1);
-	        var triangle = TriangleGeometry.create();
-	        triangle.init();
-	        this._render.init();
-	        this._render.addCommand(RenderCommand.create());
-	        this._render.render(triangle.getChild("verticeBuffer"));
-	    };
-	    Test.prototype._createTriangle = function () {
-	    };
-	    return Test;
-	}());
-	var a = new Test();
-	a.testCanvas();
-
-	var CubeData = (function () {
-	    function CubeData() {
-	    }
-	    return CubeData;
-	}());
-	CubeData.vertices = new Float32Array([
-	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
-	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
-	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
-	]);
-	CubeData.texCoords = new Float32Array([
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
-	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
-	]);
-	CubeData.indices = new Uint8Array([
-	    0, 1, 2, 0, 2, 3,
-	    4, 5, 6, 4, 6, 7,
-	    8, 9, 10, 8, 10, 11,
-	    12, 13, 14, 12, 14, 15,
-	    16, 17, 18, 16, 18, 19,
-	    20, 21, 22, 20, 22, 23
-	]);
-	CubeData.normals = new Float32Array([
-	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
-	]);
-	CubeData.color = new Float32Array([
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
-	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
-	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
-	]);
-
-	var PlaneData = (function () {
-	    function PlaneData() {
-	    }
-	    return PlaneData;
-	}());
-	PlaneData.vertices = new Float32Array([
-	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
-	]);
-	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
-	PlaneData.color = new Float32Array([
-	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-	]);
-	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
-
-	var Transform = (function (_super) {
-	    __extends(Transform, _super);
-	    function Transform() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.mMatrix = new Matrix4();
-	        return _this;
-	    }
-	    Transform.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    Transform.prototype.rotate = function (angle, x, y, z) {
-	        this.mMatrix.rotate(angle, x, y, z);
-	    };
-	    Transform.prototype.scale = function (x, y, z) {
-	        this.mMatrix.scale(x, y, z);
-	    };
-	    Transform.prototype.translate = function (x, y, z) {
-	        this.mMatrix.translate(x, y, z);
-	    };
-	    return Transform;
-	}(Component));
-
-	var ThreeDTransform = (function (_super) {
-	    __extends(ThreeDTransform, _super);
-	    function ThreeDTransform() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    return ThreeDTransform;
-	}(Transform));
-
-	(function (EScreenSize) {
-	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
-	})(exports.EScreenSize || (exports.EScreenSize = {}));
-
-	exports.Director = (function () {
-	    function Director() {
-	    }
-	    Director.getInstance = function () { };
-	    Director.prototype.initWhenCreate = function () {
-	        this.render = WebglRender.create();
-	    };
-	    Director.prototype.init = function () {
-	    };
-	    return Director;
-	}());
-	exports.Director = __decorate([
-	    singleton(true)
-	], exports.Director);
 
 	var JudgeUtils$2 = (function (_super) {
 	    __extends(JudgeUtils$$1, _super);
@@ -2814,27 +2657,118 @@
 	    return EntityManager;
 	}(Entity));
 
+	var Transform = (function (_super) {
+	    __extends(Transform, _super);
+	    function Transform() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.mMatrix = new Matrix4();
+	        return _this;
+	    }
+	    Transform.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Transform.prototype.rotate = function (angle, x, y, z) {
+	        this.mMatrix.rotate(angle, x, y, z);
+	    };
+	    Transform.prototype.scale = function (x, y, z) {
+	        this.mMatrix.scale(x, y, z);
+	    };
+	    Transform.prototype.translate = function (x, y, z) {
+	        this.mMatrix.translate(x, y, z);
+	    };
+	    return Transform;
+	}(Component));
+
+	var RendererComponent = (function (_super) {
+	    __extends(RendererComponent, _super);
+	    function RendererComponent() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    return RendererComponent;
+	}(Component));
+
+	(function (EDrawMode) {
+	    EDrawMode[EDrawMode["POINTS"] = "POINTS"] = "POINTS";
+	    EDrawMode[EDrawMode["LINES"] = "LINES"] = "LINES";
+	    EDrawMode[EDrawMode["LINE_LOOP"] = "LINE_LOOP"] = "LINE_LOOP";
+	    EDrawMode[EDrawMode["LINE_STRIP"] = "LINE_STRIP"] = "LINE_STRIP";
+	    EDrawMode[EDrawMode["TRIANGLES"] = "TRIANGLES"] = "TRIANGLES";
+	    EDrawMode[EDrawMode["TRIANGLE_STRIP"] = "TRIANGLE_STRIP"] = "TRIANGLE_STRIP";
+	    EDrawMode[EDrawMode["TRANGLE_FAN"] = "TRIANGLE_FAN"] = "TRANGLE_FAN";
+	})(exports.EDrawMode || (exports.EDrawMode = {}));
+
+	var RenderCommand = (function () {
+	    function RenderCommand() {
+	        this.buffers = null;
+	        this._drawMode = exports.EDrawMode.TRIANGLES;
+	    }
+	    RenderCommand.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    RenderCommand.prototype.draw = function () {
+	        var startOffset = 0, gl = exports.Device.getInstance().gl;
+	        var verticeBuffer = this.buffers.getChild("verticeBuffer");
+	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
+	    };
+	    return RenderCommand;
+	}());
+
+	var MeshRender = (function (_super) {
+	    __extends(MeshRender, _super);
+	    function MeshRender() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    MeshRender.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    MeshRender.prototype.render = function (render, targetObject) {
+	        render.addCommand(this._createCmd(targetObject));
+	    };
+	    MeshRender.prototype._createCmd = function (targetObject) {
+	        var geometry = targetObject.geometry;
+	        var renderCmd = RenderCommand.create();
+	        renderCmd.buffers = geometry.bufferContainer;
+	        return renderCmd;
+	    };
+	    return MeshRender;
+	}(RendererComponent));
+
 	var ComponentManager = (function () {
 	    function ComponentManager(_entityObject) {
 	        this._entityObject = _entityObject;
 	        this.transform = null;
+	        this.geometry = null;
 	        this._componentList = new Collection();
-	        this._geometry = null;
+	        this._renderComponent = null;
 	    }
 	    ComponentManager.create = function (entityObject) {
 	        var obj = new this(entityObject);
 	        return obj;
 	    };
 	    ComponentManager.prototype.init = function () {
+	        console.log(this._componentList);
+	        this._componentList.forEach(function (component) {
+	            component.init();
+	        });
 	    };
 	    ComponentManager.prototype.addComponent = function (component) {
 	        if (component instanceof Geometry) {
-	            this._geometry = component;
+	            this.geometry = component;
 	        }
 	        else if (component instanceof Transform) {
 	            this.transform = component;
 	        }
+	        else if (component instanceof MeshRender) {
+	            this._renderComponent = component;
+	        }
 	        this._componentList.addChild(component);
+	        component.addToObject(this._entityObject);
+	    };
+	    ComponentManager.prototype.getRenderComponent = function () {
+	        return this._renderComponent;
 	    };
 	    return ComponentManager;
 	}());
@@ -2850,14 +2784,34 @@
 	    }
 	    Object.defineProperty(EntityObject.prototype, "transform", {
 	        get: function () {
-	            return;
+	            return this._componentManager.transform;
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
+	    Object.defineProperty(EntityObject.prototype, "geometry", {
+	        get: function () {
+	            return this._componentManager.geometry;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    EntityObject.prototype.initWhenCreate = function () {
+	        this._componentManager.addComponent(this.createTransform());
+	    };
 	    EntityObject.prototype.init = function () {
+	        console.log(this);
+	        this._componentManager.init();
 	        this._entityManager.init();
 	        return this;
+	    };
+	    EntityObject.prototype.render = function (render) {
+	        var renderComponent = this._componentManager.getRenderComponent();
+	        if (renderComponent != void 0)
+	            renderComponent.render(render, this);
+	        this.getChildren().forEach(function (child) {
+	            child.render(render);
+	        });
 	    };
 	    EntityObject.prototype.dispose = function () {
 	        this._entityManager.dispose();
@@ -2926,22 +2880,171 @@
 	        return obj;
 	    };
 	    GameObject.prototype.initWhenCreate = function () {
+	        _super.prototype.initWhenCreate.call(this);
 	        this.name = "GameObject" + this.uid;
+	    };
+	    GameObject.prototype.createTransform = function () {
+	        return Transform.create();
 	    };
 	    return GameObject;
 	}(EntityObject));
 
-	exports.Scene = (function (_super) {
-	    __extends(Scene, _super);
-	    function Scene() {
+	var GameObjectScene = (function (_super) {
+	    __extends(GameObjectScene, _super);
+	    function GameObjectScene() {
 	        return _super !== null && _super.apply(this, arguments) || this;
 	    }
-	    Scene.getInstance = function () { };
+	    GameObjectScene.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    GameObjectScene.prototype.createTransform = function () {
+	        return null;
+	    };
+	    return GameObjectScene;
+	}(EntityObject));
+
+	var Scene = (function (_super) {
+	    __extends(Scene, _super);
+	    function Scene() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.gameObjectScene = GameObjectScene.create();
+	        return _this;
+	    }
+	    Scene.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Scene.prototype.createTransform = function () {
+	        return null;
+	    };
+	    Scene.prototype.addChild = function (child) {
+	        if (child instanceof GameObject) {
+	            this.gameObjectScene.addChild(child);
+	        }
+	        child.parent = this;
+	        return this;
+	    };
 	    return Scene;
 	}(EntityObject));
-	exports.Scene = __decorate([
-	    singleton()
-	], exports.Scene);
+
+	exports.Director = (function () {
+	    function Director() {
+	        this.render = null;
+	        this.scene = null;
+	    }
+	    Director.getInstance = function () { };
+	    Director.prototype.initWhenCreate = function () {
+	        this.render = WebglRender.create();
+	        this.scene = Scene.create();
+	    };
+	    Director.prototype.init = function () {
+	        this.render.init();
+	        this.scene.gameObjectScene.init();
+	    };
+	    Director.prototype.Render = function () {
+	        this.scene.gameObjectScene.render(this.render);
+	        this.render.render();
+	    };
+	    Director.prototype.start = function () {
+	        this.init();
+	        this.Render();
+	    };
+	    return Director;
+	}());
+	exports.Director = __decorate([
+	    singleton(true)
+	], exports.Director);
+
+	var Test = (function () {
+	    function Test() {
+	    }
+	    Test.prototype.testCanvas = function () {
+	        Main.setCanvas("webgl").init();
+	        var gameobj = GameObject.create();
+	        var triangle = TriangleGeometry.create();
+	        gameobj.addComponent(triangle);
+	        gameobj.addComponent(MeshRender.create());
+	        var director = exports.Director.getInstance();
+	        director.scene.addChild(gameobj);
+	        director.start();
+	    };
+	    return Test;
+	}());
+	var a = new Test();
+	a.testCanvas();
+
+	var CubeData = (function () {
+	    function CubeData() {
+	    }
+	    return CubeData;
+	}());
+	CubeData.vertices = new Float32Array([
+	    1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
+	    1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
+	    1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
+	    -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
+	    -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+	    1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
+	]);
+	CubeData.texCoords = new Float32Array([
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
+	    1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
+	    1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	    0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
+	]);
+	CubeData.indices = new Uint8Array([
+	    0, 1, 2, 0, 2, 3,
+	    4, 5, 6, 4, 6, 7,
+	    8, 9, 10, 8, 10, 11,
+	    12, 13, 14, 12, 14, 15,
+	    16, 17, 18, 16, 18, 19,
+	    20, 21, 22, 20, 22, 23
+	]);
+	CubeData.normals = new Float32Array([
+	    0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+	    1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+	    0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	    -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
+	    0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+	    0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
+	]);
+	CubeData.color = new Float32Array([
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
+	    1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+	    1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
+	    1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+	    0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1
+	]);
+
+	var PlaneData = (function () {
+	    function PlaneData() {
+	    }
+	    return PlaneData;
+	}());
+	PlaneData.vertices = new Float32Array([
+	    1.0, 1.0, 0.0, -1.0, 1.0, 0.0, -1.0, -1.0, 0.0, 1.0, -1.0, 0.0
+	]);
+	PlaneData.texCoords = new Float32Array([1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0]);
+	PlaneData.color = new Float32Array([
+	    1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+	]);
+	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
+
+	var ThreeDTransform = (function (_super) {
+	    __extends(ThreeDTransform, _super);
+	    function ThreeDTransform() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    return ThreeDTransform;
+	}(Transform));
+
+	(function (EScreenSize) {
+	    EScreenSize[EScreenSize["FULL"] = 0] = "FULL";
+	})(exports.EScreenSize || (exports.EScreenSize = {}));
 
 	exports.Test = Test;
 	exports.BufferContainer = BufferContainer;
@@ -2952,8 +3055,10 @@
 	exports.TriangleGeometry = TriangleGeometry;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
+	exports.MeshRender = MeshRender;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
+	exports.RendererComponent = RendererComponent;
 	exports.Shader = Shader;
 	exports.TriangleShader = TriangleShader;
 	exports.VariableLib = VariableLib;
@@ -2971,6 +3076,7 @@
 	exports.Render = Render;
 	exports.WebglRender = WebglRender;
 	exports.WebglState = WebglState;
+	exports.Scene = Scene;
 	exports.Matrix4 = Matrix4;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;

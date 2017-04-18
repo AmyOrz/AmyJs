@@ -26,9 +26,9 @@ var WebglRender = (function (_super) {
     WebglRender.prototype.init = function () {
         this.webglState.init();
     };
-    WebglRender.prototype.render = function (buffer) {
+    WebglRender.prototype.render = function () {
         this._commandQueue.forEach(function (renderCmd) {
-            renderCmd.draw(buffer);
+            renderCmd.draw();
         });
     };
     WebglRender.prototype.addCommand = function (renderCmd) {

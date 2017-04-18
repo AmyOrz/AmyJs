@@ -27,7 +27,8 @@ var Component = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Component.prototype.init = function () { };
+    Component.prototype.init = function () {
+    };
     Component.prototype.addToObject = function (entityObject) {
         this.entityObject = entityObject;
         this.addToComponentContainer();
