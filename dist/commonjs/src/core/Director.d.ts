@@ -1,8 +1,8 @@
-import { Render } from "./renderer/render/Render";
+import { Renderer } from "./renderer/render/Renderer";
 import { Scene } from "./Scene/Scene";
 export declare class Director {
     static getInstance(): any;
-    render: Render;
+    renderer: Renderer;
     scene: Scene;
     initWhenCreate(): void;
     init(): void;

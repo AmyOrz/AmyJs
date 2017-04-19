@@ -2,7 +2,7 @@ import { EntityObject } from "../EntityObject";
 import { Geometry } from "../../../Component/Geometry/Geometry";
 import { Component } from "../../Component";
 import { Transform } from "../../../Component/Transform/Transform";
-import { MeshRender } from "../../../Component/Renderer/MeshRender/MeshRender";
+import { MeshRenderer } from "../../../Component/Render/MeshRender/MeshRenderer";
 export declare class ComponentManager {
     private _entityObject;
     static create(entityObject: EntityObject): ComponentManager;
@@ -13,5 +13,5 @@ export declare class ComponentManager {
     private _renderComponent;
     init(): void;
     addComponent(component: Component): void;
-    getRenderComponent(): MeshRender;
+    getRenderComponent(): MeshRenderer;
 }

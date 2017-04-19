@@ -1522,7 +1522,6 @@
 	        this.initProgram();
 	        this.sendShaderAttribute();
 	        this.program.use();
-	        this.sendShaderUniform();
 	    };
 	    Shader.prototype.sendAttributeBuffer = function (name, data) {
 	        this.program.sendAttributeBuffer(name, data);
@@ -2151,14 +2150,12 @@
 	        this.sendAttributeBuffer("a_Color", colorBuffer);
 	        this.program.sendAllBufferData();
 	    };
-	    TriangleShader.prototype.sendShaderUniform = function () {
-	        var modelMatrix = new Matrix4();
+	    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
 	        var viewMatrix = new Matrix4();
 	        var projMatrix = new Matrix4();
-	        modelMatrix.setRotate(30, 0, 0, 1);
 	        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
 	        projMatrix.perspective(45, exports.Device.getInstance().canvas.width / exports.Device.getInstance().canvas.height, 1, 100);
-	        this.sendUniformData("u_mMatrix", modelMatrix);
+	        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
 	        this.sendUniformData("u_vMatrix", viewMatrix);
 	        this.sendUniformData("u_pMatrix", projMatrix);
 	    };
@@ -2170,7 +2167,7 @@
 	    function Geometry() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this.bufferContainer = null;
-	        _this._shader = TriangleShader.create(_this);
+	        _this.shader = TriangleShader.create(_this);
 	        return _this;
 	    }
 	    Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -2182,7 +2179,7 @@
 	    });
 	    Object.defineProperty(Geometry.prototype, "program", {
 	        get: function () {
-	            return this._shader.program;
+	            return this.shader.program;
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -2192,7 +2189,7 @@
 	        this.bufferContainer = BufferContainer.create();
 	        this.bufferContainer.geometryData = this.createGeometryData(computeData);
 	        this.bufferContainer.init();
-	        this._shader.init();
+	        this.shader.init();
 	    };
 	    Geometry.prototype.createGeometryData = function (computeData) {
 	        var vertice = computeData.vertice, color = computeData.color;
@@ -2495,11 +2492,11 @@
 	    return WebglState;
 	}());
 
-	var Render = (function () {
-	    function Render() {
+	var Renderer = (function () {
+	    function Renderer() {
 	        this._wegbglState = WebglState.create();
 	    }
-	    Object.defineProperty(Render.prototype, "webglState", {
+	    Object.defineProperty(Renderer.prototype, "webglState", {
 	        get: function () {
 	            return this._wegbglState;
 	        },
@@ -2509,36 +2506,36 @@
 	        enumerable: true,
 	        configurable: true
 	    });
-	    Render.prototype.setClearColor = function (r, g, b, a) {
+	    Renderer.prototype.setClearColor = function (r, g, b, a) {
 	        this._wegbglState.setClearColor(r, g, b, a);
 	    };
-	    return Render;
+	    return Renderer;
 	}());
 
-	var WebglRender = (function (_super) {
-	    __extends(WebglRender, _super);
-	    function WebglRender() {
+	var WebglRenderer = (function (_super) {
+	    __extends(WebglRenderer, _super);
+	    function WebglRenderer() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this._commandQueue = new Queue();
 	        return _this;
 	    }
-	    WebglRender.create = function () {
+	    WebglRenderer.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
-	    WebglRender.prototype.init = function () {
+	    WebglRenderer.prototype.init = function () {
 	        this.webglState.init();
 	    };
-	    WebglRender.prototype.render = function () {
+	    WebglRenderer.prototype.render = function () {
 	        this._commandQueue.forEach(function (renderCmd) {
 	            renderCmd.draw();
 	        });
 	    };
-	    WebglRender.prototype.addCommand = function (renderCmd) {
+	    WebglRenderer.prototype.addCommand = function (renderCmd) {
 	        this._commandQueue.addChild(renderCmd);
 	    };
-	    return WebglRender;
-	}(Render));
+	    return WebglRenderer;
+	}(Renderer));
 
 	var JudgeUtils$2 = (function (_super) {
 	    __extends(JudgeUtils$$1, _super);
@@ -2701,39 +2698,55 @@
 	var RenderCommand = (function () {
 	    function RenderCommand() {
 	        this.buffers = null;
+	        this.mMatrix = null;
+	        this.vMatrix = null;
+	        this.pMatrix = null;
+	        this.targetObject = null;
+	        this.shader = null;
 	        this._drawMode = exports.EDrawMode.TRIANGLES;
 	    }
 	    RenderCommand.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
+	    Object.defineProperty(RenderCommand.prototype, "MvpMatrix", {
+	        get: function () {
+	            return this.pMatrix.multiply(this.vMatrix).multiply(this.mMatrix);
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    RenderCommand.prototype.draw = function () {
 	        var startOffset = 0, gl = exports.Device.getInstance().gl;
+	        this.shader.sendShaderUniform(this);
 	        var verticeBuffer = this.buffers.getChild("verticeBuffer");
 	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
 	    };
 	    return RenderCommand;
 	}());
 
-	var MeshRender = (function (_super) {
-	    __extends(MeshRender, _super);
-	    function MeshRender() {
+	var MeshRenderer = (function (_super) {
+	    __extends(MeshRenderer, _super);
+	    function MeshRenderer() {
 	        return _super !== null && _super.apply(this, arguments) || this;
 	    }
-	    MeshRender.create = function () {
+	    MeshRenderer.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
-	    MeshRender.prototype.render = function (render, targetObject) {
-	        render.addCommand(this._createCmd(targetObject));
+	    MeshRenderer.prototype.render = function (renderer, targetObject) {
+	        renderer.addCommand(this._createCmd(targetObject));
 	    };
-	    MeshRender.prototype._createCmd = function (targetObject) {
+	    MeshRenderer.prototype._createCmd = function (targetObject) {
 	        var geometry = targetObject.geometry;
 	        var renderCmd = RenderCommand.create();
+	        renderCmd.shader = geometry.shader;
 	        renderCmd.buffers = geometry.bufferContainer;
+	        renderCmd.targetObject = targetObject;
+	        renderCmd.mMatrix = targetObject.transform.mMatrix;
 	        return renderCmd;
 	    };
-	    return MeshRender;
+	    return MeshRenderer;
 	}(RendererComponent));
 
 	var ComponentManager = (function () {
@@ -2749,7 +2762,6 @@
 	        return obj;
 	    };
 	    ComponentManager.prototype.init = function () {
-	        console.log(this._componentList);
 	        this._componentList.forEach(function (component) {
 	            component.init();
 	        });
@@ -2761,7 +2773,7 @@
 	        else if (component instanceof Transform) {
 	            this.transform = component;
 	        }
-	        else if (component instanceof MeshRender) {
+	        else if (component instanceof MeshRenderer) {
 	            this._renderComponent = component;
 	        }
 	        this._componentList.addChild(component);
@@ -2800,17 +2812,16 @@
 	        this._componentManager.addComponent(this.createTransform());
 	    };
 	    EntityObject.prototype.init = function () {
-	        console.log(this);
 	        this._componentManager.init();
 	        this._entityManager.init();
 	        return this;
 	    };
-	    EntityObject.prototype.render = function (render) {
+	    EntityObject.prototype.render = function (renderer) {
 	        var renderComponent = this._componentManager.getRenderComponent();
 	        if (renderComponent != void 0)
-	            renderComponent.render(render, this);
+	            renderComponent.render(renderer, this);
 	        this.getChildren().forEach(function (child) {
-	            child.render(render);
+	            child.render(renderer);
 	        });
 	    };
 	    EntityObject.prototype.dispose = function () {
@@ -2896,7 +2907,11 @@
 	    }
 	    GameObjectScene.create = function () {
 	        var obj = new this();
+	        obj.initWhenCreate();
 	        return obj;
+	    };
+	    GameObjectScene.prototype.initWhenCreate = function () {
+	        this.name = "GameObjectScene" + this.uid;
 	    };
 	    GameObjectScene.prototype.createTransform = function () {
 	        return null;
@@ -2913,7 +2928,11 @@
 	    }
 	    Scene.create = function () {
 	        var obj = new this();
+	        obj.initWhenCreate();
 	        return obj;
+	    };
+	    Scene.prototype.initWhenCreate = function () {
+	        this.name = "Scene" + this.uid;
 	    };
 	    Scene.prototype.createTransform = function () {
 	        return null;
@@ -2930,21 +2949,21 @@
 
 	exports.Director = (function () {
 	    function Director() {
-	        this.render = null;
+	        this.renderer = null;
 	        this.scene = null;
 	    }
 	    Director.getInstance = function () { };
 	    Director.prototype.initWhenCreate = function () {
-	        this.render = WebglRender.create();
+	        this.renderer = WebglRenderer.create();
 	        this.scene = Scene.create();
 	    };
 	    Director.prototype.init = function () {
-	        this.render.init();
+	        this.renderer.init();
 	        this.scene.gameObjectScene.init();
 	    };
 	    Director.prototype.Render = function () {
-	        this.scene.gameObjectScene.render(this.render);
-	        this.render.render();
+	        this.scene.gameObjectScene.render(this.renderer);
+	        this.renderer.render();
 	    };
 	    Director.prototype.start = function () {
 	        this.init();
@@ -2964,7 +2983,9 @@
 	        var gameobj = GameObject.create();
 	        var triangle = TriangleGeometry.create();
 	        gameobj.addComponent(triangle);
-	        gameobj.addComponent(MeshRender.create());
+	        gameobj.addComponent(MeshRenderer.create());
+	        gameobj.transform.rotate(45, 1, 1, 0);
+	        gameobj.transform.translate(0.4, 0, 0);
 	        var director = exports.Director.getInstance();
 	        director.scene.addChild(gameobj);
 	        director.start();
@@ -3055,10 +3076,10 @@
 	exports.TriangleGeometry = TriangleGeometry;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
-	exports.MeshRender = MeshRender;
+	exports.MeshRenderer = MeshRenderer;
+	exports.RendererComponent = RendererComponent;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
-	exports.RendererComponent = RendererComponent;
 	exports.Shader = Shader;
 	exports.TriangleShader = TriangleShader;
 	exports.VariableLib = VariableLib;
@@ -3073,9 +3094,10 @@
 	exports.EntityManager = EntityManager;
 	exports.Main = Main;
 	exports.RenderCommand = RenderCommand;
-	exports.Render = Render;
-	exports.WebglRender = WebglRender;
+	exports.Renderer = Renderer;
+	exports.WebglRenderer = WebglRenderer;
 	exports.WebglState = WebglState;
+	exports.GameObjectScene = GameObjectScene;
 	exports.Scene = Scene;
 	exports.Matrix4 = Matrix4;
 	exports.Vector3 = Vector3;

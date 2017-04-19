@@ -7,25 +7,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var singleton_1 = require("../until/singleton");
-var WebglRender_1 = require("./renderer/render/WebglRender");
+var WebglRenderer_1 = require("./renderer/render/WebglRenderer");
 var Scene_1 = require("./Scene/Scene");
 var Director = (function () {
     function Director() {
-        this.render = null;
+        this.renderer = null;
         this.scene = null;
     }
     Director.getInstance = function () { };
     Director.prototype.initWhenCreate = function () {
-        this.render = WebglRender_1.WebglRender.create();
+        this.renderer = WebglRenderer_1.WebglRenderer.create();
         this.scene = Scene_1.Scene.create();
     };
     Director.prototype.init = function () {
-        this.render.init();
+        this.renderer.init();
         this.scene.gameObjectScene.init();
     };
     Director.prototype.Render = function () {
-        this.scene.gameObjectScene.render(this.render);
-        this.render.render();
+        this.scene.gameObjectScene.render(this.renderer);
+        this.renderer.render();
     };
     Director.prototype.start = function () {
         this.init();

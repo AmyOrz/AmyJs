@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var EBufferDataType_1 = require("./EBufferDataType");
 var Hash_1 = require("../../../../node_modules/wonder-commonlib/dist/commonjs/Hash");
-var ArrayBuffer_1 = require("../../Renderer/Buffer/ArrayBuffer");
+var ArrayBuffer_1 = require("../../Render/Buffer/ArrayBuffer");
 var BufferContainer = (function () {
     function BufferContainer() {
         this.geometryData = null;

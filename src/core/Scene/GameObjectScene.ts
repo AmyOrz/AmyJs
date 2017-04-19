@@ -1,12 +1,17 @@
-import {EntityObject} from "../Entity/EntityObject";
-export class GameObjectScene extends EntityObject{
-    public static create(){
+import { EntityObject } from "../Entity/EntityObject";
+export class GameObjectScene extends EntityObject {
+    public static create() {
         var obj = new this();
 
+        obj.initWhenCreate();
         return obj;
     }
 
-    protected createTransform(){
+    public initWhenCreate() {
+        this.name = `GameObjectScene${this.uid}`;
+    }
+
+    protected createTransform() {
         return null;
     }
 }

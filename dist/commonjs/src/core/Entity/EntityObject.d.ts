@@ -3,7 +3,7 @@ import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Component } from "../Component";
 import { ComponentManager } from "./Manager/ComponentManager";
-import { Render } from "../renderer/render/Render";
+import { Renderer } from "../renderer/render/Renderer";
 import { Geometry } from "../../Component/Geometry/Geometry";
 import { Transform } from "../../Component/Transform/Transform";
 export declare abstract class EntityObject extends Entity {
@@ -15,7 +15,7 @@ export declare abstract class EntityObject extends Entity {
     protected _componentManager: ComponentManager;
     initWhenCreate(): void;
     init(): this;
-    render(render: Render): void;
+    render(renderer: Renderer): void;
     protected abstract createTransform(): any;
     dispose(): this;
     hasChild(child: EntityObject): boolean;

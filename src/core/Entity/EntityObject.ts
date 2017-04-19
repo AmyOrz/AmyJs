@@ -3,7 +3,7 @@ import { EntityManager } from "./Manager/EntityManager";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Component } from "../Component";
 import { ComponentManager } from "./Manager/ComponentManager";
-import { Render } from "../renderer/render/Render";
+import { Renderer } from "../renderer/render/Renderer";
 import { Geometry } from "../../Component/Geometry/Geometry";
 import { Transform } from "../../Component/Transform/Transform";
 
@@ -26,19 +26,18 @@ export abstract class EntityObject extends Entity {
     }
 
     public init() {
-        console.log(this)
         this._componentManager.init();
         this._entityManager.init();
         return this;
     }
 
-    public render(render: Render) {
+    public render(renderer: Renderer) {
         var renderComponent = this._componentManager.getRenderComponent();
         if (renderComponent != void 0)
-            renderComponent.render(render, this);
+            renderComponent.render(renderer, this);
 
-        this.getChildren().forEach((child:EntityObject) => {
-            child.render(render);
+        this.getChildren().forEach((child: EntityObject) => {
+            child.render(renderer);
         });
     }
 

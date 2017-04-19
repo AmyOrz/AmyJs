@@ -45,12 +45,12 @@ var EntityObject = (function (_super) {
         this._entityManager.init();
         return this;
     };
-    EntityObject.prototype.render = function (render) {
+    EntityObject.prototype.render = function (renderer) {
         var renderComponent = this._componentManager.getRenderComponent();
         if (renderComponent != void 0)
-            renderComponent.render(render, this);
+            renderComponent.render(renderer, this);
         this.getChildren().forEach(function (child) {
-            child.render(render);
+            child.render(renderer);
         });
     };
     EntityObject.prototype.dispose = function () {

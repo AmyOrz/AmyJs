@@ -13,13 +13,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Component_1 = require("../../core/Component");
 var GeometryData_1 = require("./Data/GeometryData");
 var BufferContainer_1 = require("./BufferContainer/BufferContainer");
-var TriangleShader_1 = require("../Renderer/Shader/shader/TriangleShader");
+var TriangleShader_1 = require("../Render/Shader/shader/TriangleShader");
 var Geometry = (function (_super) {
     __extends(Geometry, _super);
     function Geometry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.bufferContainer = null;
-        _this._shader = TriangleShader_1.TriangleShader.create(_this);
+        _this.shader = TriangleShader_1.TriangleShader.create(_this);
         return _this;
     }
     Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -31,7 +31,7 @@ var Geometry = (function (_super) {
     });
     Object.defineProperty(Geometry.prototype, "program", {
         get: function () {
-            return this._shader.program;
+            return this.shader.program;
         },
         enumerable: true,
         configurable: true
@@ -41,7 +41,7 @@ var Geometry = (function (_super) {
         this.bufferContainer = BufferContainer_1.BufferContainer.create();
         this.bufferContainer.geometryData = this.createGeometryData(computeData);
         this.bufferContainer.init();
-        this._shader.init();
+        this.shader.init();
     };
     Geometry.prototype.createGeometryData = function (computeData) {
         var vertice = computeData.vertice, color = computeData.color;

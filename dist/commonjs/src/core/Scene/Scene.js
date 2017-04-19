@@ -22,7 +22,11 @@ var Scene = (function (_super) {
     }
     Scene.create = function () {
         var obj = new this();
+        obj.initWhenCreate();
         return obj;
+    };
+    Scene.prototype.initWhenCreate = function () {
+        this.name = "Scene" + this.uid;
     };
     Scene.prototype.createTransform = function () {
         return null;

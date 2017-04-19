@@ -3,7 +3,7 @@ import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Geometry } from "../../../Component/Geometry/Geometry";
 import { Component } from "../../Component";
 import { Transform } from "../../../Component/Transform/Transform";
-import { MeshRender } from "../../../Component/Renderer/MeshRender/MeshRender";
+import { MeshRenderer } from "../../../Component/Render/MeshRender/MeshRenderer";
 
 export class ComponentManager {
     public static create(entityObject: EntityObject) {
@@ -18,10 +18,9 @@ export class ComponentManager {
     public geometry: Geometry = null;
 
     private _componentList: Collection<any> = new Collection<any>();
-    private _renderComponent: MeshRender = null;
+    private _renderComponent: MeshRenderer = null;
 
     public init() {
-        console.log(this._componentList)
         this._componentList.forEach((component: Component) => {
             component.init();
         })
@@ -34,7 +33,7 @@ export class ComponentManager {
         else if (component instanceof Transform) {
             this.transform = component;
         }
-        else if (component instanceof MeshRender) {
+        else if (component instanceof MeshRenderer) {
             this._renderComponent = component;
         }
 

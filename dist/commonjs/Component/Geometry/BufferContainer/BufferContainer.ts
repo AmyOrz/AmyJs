@@ -1,7 +1,7 @@
 import { EBufferDataType } from "./EBufferDataType";
 import { GeometryData } from "../Data/GeometryData";
 import { Hash } from "../../../../node_modules/wonder-commonlib/dist/commonjs/Hash";
-import { ArrayBuffer } from "../../Renderer/Buffer/ArrayBuffer";
+import { ArrayBuffer } from "../../Render/Buffer/ArrayBuffer";
 
 export class BufferContainer {
     public static create() {

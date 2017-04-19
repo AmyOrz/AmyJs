@@ -1,9 +1,8 @@
 import { Main } from "./core/Main";
 import { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
-import { Render } from "./core/renderer/render/Render";
 import { Director } from "./core/Director";
 import { GameObject } from "./core/Entity/GameObject";
-import { MeshRender } from "./Component/Renderer/MeshRender/MeshRender";
+import { MeshRenderer } from "./Component/Render/MeshRender/MeshRenderer";
 
 export class Test {
 
@@ -15,7 +14,11 @@ export class Test {
         var triangle = TriangleGeometry.create();
 
         gameobj.addComponent(triangle);
-        gameobj.addComponent(MeshRender.create());
+        gameobj.addComponent(MeshRenderer.create());
+
+        gameobj.transform.rotate(45,1,1,0);
+        gameobj.transform.translate(0.4,0,0);
+
 
         var director = Director.getInstance();
         director.scene.addChild(gameobj);

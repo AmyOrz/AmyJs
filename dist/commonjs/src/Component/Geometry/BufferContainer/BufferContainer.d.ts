@@ -1,5 +1,5 @@
 import { GeometryData } from "../Data/GeometryData";
-import { ArrayBuffer } from "../../Renderer/Buffer/ArrayBuffer";
+import { ArrayBuffer } from "../../Render/Buffer/ArrayBuffer";
 export declare class BufferContainer {
     static create(): BufferContainer;
     constructor();

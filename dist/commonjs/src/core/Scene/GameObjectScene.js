@@ -18,7 +18,11 @@ var GameObjectScene = (function (_super) {
     }
     GameObjectScene.create = function () {
         var obj = new this();
+        obj.initWhenCreate();
         return obj;
+    };
+    GameObjectScene.prototype.initWhenCreate = function () {
+        this.name = "GameObjectScene" + this.uid;
     };
     GameObjectScene.prototype.createTransform = function () {
         return null;
