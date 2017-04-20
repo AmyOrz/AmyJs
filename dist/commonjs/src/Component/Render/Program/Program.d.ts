@@ -1,7 +1,8 @@
 import { Shader } from "../Shader/shader/Shader";
 import { EVariableType } from "./EVariableType";
 import { ArrayBuffer } from "../Buffer/ArrayBuffer";
-export declare class Program {
+import { Entity } from "../../../core/Entity/Entity";
+export declare class Program extends Entity {
     static create(): Program;
     glProgram: any;
     private _attributeList;

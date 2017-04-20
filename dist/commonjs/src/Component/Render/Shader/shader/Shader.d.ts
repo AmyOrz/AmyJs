@@ -1,6 +1,7 @@
 import { Program } from "../../Program/Program";
 import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
-export declare abstract class Shader {
+import { Component } from "../../../../core/Component";
+export declare abstract class Shader extends Component {
     VSource: string;
     FSource: string;
     program: Program;

@@ -1193,14 +1193,11 @@
 	        return obj;
 	    };
 	    BufferContainer.prototype.init = function () {
-	        this.addChild("verticeBuffer", this._getBufferByType(exports.EBufferDataType.VERTICE));
-	        this.addChild("colorBuffer", this._getBufferByType(exports.EBufferDataType.COLOR));
+	        this.getChild(exports.EBufferDataType.VERTICE);
+	        this.getChild(exports.EBufferDataType.COLOR);
 	    };
 	    BufferContainer.prototype.addChild = function (bufferName, buffer) {
 	        this._bufferList.addChild(bufferName, buffer);
-	    };
-	    BufferContainer.prototype.getChild = function (bufferName) {
-	        return this._bufferList.getChild(bufferName);
 	    };
 	    BufferContainer.prototype.hasChild = function (bufferName) {
 	        return this._bufferList.hasChild(bufferName);
@@ -1208,23 +1205,37 @@
 	    BufferContainer.prototype.getChildren = function () {
 	        return this._bufferList.getChildren();
 	    };
-	    BufferContainer.prototype._getBufferByType = function (type) {
+	    BufferContainer.prototype.getChild = function (type) {
 	        var buffer = null;
 	        switch (type) {
 	            case exports.EBufferDataType.VERTICE:
-	                buffer = this._getVerticeBuffer();
+	                buffer = this._getVerticeBuffer(type);
 	                break;
 	            case exports.EBufferDataType.COLOR:
-	                buffer = this._getColorBuffer();
+	                buffer = this._getColorBuffer(type);
 	                break;
 	        }
 	        return buffer;
 	    };
-	    BufferContainer.prototype._getVerticeBuffer = function () {
-	        return ArrayBuffer.create(this.geometryData.vertice, 3);
+	    BufferContainer.prototype._getVerticeBuffer = function (type) {
+	        var buffer = ArrayBuffer.create(this.geometryData.vertice, 3);
+	        if (this._bufferList.hasChild(type)) {
+	            return this._bufferList.getChild(type);
+	        }
+	        else {
+	            this.addChild(type, buffer);
+	            return buffer;
+	        }
 	    };
-	    BufferContainer.prototype._getColorBuffer = function () {
-	        return ArrayBuffer.create(this.geometryData.color, 3);
+	    BufferContainer.prototype._getColorBuffer = function (type) {
+	        var buffer = ArrayBuffer.create(this.geometryData.color, 3);
+	        if (this._bufferList.hasChild(type)) {
+	            return this._bufferList.getChild(type);
+	        }
+	        else {
+	            this.addChild(type, buffer);
+	            return buffer;
+	        }
 	    };
 	    BufferContainer.prototype._getNormalBuffer = function () {
 	    };
@@ -1336,11 +1347,14 @@
 	    return GLSLDataSender;
 	}());
 
-	var Program = (function () {
+	var Program = (function (_super) {
+	    __extends(Program, _super);
 	    function Program() {
-	        this.glProgram = null;
-	        this._attributeList = new Hash();
-	        this._glslSend = GLSLDataSender.create(this);
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.glProgram = null;
+	        _this._attributeList = new Hash();
+	        _this._glslSend = GLSLDataSender.create(_this);
+	        return _this;
 	    }
 	    Program.create = function () {
 	        var obj = new this();
@@ -1488,7 +1502,7 @@
 	        return exports.Device.getInstance().gl;
 	    };
 	    return Program;
-	}());
+	}(Entity));
 
 	var VariableLib = (function () {
 	    function VariableLib() {
@@ -1514,14 +1528,16 @@
 	    type: exports.EVariableType.FLOAT_MAT4,
 	};
 
-	var Shader = (function () {
+	var Shader = (function (_super) {
+	    __extends(Shader, _super);
 	    function Shader() {
-	        this.program = Program.create();
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.program = Program.create();
+	        return _this;
 	    }
 	    Shader.prototype.init = function () {
 	        this.initProgram();
 	        this.sendShaderAttribute();
-	        this.program.use();
 	    };
 	    Shader.prototype.sendAttributeBuffer = function (name, data) {
 	        this.program.sendAttributeBuffer(name, data);
@@ -1530,7 +1546,7 @@
 	        this.program.sendUniformData(name, VariableLib[name].type, data);
 	    };
 	    return Shader;
-	}());
+	}(Component));
 
 	var Vector3 = (function () {
 	    function Vector3(opt_src) {
@@ -2144,13 +2160,14 @@
 	        this.program.initProgramWithShader(this);
 	    };
 	    TriangleShader.prototype.sendShaderAttribute = function () {
-	        var verticeBuffer = this.geometry.bufferContainer.getChild("verticeBuffer");
-	        var colorBuffer = this.geometry.bufferContainer.getChild("colorBuffer");
+	        var verticeBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.VERTICE);
+	        var colorBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.COLOR);
 	        this.sendAttributeBuffer("a_Position", verticeBuffer);
 	        this.sendAttributeBuffer("a_Color", colorBuffer);
 	        this.program.sendAllBufferData();
 	    };
 	    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
+	        this.program.use();
 	        var viewMatrix = new Matrix4();
 	        var projMatrix = new Matrix4();
 	        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
@@ -2173,13 +2190,6 @@
 	    Object.defineProperty(Geometry.prototype, "geometryData", {
 	        get: function () {
 	            return this.bufferContainer.geometryData;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Geometry.prototype, "program", {
-	        get: function () {
-	            return this.shader.program;
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -2719,7 +2729,7 @@
 	    RenderCommand.prototype.draw = function () {
 	        var startOffset = 0, gl = exports.Device.getInstance().gl;
 	        this.shader.sendShaderUniform(this);
-	        var verticeBuffer = this.buffers.getChild("verticeBuffer");
+	        var verticeBuffer = this.buffers.getChild(exports.EBufferDataType.VERTICE);
 	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
 	    };
 	    return RenderCommand;
@@ -2980,15 +2990,24 @@
 	    }
 	    Test.prototype.testCanvas = function () {
 	        Main.setCanvas("webgl").init();
-	        var gameobj = GameObject.create();
-	        var triangle = TriangleGeometry.create();
-	        gameobj.addComponent(triangle);
-	        gameobj.addComponent(MeshRenderer.create());
+	        var gameobj = this.createTriangle();
 	        gameobj.transform.rotate(45, 1, 1, 0);
 	        gameobj.transform.translate(0.4, 0, 0);
+	        var object = this.createTriangle();
+	        object.transform.translate(-0.4, -0.2, 0);
+	        object.transform.rotate(30, 0, 0, 1);
 	        var director = exports.Director.getInstance();
+	        director.renderer.setClearColor(0, 0, 0, 1);
 	        director.scene.addChild(gameobj);
+	        director.scene.addChild(object);
 	        director.start();
+	    };
+	    Test.prototype.createTriangle = function () {
+	        var gameObject = GameObject.create();
+	        var triangle = TriangleGeometry.create();
+	        gameObject.addComponent(triangle);
+	        gameObject.addComponent(MeshRenderer.create());
+	        return gameObject;
 	    };
 	    return Test;
 	}());

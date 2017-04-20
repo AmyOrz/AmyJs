@@ -1,14 +1,28 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Hash_1 = require("../../../../node_modules/wonder-commonlib/dist/commonjs/Hash");
 var EVariableType_1 = require("./EVariableType");
 var GLSLDataSender_1 = require("./GLSLDataSender");
 var Device_1 = require("../../../core/device/Device");
-var Program = (function () {
+var Entity_1 = require("../../../core/Entity/Entity");
+var Program = (function (_super) {
+    __extends(Program, _super);
     function Program() {
-        this.glProgram = null;
-        this._attributeList = new Hash_1.Hash();
-        this._glslSend = GLSLDataSender_1.GLSLDataSender.create(this);
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.glProgram = null;
+        _this._attributeList = new Hash_1.Hash();
+        _this._glslSend = GLSLDataSender_1.GLSLDataSender.create(_this);
+        return _this;
     }
     Program.create = function () {
         var obj = new this();
@@ -156,6 +170,6 @@ var Program = (function () {
         return Device_1.Device.getInstance().gl;
     };
     return Program;
-}());
+}(Entity_1.Entity));
 exports.Program = Program;
 //# sourceMappingURL=Program.js.map

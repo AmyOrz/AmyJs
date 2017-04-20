@@ -29,13 +29,6 @@ var Geometry = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Geometry.prototype, "program", {
-        get: function () {
-            return this.shader.program;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Geometry.prototype.init = function () {
         var computeData = this.computeData();
         this.bufferContainer = BufferContainer_1.BufferContainer.create();

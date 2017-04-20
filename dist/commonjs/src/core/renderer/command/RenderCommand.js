@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Device_1 = require("../../device/Device");
 var EDrawMode_1 = require("./EDrawMode");
+var EBufferDataType_1 = require("../../../Component/Geometry/BufferContainer/EBufferDataType");
 var RenderCommand = (function () {
     function RenderCommand() {
         this.buffers = null;
@@ -26,7 +27,7 @@ var RenderCommand = (function () {
     RenderCommand.prototype.draw = function () {
         var startOffset = 0, gl = Device_1.Device.getInstance().gl;
         this.shader.sendShaderUniform(this);
-        var verticeBuffer = this.buffers.getChild("verticeBuffer");
+        var verticeBuffer = this.buffers.getChild(EBufferDataType_1.EBufferDataType.VERTICE);
         gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
     };
     return RenderCommand;

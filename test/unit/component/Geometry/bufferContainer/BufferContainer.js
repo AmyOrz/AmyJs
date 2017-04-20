@@ -18,23 +18,23 @@ describe("BufferContains", function () {
             var geometryData = new amy.GeometryData();
             bufferContainer.geometryData = geometryData;
 
-            sandbox.stub(bufferContainer,"addChild");
+            sandbox.stub(bufferContainer,"getChild");
 
             bufferContainer.init();
 
-            expect(bufferContainer.addChild).toCalledTwice();
+            expect(bufferContainer.getChild).toCalledTwice();
         });
         it("_getChildByType should addChild by type",function () {
             var geometryData = new amy.GeometryData();
             bufferContainer.geometryData = geometryData;
 
-            sandbox.stub(bufferContainer,"_getBufferByType");
+            sandbox.stub(bufferContainer,"getChild");
 
             bufferContainer.init();
 
-            expect(bufferContainer._getBufferByType.callCount).toEqual(2);
-            expect(bufferContainer._getBufferByType.getCall(0)).toCalledWith(amy.EBufferDataType.VERTICE);
-            expect(bufferContainer._getBufferByType.getCall(1)).toCalledWith(amy.EBufferDataType.COLOR);
+            expect(bufferContainer.getChild.callCount).toEqual(2);
+            expect(bufferContainer.getChild.getCall(0)).toCalledWith(amy.EBufferDataType.VERTICE);
+            expect(bufferContainer.getChild.getCall(1)).toCalledWith(amy.EBufferDataType.COLOR);
         })
     });
 });

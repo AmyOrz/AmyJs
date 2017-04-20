@@ -26,7 +26,6 @@ export abstract class EntityObject extends Entity {
     }
 
     public init() {
-        console.log(this)
         this._componentManager.init();
         this._entityManager.init();
         return this;

@@ -1,20 +1,20 @@
+import { EBufferDataType } from "./EBufferDataType";
 import { GeometryData } from "../Data/GeometryData";
-import { ArrayBuffer } from "../../Render/Buffer/ArrayBuffer";
+import { Buffer } from "../../Render/Buffer/Buffer";
 export declare class BufferContainer {
     static create(): BufferContainer;
     constructor();
     geometryData: GeometryData;
     private _bufferList;
     init(): void;
-    addChild(bufferName: string, buffer: ArrayBuffer): void;
-    getChild(bufferName: string): ArrayBuffer;
-    hasChild(bufferName: string): boolean;
+    addChild(bufferName: any, buffer: Buffer): void;
+    hasChild(bufferName: any): boolean;
     getChildren(): {
-        [s: string]: ArrayBuffer;
+        [s: string]: Buffer;
     };
-    private _getBufferByType(type);
-    private _getVerticeBuffer();
-    private _getColorBuffer();
+    getChild(type: EBufferDataType): any;
+    private _getVerticeBuffer(type);
+    private _getColorBuffer(type);
     private _getNormalBuffer();
     private _getIndiceBuffer();
     private _getTexCoordBuffer();

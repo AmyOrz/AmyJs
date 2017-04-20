@@ -2,9 +2,10 @@ import { Device } from "../../device/Device";
 import { EDrawMode } from "./EDrawMode";
 import { ArrayBuffer } from "../../../Component/Render/Buffer/ArrayBuffer";
 import { BufferContainer } from "../../../Component/Geometry/BufferContainer/BufferContainer";
-import {Matrix4} from "../../../Math/Matrix4";
-import {Shader} from "../../../Component/Render/Shader/shader/Shader";
-import {EntityObject} from "../../Entity/EntityObject";
+import { Matrix4 } from "../../../Math/Matrix4";
+import { Shader } from "../../../Component/Render/Shader/shader/Shader";
+import { EntityObject } from "../../Entity/EntityObject";
+import { EBufferDataType } from "../../../Component/Geometry/BufferContainer/EBufferDataType";
 export class RenderCommand {
     public static create() {
         var obj = new this();
@@ -12,18 +13,19 @@ export class RenderCommand {
         return obj;
     }
 
-    get MvpMatrix(){
+    get MvpMatrix() {
         return this.pMatrix.multiply(this.vMatrix).multiply(this.mMatrix);
     }
 
     public buffers: BufferContainer = null;
-    public mMatrix:Matrix4 = null;
-    public vMatrix:Matrix4 = null;
-    public pMatrix:Matrix4 = null;
+    public mMatrix: Matrix4 = null;
+    public vMatrix: Matrix4 = null;
+    public pMatrix: Matrix4 = null;
 
-    public targetObject:EntityObject = null;
+    public targetObject: EntityObject = null;
     // public material = null;
-    public shader:Shader = null;
+    public shader: Shader = null;
+
 
     private _drawMode: EDrawMode = EDrawMode.TRIANGLES;
 
@@ -33,7 +35,7 @@ export class RenderCommand {
 
         this.shader.sendShaderUniform(this);
 
-        var verticeBuffer: ArrayBuffer = this.buffers.getChild("verticeBuffer");
+        var verticeBuffer: ArrayBuffer = this.buffers.getChild(EBufferDataType.VERTICE);
         gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
     }
 }

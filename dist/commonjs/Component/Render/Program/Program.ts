@@ -4,8 +4,9 @@ import { EVariableType } from "./EVariableType";
 import { GLSLDataSender } from "./GLSLDataSender";
 import { ArrayBuffer } from "../Buffer/ArrayBuffer";
 import { Device } from "../../../core/device/Device";
+import { Entity } from "../../../core/Entity/Entity";
 
-export class Program {
+export class Program extends Entity {
     public static create() {
         var obj = new this();
 

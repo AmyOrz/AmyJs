@@ -13,14 +13,11 @@ var BufferContainer = (function () {
         return obj;
     };
     BufferContainer.prototype.init = function () {
-        this.addChild("verticeBuffer", this._getBufferByType(EBufferDataType_1.EBufferDataType.VERTICE));
-        this.addChild("colorBuffer", this._getBufferByType(EBufferDataType_1.EBufferDataType.COLOR));
+        this.getChild(EBufferDataType_1.EBufferDataType.VERTICE);
+        this.getChild(EBufferDataType_1.EBufferDataType.COLOR);
     };
     BufferContainer.prototype.addChild = function (bufferName, buffer) {
         this._bufferList.addChild(bufferName, buffer);
-    };
-    BufferContainer.prototype.getChild = function (bufferName) {
-        return this._bufferList.getChild(bufferName);
     };
     BufferContainer.prototype.hasChild = function (bufferName) {
         return this._bufferList.hasChild(bufferName);
@@ -28,23 +25,37 @@ var BufferContainer = (function () {
     BufferContainer.prototype.getChildren = function () {
         return this._bufferList.getChildren();
     };
-    BufferContainer.prototype._getBufferByType = function (type) {
+    BufferContainer.prototype.getChild = function (type) {
         var buffer = null;
         switch (type) {
             case EBufferDataType_1.EBufferDataType.VERTICE:
-                buffer = this._getVerticeBuffer();
+                buffer = this._getVerticeBuffer(type);
                 break;
             case EBufferDataType_1.EBufferDataType.COLOR:
-                buffer = this._getColorBuffer();
+                buffer = this._getColorBuffer(type);
                 break;
         }
         return buffer;
     };
-    BufferContainer.prototype._getVerticeBuffer = function () {
-        return ArrayBuffer_1.ArrayBuffer.create(this.geometryData.vertice, 3);
+    BufferContainer.prototype._getVerticeBuffer = function (type) {
+        var buffer = ArrayBuffer_1.ArrayBuffer.create(this.geometryData.vertice, 3);
+        if (this._bufferList.hasChild(type)) {
+            return this._bufferList.getChild(type);
+        }
+        else {
+            this.addChild(type, buffer);
+            return buffer;
+        }
     };
-    BufferContainer.prototype._getColorBuffer = function () {
-        return ArrayBuffer_1.ArrayBuffer.create(this.geometryData.color, 3);
+    BufferContainer.prototype._getColorBuffer = function (type) {
+        var buffer = ArrayBuffer_1.ArrayBuffer.create(this.geometryData.color, 3);
+        if (this._bufferList.hasChild(type)) {
+            return this._bufferList.getChild(type);
+        }
+        else {
+            this.addChild(type, buffer);
+            return buffer;
+        }
     };
     BufferContainer.prototype._getNormalBuffer = function () {
     };

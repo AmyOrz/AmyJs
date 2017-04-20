@@ -2,7 +2,8 @@ import { Shader } from "./Shader";
 import { Geometry } from "../../../Geometry/Geometry";
 import { Matrix4 } from "../../../../Math/Matrix4";
 import { Device } from "../../../../core/device/Device";
-import {RenderCommand} from "../../../../core/renderer/command/RenderCommand";
+import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
+import { EBufferDataType } from "../../../Geometry/BufferContainer/EBufferDataType";
 export class TriangleShader extends Shader {
     public static create(geometry: Geometry) {
         var obj = new this();
@@ -38,8 +39,9 @@ export class TriangleShader extends Shader {
     }
 
     public sendShaderAttribute() {
-        var verticeBuffer = this.geometry.bufferContainer.getChild("verticeBuffer");
-        var colorBuffer = this.geometry.bufferContainer.getChild("colorBuffer");
+
+        var verticeBuffer = this.geometry.bufferContainer.getChild(EBufferDataType.VERTICE);
+        var colorBuffer = this.geometry.bufferContainer.getChild(EBufferDataType.COLOR);
 
         this.sendAttributeBuffer("a_Position", verticeBuffer);
         this.sendAttributeBuffer("a_Color", colorBuffer);
@@ -47,7 +49,9 @@ export class TriangleShader extends Shader {
         this.program.sendAllBufferData();
     }
 
-    public sendShaderUniform(renderCmd:RenderCommand) {
+    public sendShaderUniform(renderCmd: RenderCommand) {
+        this.program.use();
+
         var viewMatrix = new Matrix4();
         var projMatrix = new Matrix4();
 

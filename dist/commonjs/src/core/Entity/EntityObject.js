@@ -40,7 +40,6 @@ var EntityObject = (function (_super) {
         this._componentManager.addComponent(this.createTransform());
     };
     EntityObject.prototype.init = function () {
-        console.log(this);
         this._componentManager.init();
         this._entityManager.init();
         return this;

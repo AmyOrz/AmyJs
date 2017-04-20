@@ -1,7 +1,8 @@
 import { Program } from "../../Program/Program";
 import { VariableLib } from "../VariableLib";
-import {RenderCommand} from "../../../../core/renderer/command/RenderCommand";
-export abstract class Shader {
+import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
+import { Component } from "../../../../core/Component";
+export abstract class Shader extends Component {
 
     public VSource: string;
     public FSource: string;
@@ -11,7 +12,6 @@ export abstract class Shader {
     public init() {
         this.initProgram();
         this.sendShaderAttribute();
-        this.program.use();
     }
 
     protected sendAttributeBuffer(name: string, data: any) {
@@ -23,6 +23,6 @@ export abstract class Shader {
 
     public abstract initProgram();
     public abstract sendShaderAttribute();
-    public abstract sendShaderUniform(renderCommand:RenderCommand);
+    public abstract sendShaderUniform(renderCommand: RenderCommand);
     // public abstract sendShaderUniform();
 }

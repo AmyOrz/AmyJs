@@ -13,6 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Shader_1 = require("./Shader");
 var Matrix4_1 = require("../../../../Math/Matrix4");
 var Device_1 = require("../../../../core/device/Device");
+var EBufferDataType_1 = require("../../../Geometry/BufferContainer/EBufferDataType");
 var TriangleShader = (function (_super) {
     __extends(TriangleShader, _super);
     function TriangleShader() {
@@ -45,13 +46,14 @@ var TriangleShader = (function (_super) {
         this.program.initProgramWithShader(this);
     };
     TriangleShader.prototype.sendShaderAttribute = function () {
-        var verticeBuffer = this.geometry.bufferContainer.getChild("verticeBuffer");
-        var colorBuffer = this.geometry.bufferContainer.getChild("colorBuffer");
+        var verticeBuffer = this.geometry.bufferContainer.getChild(EBufferDataType_1.EBufferDataType.VERTICE);
+        var colorBuffer = this.geometry.bufferContainer.getChild(EBufferDataType_1.EBufferDataType.COLOR);
         this.sendAttributeBuffer("a_Position", verticeBuffer);
         this.sendAttributeBuffer("a_Color", colorBuffer);
         this.program.sendAllBufferData();
     };
     TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
+        this.program.use();
         var viewMatrix = new Matrix4_1.Matrix4();
         var projMatrix = new Matrix4_1.Matrix4();
         viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);

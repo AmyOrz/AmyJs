@@ -16,10 +16,6 @@ export abstract class Geometry extends Component {
         return this.bufferContainer.geometryData;
     }
 
-    get program(): Program {
-        return this.shader.program;
-    }
-
     public bufferContainer: BufferContainer = null;
     public shader: Shader = TriangleShader.create(this);
 
