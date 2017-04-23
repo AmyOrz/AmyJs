@@ -4,7 +4,6 @@ import { Shader } from "../../../Component/Render/Shader/shader/Shader";
 import { EntityObject } from "../../Entity/EntityObject";
 export declare class RenderCommand {
     static create(): RenderCommand;
-    readonly MvpMatrix: any;
     buffers: BufferContainer;
     mMatrix: Matrix4;
     vMatrix: Matrix4;

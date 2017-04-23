@@ -113,7 +113,7 @@ var testTool = (function () {
                 getProgramParameter: sandbox.stub().returns(true),
                 compileShader: sandbox.stub(),
                 shaderSource: sandbox.stub(),
-                createShader: sandbox.stub(),
+                createShader: sandbox.stub().returns({}),
                 bindBuffer: sandbox.stub(),
                 bufferData: sandbox.stub(),
                 bufferSubData: sandbox.stub(),

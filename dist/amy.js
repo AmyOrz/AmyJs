@@ -276,6 +276,9 @@
 	    function GeometryData() {
 	        this.vertice = null;
 	        this.color = null;
+	        this.indice = null;
+	        this.normal = null;
+	        this.texCoord = null;
 	    }
 	    GeometryData.create = function () {
 	        var obj = new this();
@@ -1195,6 +1198,9 @@
 	    BufferContainer.prototype.init = function () {
 	        this.getChild(exports.EBufferDataType.VERTICE);
 	        this.getChild(exports.EBufferDataType.COLOR);
+	        this.getChild(exports.EBufferDataType.INDICE);
+	        this.getChild(exports.EBufferDataType.NORMAL);
+	        this.getChild(exports.EBufferDataType.TEXCOORD);
 	    };
 	    BufferContainer.prototype.addChild = function (bufferName, buffer) {
 	        this._bufferList.addChild(bufferName, buffer);
@@ -1214,21 +1220,37 @@
 	            case exports.EBufferDataType.COLOR:
 	                buffer = this._getColorBuffer(type);
 	                break;
+	            case exports.EBufferDataType.INDICE:
+	                buffer = this._getIndiceBuffer(type);
+	                break;
+	            case exports.EBufferDataType.NORMAL:
+	                buffer = this._getNormalBuffer(type);
+	                break;
+	            case exports.EBufferDataType.TEXCOORD:
+	                buffer = this._getTexCoordBuffer(type);
+	                break;
 	        }
 	        return buffer;
 	    };
 	    BufferContainer.prototype._getVerticeBuffer = function (type) {
 	        var buffer = ArrayBuffer.create(this.geometryData.vertice, 3);
-	        if (this._bufferList.hasChild(type)) {
-	            return this._bufferList.getChild(type);
-	        }
-	        else {
-	            this.addChild(type, buffer);
-	            return buffer;
-	        }
+	        return this._bufferCache(type, buffer);
 	    };
 	    BufferContainer.prototype._getColorBuffer = function (type) {
 	        var buffer = ArrayBuffer.create(this.geometryData.color, 3);
+	        return this._bufferCache(type, buffer);
+	    };
+	    BufferContainer.prototype._getNormalBuffer = function (type) {
+	        var buffer = ArrayBuffer.create(this.geometryData.normal, 3);
+	        return this._bufferCache(type, buffer);
+	    };
+	    BufferContainer.prototype._getIndiceBuffer = function (type) {
+	    };
+	    BufferContainer.prototype._getTexCoordBuffer = function (type) {
+	        var buffer = ArrayBuffer.create(this.geometryData.texCoord, 3);
+	        return this._bufferCache(type, buffer);
+	    };
+	    BufferContainer.prototype._bufferCache = function (type, buffer) {
 	        if (this._bufferList.hasChild(type)) {
 	            return this._bufferList.getChild(type);
 	        }
@@ -1237,14 +1259,44 @@
 	            return buffer;
 	        }
 	    };
-	    BufferContainer.prototype._getNormalBuffer = function () {
-	    };
-	    BufferContainer.prototype._getIndiceBuffer = function () {
-	    };
-	    BufferContainer.prototype._getTexCoordBuffer = function () {
-	    };
 	    return BufferContainer;
 	}());
+
+	var Geometry = (function (_super) {
+	    __extends(Geometry, _super);
+	    function Geometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.bufferContainer = null;
+	        _this.shader = null;
+	        return _this;
+	    }
+	    Object.defineProperty(Geometry.prototype, "geometryData", {
+	        get: function () {
+	            return this.bufferContainer.geometryData;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Geometry.prototype.init = function () {
+	        this.shader = this.getShader();
+	        var computeData = this.computeData();
+	        this.bufferContainer = BufferContainer.create();
+	        this.bufferContainer.geometryData = this.createGeometryData(computeData);
+	        this.bufferContainer.init();
+	        this.shader.init();
+	    };
+	    Geometry.prototype.createGeometryData = function (computeData) {
+	        var vertice = computeData.vertice, color = computeData.color, texCoord = computeData.texCoord, normal = computeData.normal, indice = computeData.indice;
+	        var geometryData = GeometryData.create();
+	        geometryData.vertice = vertice;
+	        geometryData.color = color;
+	        geometryData.texCoord = texCoord;
+	        geometryData.normal = normal;
+	        geometryData.indice = indice;
+	        return geometryData;
+	    };
+	    return Geometry;
+	}(Component));
 
 	(function (EVariableType) {
 	    EVariableType[EVariableType["FLOAT_1"] = "FLOAT_1"] = "FLOAT_1";
@@ -2179,38 +2231,6 @@
 	    return TriangleShader;
 	}(Shader));
 
-	var Geometry = (function (_super) {
-	    __extends(Geometry, _super);
-	    function Geometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.bufferContainer = null;
-	        _this.shader = TriangleShader.create(_this);
-	        return _this;
-	    }
-	    Object.defineProperty(Geometry.prototype, "geometryData", {
-	        get: function () {
-	            return this.bufferContainer.geometryData;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Geometry.prototype.init = function () {
-	        var computeData = this.computeData();
-	        this.bufferContainer = BufferContainer.create();
-	        this.bufferContainer.geometryData = this.createGeometryData(computeData);
-	        this.bufferContainer.init();
-	        this.shader.init();
-	    };
-	    Geometry.prototype.createGeometryData = function (computeData) {
-	        var vertice = computeData.vertice, color = computeData.color;
-	        var geometryData = GeometryData.create();
-	        geometryData.vertice = vertice;
-	        geometryData.color = color;
-	        return geometryData;
-	    };
-	    return Geometry;
-	}(Component));
-
 	var TriangleGeometry = (function (_super) {
 	    __extends(TriangleGeometry, _super);
 	    function TriangleGeometry() {
@@ -2223,22 +2243,25 @@
 	        var obj = new this();
 	        return obj;
 	    };
+	    TriangleGeometry.prototype.getShader = function () {
+	        return TriangleShader.create(this);
+	    };
 	    TriangleGeometry.prototype.computeData = function () {
-	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertices = null, texCoords = null, indices = null, color = null, normals = null;
-	        vertices = [
+	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
+	        vertice = [
 	            0.0, up, 0,
 	            left, down, 0,
 	            right, down, 0
 	        ];
-	        indices = [
+	        indice = [
 	            0, 1, 2
 	        ];
-	        texCoords = [
+	        texCoord = [
 	            0.5, 1.0,
 	            0.0, 0.0,
 	            1.0, 0.0
 	        ];
-	        normals = [
+	        normal = [
 	            0, 0, 1,
 	            0, 0, 1,
 	            0, 0, 1
@@ -2247,8 +2270,11 @@
 	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
 	        ];
 	        return {
-	            vertice: vertices,
-	            color: color
+	            vertice: vertice,
+	            texCoord: texCoord,
+	            color: color,
+	            normal: normal,
+	            indice: indice
 	        };
 	    };
 	    return TriangleGeometry;
@@ -2719,13 +2745,6 @@
 	        var obj = new this();
 	        return obj;
 	    };
-	    Object.defineProperty(RenderCommand.prototype, "MvpMatrix", {
-	        get: function () {
-	            return this.pMatrix.multiply(this.vMatrix).multiply(this.mMatrix);
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
 	    RenderCommand.prototype.draw = function () {
 	        var startOffset = 0, gl = exports.Device.getInstance().gl;
 	        this.shader.sendShaderUniform(this);

@@ -1,4 +1,5 @@
 import { Geometry, GeometryDataType } from "./Geometry";
+import {TriangleShader} from "../Render/Shader/shader/TriangleShader";
 
 export class TriangleGeometry extends Geometry {
     public static create() {
@@ -9,6 +10,10 @@ export class TriangleGeometry extends Geometry {
     public width: number = 1;
     public height: number = 1;
 
+    public getShader(){
+        return TriangleShader.create(this);
+    }
+
     public computeData(): GeometryDataType {
         var width = this.width,
             height = this.height,
@@ -16,29 +21,29 @@ export class TriangleGeometry extends Geometry {
             right = width / 2,
             up = height / 2,
             down = -height / 2,
-            vertices = null,
-            texCoords = null,
-            indices = null,
+            vertice = null,
+            texCoord = null,
+            indice = null,
             color = null,
-            normals = null;
+            normal = null;
 
-        vertices = [
+        vertice = [
             0.0, up, 0,
             left, down, 0,
             right, down, 0
         ];
 
-        indices = [
+        indice = [
             0, 1, 2
         ];
 
-        texCoords = [
+        texCoord = [
             0.5, 1.0,
             0.0, 0.0,
             1.0, 0.0
         ];
 
-        normals = [
+        normal = [
             0, 0, 1,
             0, 0, 1,
             0, 0, 1
@@ -47,9 +52,11 @@ export class TriangleGeometry extends Geometry {
             1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
         ];
         return {
-            vertice: vertices,
-            // texCoord: texCoords,
-            color: color
+            vertice: vertice,
+            texCoord: texCoord,
+            color: color,
+            normal:normal,
+            indice:indice
         };
     }
 }

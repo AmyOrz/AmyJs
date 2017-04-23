@@ -6,15 +6,12 @@ import { Matrix4 } from "../../../Math/Matrix4";
 import { Shader } from "../../../Component/Render/Shader/shader/Shader";
 import { EntityObject } from "../../Entity/EntityObject";
 import { EBufferDataType } from "../../../Component/Geometry/BufferContainer/EBufferDataType";
+
 export class RenderCommand {
     public static create() {
         var obj = new this();
 
         return obj;
-    }
-
-    get MvpMatrix() {
-        return this.pMatrix.multiply(this.vMatrix).multiply(this.mMatrix);
     }
 
     public buffers: BufferContainer = null;

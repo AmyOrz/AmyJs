@@ -7,8 +7,8 @@ export class GeometryData {
 
     public vertice: number[] = null;
     public color: number[] = null;
-    // public indice: number[] = null;
-    // public normal: number[] = null;
-    // public texCoord: number[] = null;
+    public indice: number[] = null;
+    public normal: number[] = null;
+    public texCoord: number[] = null;
 
 }

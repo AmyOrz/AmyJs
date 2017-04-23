@@ -19,10 +19,9 @@ export class BufferContainer {
     public init() {
         this.getChild(EBufferDataType.VERTICE);
         this.getChild(EBufferDataType.COLOR);
-        // this.addChild("indiceBuffer", this._getBufferByType(EBufferDataType.INDICE));
-        // this.addChild("normalBuffer", this._getBufferByType(EBufferDataType.NORMAL));
-        // this.addChild("texCoordBuffer", this._getBufferByType(EBufferDataType.TEXCOORD));
-
+        this.getChild(EBufferDataType.INDICE);
+        this.getChild(EBufferDataType.NORMAL);
+        this.getChild(EBufferDataType.TEXCOORD);
     }
 
     public addChild(bufferName: any, buffer: Buffer) {
@@ -42,42 +41,49 @@ export class BufferContainer {
         switch (type) {
             case EBufferDataType.VERTICE: buffer = this._getVerticeBuffer(type); break;
             case EBufferDataType.COLOR: buffer = this._getColorBuffer(type); break;
-            // case EBufferDataType.INDICE: bufferContainer = this._getIndiceBuffer(); break;
-            // case EBufferDataType.NORMAL: bufferContainer = this._getNormalBuffer(); break;
-            // case EBufferDataType.TEXCOORD: bufferContainer = this._getTexCoordBuffer(); break;
+            case EBufferDataType.INDICE: buffer = this._getIndiceBuffer(type); break;
+            case EBufferDataType.NORMAL: buffer = this._getNormalBuffer(type); break;
+            case EBufferDataType.TEXCOORD: buffer = this._getTexCoordBuffer(type); break;
         }
         return buffer;
     }
 
     private _getVerticeBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.vertice, 3);
-        if (this._bufferList.hasChild(type)) {
-            return this._bufferList.getChild(type);
-        } else {
-            this.addChild(type, buffer);
-            return buffer;
-        }
 
+        return this._bufferCache(type,buffer);
     }
 
     private _getColorBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.color, 3);
+
+        return this._bufferCache(type,buffer);
+    }
+
+    private _getNormalBuffer(type:any) {
+        var buffer: Buffer = ArrayBuffer.create(this.geometryData.normal, 3);
+
+        return this._bufferCache(type,buffer);
+    }
+
+    private _getIndiceBuffer(type:any) {
+
+        // var buffer: Buffer = ArrayBuffer.create(this.geometryData.indice, 3);
+
+        // return this._bufferCache(type,buffer);
+
+    }
+    private _getTexCoordBuffer(type:any):Buffer{
+        var buffer: Buffer = ArrayBuffer.create(this.geometryData.texCoord, 3);
+        return this._bufferCache(type,buffer);
+    }
+
+    private _bufferCache(type:any,buffer:any):Buffer{
         if (this._bufferList.hasChild(type)) {
             return this._bufferList.getChild(type);
         } else {
             this.addChild(type, buffer);
             return buffer;
         }
-    }
-
-    private _getNormalBuffer() {
-
-    }
-
-    private _getIndiceBuffer() {
-
-    }
-    private _getTexCoordBuffer() {
-
     }
 }

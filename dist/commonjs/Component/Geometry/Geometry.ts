@@ -9,6 +9,8 @@ export type GeometryDataType = {
     vertice: number[];
     color?: number[];
     texCoord?: number[];
+    normal?:number[];
+    indice?:number[];
 }
 
 export abstract class Geometry extends Component {
@@ -17,9 +19,12 @@ export abstract class Geometry extends Component {
     }
 
     public bufferContainer: BufferContainer = null;
-    public shader: Shader = TriangleShader.create(this);
+    public shader: Shader = null;
 
     public init() {
+
+        this.shader = this.getShader();
+
         var computeData: GeometryDataType = this.computeData();
 
         this.bufferContainer = BufferContainer.create();
@@ -32,18 +37,23 @@ export abstract class Geometry extends Component {
     }
 
     protected abstract computeData(): GeometryDataType;
+    protected abstract getShader():Shader;
 
     protected createGeometryData(computeData: GeometryDataType): GeometryData {
         var {
             vertice,
             color,
-            // texCoord
+            texCoord,
+            normal,
+            indice
         } = computeData;
         var geometryData = GeometryData.create();
 
         geometryData.vertice = vertice;
         geometryData.color = color;
-        // geometryData.texCoord = texCoord;
+        geometryData.texCoord = texCoord;
+        geometryData.normal = normal;
+        geometryData.indice = indice;
 
         return geometryData;
     }

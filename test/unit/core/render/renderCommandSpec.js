@@ -1,5 +1,5 @@
 describe("renderCommandSpec operation",function(){
-    var sandbox,gl,device;
+    var sandbox,gl,device,pos = 100;
     var renderCmd,shader,buffers,geometry;
     beforeEach(function () {
         sandbox = sinon.sandbox.create();
@@ -7,10 +7,12 @@ describe("renderCommandSpec operation",function(){
         sandbox.stub(device,"gl",testTool.buildFakeGl(sandbox));
 
         gl = device.gl;
+        sandbox.stub(gl,"getUniformLocation").returns(pos);
 
         renderCmd = amy.RenderCommand.create();
         geometry = amy.TriangleGeometry.create();
 
+        geometry.init();
         renderCmd.shader = geometry.shader;
         renderCmd.buffers = geometry.bufferContainer;
         renderCmd.mMatrix = new amy.Matrix4();
@@ -21,12 +23,8 @@ describe("renderCommandSpec operation",function(){
     });
 
     it("draw method should call gl.drawArrays", function () {
-        sandbox.stub(renderCmd.shader,"initProgram").returns({});
-
-        geometry.init();
-
         renderCmd.draw();
 
-        expect(gl.drawArrays).toCalledOnce();
+        expect(gl.drawArrays).toCalledWith(gl.TRIANGLES,0,3);
     })
 });

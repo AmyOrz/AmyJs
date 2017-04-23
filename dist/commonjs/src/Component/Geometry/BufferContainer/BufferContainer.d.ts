@@ -15,7 +15,8 @@ export declare class BufferContainer {
     getChild(type: EBufferDataType): any;
     private _getVerticeBuffer(type);
     private _getColorBuffer(type);
-    private _getNormalBuffer();
-    private _getIndiceBuffer();
-    private _getTexCoordBuffer();
+    private _getNormalBuffer(type);
+    private _getIndiceBuffer(type);
+    private _getTexCoordBuffer(type);
+    private _bufferCache(type, buffer);
 }

@@ -6,6 +6,8 @@ export declare type GeometryDataType = {
     vertice: number[];
     color?: number[];
     texCoord?: number[];
+    normal?: number[];
+    indice?: number[];
 };
 export declare abstract class Geometry extends Component {
     readonly geometryData: GeometryData;
@@ -13,5 +15,6 @@ export declare abstract class Geometry extends Component {
     shader: Shader;
     init(): void;
     protected abstract computeData(): GeometryDataType;
+    protected abstract getShader(): Shader;
     protected createGeometryData(computeData: GeometryDataType): GeometryData;
 }

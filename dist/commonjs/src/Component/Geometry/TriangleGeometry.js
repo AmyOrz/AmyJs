@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Geometry_1 = require("./Geometry");
+var TriangleShader_1 = require("../Render/Shader/shader/TriangleShader");
 var TriangleGeometry = (function (_super) {
     __extends(TriangleGeometry, _super);
     function TriangleGeometry() {
@@ -23,22 +24,25 @@ var TriangleGeometry = (function (_super) {
         var obj = new this();
         return obj;
     };
+    TriangleGeometry.prototype.getShader = function () {
+        return TriangleShader_1.TriangleShader.create(this);
+    };
     TriangleGeometry.prototype.computeData = function () {
-        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertices = null, texCoords = null, indices = null, color = null, normals = null;
-        vertices = [
+        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
+        vertice = [
             0.0, up, 0,
             left, down, 0,
             right, down, 0
         ];
-        indices = [
+        indice = [
             0, 1, 2
         ];
-        texCoords = [
+        texCoord = [
             0.5, 1.0,
             0.0, 0.0,
             1.0, 0.0
         ];
-        normals = [
+        normal = [
             0, 0, 1,
             0, 0, 1,
             0, 0, 1
@@ -47,8 +51,11 @@ var TriangleGeometry = (function (_super) {
             1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
         ];
         return {
-            vertice: vertices,
-            color: color
+            vertice: vertice,
+            texCoord: texCoord,
+            color: color,
+            normal: normal,
+            indice: indice
         };
     };
     return TriangleGeometry;

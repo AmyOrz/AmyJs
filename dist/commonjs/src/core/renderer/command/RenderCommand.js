@@ -17,13 +17,6 @@ var RenderCommand = (function () {
         var obj = new this();
         return obj;
     };
-    Object.defineProperty(RenderCommand.prototype, "MvpMatrix", {
-        get: function () {
-            return this.pMatrix.multiply(this.vMatrix).multiply(this.mMatrix);
-        },
-        enumerable: true,
-        configurable: true
-    });
     RenderCommand.prototype.draw = function () {
         var startOffset = 0, gl = Device_1.Device.getInstance().gl;
         this.shader.sendShaderUniform(this);
