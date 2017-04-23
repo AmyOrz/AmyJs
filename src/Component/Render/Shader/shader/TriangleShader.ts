@@ -4,6 +4,7 @@ import { Matrix4 } from "../../../../Math/Matrix4";
 import { Device } from "../../../../core/device/Device";
 import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
 import { EBufferDataType } from "../../../Geometry/BufferContainer/EBufferDataType";
+
 export class TriangleShader extends Shader {
     public static create(geometry: Geometry) {
         var obj = new this();
@@ -55,7 +56,7 @@ export class TriangleShader extends Shader {
         var viewMatrix = new Matrix4();
         var projMatrix = new Matrix4();
 
-        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        viewMatrix.lookAt(9, 1, 3, 0, 0, 0, 0, 1, 0);
         projMatrix.perspective(45, Device.getInstance().canvas.width / Device.getInstance().canvas.height, 1, 100);
 
         this.sendUniformData("u_mMatrix", renderCmd.mMatrix);

@@ -56,7 +56,7 @@ var TriangleShader = (function (_super) {
         this.program.use();
         var viewMatrix = new Matrix4_1.Matrix4();
         var projMatrix = new Matrix4_1.Matrix4();
-        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+        viewMatrix.lookAt(9, 1, 3, 0, 0, 0, 0, 1, 0);
         projMatrix.perspective(45, Device_1.Device.getInstance().canvas.width / Device_1.Device.getInstance().canvas.height, 1, 100);
         this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
         this.sendUniformData("u_vMatrix", viewMatrix);

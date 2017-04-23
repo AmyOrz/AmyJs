@@ -79,4 +79,4 @@ var BufferContainer = (function () {
     return BufferContainer;
 }());
 exports.BufferContainer = BufferContainer;
-//# sourceMappingURL=BufferContainerSpec.js.map
+//# sourceMappingURL=BufferContainer.js.map

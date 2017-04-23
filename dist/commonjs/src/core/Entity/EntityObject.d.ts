@@ -9,7 +9,7 @@ import { Transform } from "../../Component/Transform/Transform";
 export declare abstract class EntityObject extends Entity {
     readonly transform: Transform;
     readonly geometry: Geometry;
-    parent: any;
+    parent: EntityObject;
     name: string;
     protected _entityManager: EntityManager;
     protected _componentManager: ComponentManager;

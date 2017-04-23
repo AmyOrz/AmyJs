@@ -2222,7 +2222,7 @@
 	        this.program.use();
 	        var viewMatrix = new Matrix4();
 	        var projMatrix = new Matrix4();
-	        viewMatrix.lookAt(0, 0, 3, 0, 0, 0, 0, 1, 0);
+	        viewMatrix.lookAt(9, 1, 3, 0, 0, 0, 0, 1, 0);
 	        projMatrix.perspective(45, exports.Device.getInstance().canvas.width / exports.Device.getInstance().canvas.height, 1, 100);
 	        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
 	        this.sendUniformData("u_vMatrix", viewMatrix);
@@ -2818,6 +2818,7 @@
 	    __extends(EntityObject, _super);
 	    function EntityObject() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.parent = null;
 	        _this.name = null;
 	        _this._entityManager = EntityManager.create(_this);
 	        _this._componentManager = ComponentManager.create(_this);

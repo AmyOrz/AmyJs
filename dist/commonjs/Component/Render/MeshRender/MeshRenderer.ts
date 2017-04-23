@@ -9,6 +9,7 @@ export class MeshRenderer extends RendererComponent {
         return obj;
     }
 
+
     public render(renderer: Renderer, targetObject: EntityObject) {
         renderer.addCommand(this._createCmd(targetObject));
     }

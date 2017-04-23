@@ -17,6 +17,7 @@ var EntityObject = (function (_super) {
     __extends(EntityObject, _super);
     function EntityObject() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.parent = null;
         _this.name = null;
         _this._entityManager = EntityManager_1.EntityManager.create(_this);
         _this._componentManager = ComponentManager_1.ComponentManager.create(_this);
