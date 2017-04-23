@@ -16,9 +16,10 @@ export abstract class EntityObject extends Entity {
         return this._componentManager.geometry;
     }
 
-    public parent;
+    public parent:EntityObject = null;
     public name: string = null;
     protected _entityManager: EntityManager = EntityManager.create(this);
+
     protected _componentManager: ComponentManager = ComponentManager.create(this);
 
     public initWhenCreate() {
