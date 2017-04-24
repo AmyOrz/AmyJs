@@ -6,6 +6,7 @@ import { ComponentManager } from "./Manager/ComponentManager";
 import { Renderer } from "../renderer/render/Renderer";
 import { Geometry } from "../../Component/Geometry/Geometry";
 import { Transform } from "../../Component/Transform/Transform";
+import { GameObject } from "./GameObject";
 export declare abstract class EntityObject extends Entity {
     readonly transform: Transform;
     readonly geometry: Geometry;
@@ -15,7 +16,7 @@ export declare abstract class EntityObject extends Entity {
     protected _componentManager: ComponentManager;
     initWhenCreate(): void;
     init(): this;
-    render(renderer: Renderer): void;
+    render(renderer: Renderer, camera: GameObject): void;
     protected abstract createTransform(): any;
     dispose(): this;
     hasChild(child: EntityObject): boolean;
@@ -34,4 +35,6 @@ export declare abstract class EntityObject extends Entity {
     removeChild(child: EntityObject): EntityManager;
     removeAllChildren(): void;
     addComponent(component: Component): void;
+    getComponent<T>(componentClass: any): T;
+    hasComponent<T>(componentClass: any): boolean;
 }

@@ -53,14 +53,8 @@ export class TriangleShader extends Shader {
     public sendShaderUniform(renderCmd: RenderCommand) {
         this.program.use();
 
-        var viewMatrix = new Matrix4();
-        var projMatrix = new Matrix4();
-
-        viewMatrix.lookAt(9, 1, 3, 0, 0, 0, 0, 1, 0);
-        projMatrix.perspective(45, Device.getInstance().canvas.width / Device.getInstance().canvas.height, 1, 100);
-
         this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
-        this.sendUniformData("u_vMatrix", viewMatrix);
-        this.sendUniformData("u_pMatrix", projMatrix);
+        this.sendUniformData("u_vMatrix", renderCmd.vMatrix);
+        this.sendUniformData("u_pMatrix", renderCmd.pMatrix);
     }
 }

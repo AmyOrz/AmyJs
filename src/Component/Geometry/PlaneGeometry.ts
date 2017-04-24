@@ -1,5 +1,5 @@
 import { Geometry, GeometryDataType } from "./Geometry";
-import {TriangleShader} from "../Render/Shader/shader/TriangleShader";
+import { TriangleShader } from "../Render/Shader/shader/TriangleShader";
 
 export class PlaneGeometry extends Geometry {
     public static create() {
@@ -10,8 +10,8 @@ export class PlaneGeometry extends Geometry {
     public width: number = 1;
     public height: number = 1;
 
-    public getShader(){
-        // return PlaneShader.create(this);
+    public getShader() {
+        return TriangleShader.create(this);
     }
 
     public computeData(): GeometryDataType {
@@ -55,8 +55,8 @@ export class PlaneGeometry extends Geometry {
             vertice: vertice,
             texCoord: texCoord,
             color: color,
-            normal:normal,
-            indice:indice
+            normal: normal,
+            indice: indice
         };
     }
 }

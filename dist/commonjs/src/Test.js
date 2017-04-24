@@ -5,6 +5,9 @@ var TriangleGeometry_1 = require("./Component/Geometry/TriangleGeometry");
 var Director_1 = require("./core/Director");
 var GameObject_1 = require("./core/Entity/GameObject");
 var MeshRenderer_1 = require("./Component/Render/MeshRender/MeshRenderer");
+var Device_1 = require("./core/device/Device");
+var PerspectiveCamera_1 = require("./Component/Camera/PerspectiveCamera");
+var CameraController_1 = require("./Component/Camera/Controll/CameraController");
 var Test = (function () {
     function Test() {
     }
@@ -20,6 +23,7 @@ var Test = (function () {
         director.renderer.setClearColor(0, 0, 0, 1);
         director.scene.addChild(gameobj);
         director.scene.addChild(object);
+        director.scene.addChild(this.createCamera());
         director.start();
     };
     Test.prototype.createTriangle = function () {
@@ -28,6 +32,17 @@ var Test = (function () {
         gameObject.addComponent(triangle);
         gameObject.addComponent(MeshRenderer_1.MeshRenderer.create());
         return gameObject;
+    };
+    Test.prototype.createCamera = function () {
+        var camera = GameObject_1.GameObject.create(), view = Device_1.Device.getInstance().view, cameraComponent = PerspectiveCamera_1.PerspectiveCamera.create();
+        cameraComponent.fovy = 45;
+        cameraComponent.aspect = view.width / view.height;
+        cameraComponent.near = 1;
+        cameraComponent.far = 100;
+        cameraComponent.translate(2, 1, 2);
+        var cameraControll = CameraController_1.CameraController.create(cameraComponent);
+        camera.addComponent(cameraControll);
+        return camera;
     };
     return Test;
 }());

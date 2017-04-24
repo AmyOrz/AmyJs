@@ -13,5 +13,7 @@ export declare class ComponentManager {
     private _renderComponent;
     init(): void;
     addComponent(component: Component): void;
+    getComponent<T>(componentClass: any): T;
+    hasComponent<T>(componentClass: any): boolean;
     getRenderComponent(): MeshRenderer;
 }

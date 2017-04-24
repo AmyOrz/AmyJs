@@ -6,6 +6,7 @@ import { ComponentManager } from "./Manager/ComponentManager";
 import { Renderer } from "../renderer/render/Renderer";
 import { Geometry } from "../../Component/Geometry/Geometry";
 import { Transform } from "../../Component/Transform/Transform";
+import { GameObject } from "./GameObject";
 
 export abstract class EntityObject extends Entity {
     get transform(): Transform {
@@ -16,7 +17,7 @@ export abstract class EntityObject extends Entity {
         return this._componentManager.geometry;
     }
 
-    public parent:EntityObject = null;
+    public parent: EntityObject = null;
     public name: string = null;
     protected _entityManager: EntityManager = EntityManager.create(this);
 
@@ -32,13 +33,13 @@ export abstract class EntityObject extends Entity {
         return this;
     }
 
-    public render(renderer: Renderer) {
+    public render(renderer: Renderer, camera: GameObject) {
         var renderComponent = this._componentManager.getRenderComponent();
         if (renderComponent != void 0)
-            renderComponent.render(renderer, this);
+            renderComponent.render(renderer, this, camera);
 
         this.getChildren().forEach((child: EntityObject) => {
-            child.render(renderer);
+            child.render(renderer, camera);
         });
     }
 
@@ -113,4 +114,11 @@ export abstract class EntityObject extends Entity {
         this._componentManager.addComponent(component);
     }
 
+    public getComponent<T>(componentClass: any): T {
+        return this._componentManager.getComponent<T>(componentClass);
+    }
+
+    public hasComponent<T>(componentClass:any):boolean{
+        return this._componentManager.hasComponent<T>(componentClass);
+    }
 }

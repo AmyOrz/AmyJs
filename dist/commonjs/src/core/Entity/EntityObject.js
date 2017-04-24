@@ -45,12 +45,12 @@ var EntityObject = (function (_super) {
         this._entityManager.init();
         return this;
     };
-    EntityObject.prototype.render = function (renderer) {
+    EntityObject.prototype.render = function (renderer, camera) {
         var renderComponent = this._componentManager.getRenderComponent();
         if (renderComponent != void 0)
-            renderComponent.render(renderer, this);
+            renderComponent.render(renderer, this, camera);
         this.getChildren().forEach(function (child) {
-            child.render(renderer);
+            child.render(renderer, camera);
         });
     };
     EntityObject.prototype.dispose = function () {
@@ -105,6 +105,12 @@ var EntityObject = (function (_super) {
     };
     EntityObject.prototype.addComponent = function (component) {
         this._componentManager.addComponent(component);
+    };
+    EntityObject.prototype.getComponent = function (componentClass) {
+        return this._componentManager.getComponent(componentClass);
+    };
+    EntityObject.prototype.hasComponent = function (componentClass) {
+        return this._componentManager.hasComponent(componentClass);
     };
     return EntityObject;
 }(Entity_1.Entity));

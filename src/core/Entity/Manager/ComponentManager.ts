@@ -42,6 +42,19 @@ export class ComponentManager {
         component.addToObject(this._entityObject);
     }
 
+    public getComponent<T>(componentClass: any): T {
+        return this._componentList.findOne((component: Component) => {
+            return component instanceof componentClass;
+        })
+    }
+
+    public hasComponent<T>(componentClass: any): boolean {
+        var res =  this._componentList.hasChildWithFunc((component: Component) => {
+            return component instanceof componentClass;
+        })
+        return res;
+    }
+
     public getRenderComponent() {
         return this._renderComponent;
     }

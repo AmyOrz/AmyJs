@@ -51,34 +51,34 @@ export class BufferContainer {
     private _getVerticeBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.vertice, 3);
 
-        return this._bufferCache(type,buffer);
+        return this._bufferCache(type, buffer);
     }
 
     private _getColorBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.color, 3);
 
-        return this._bufferCache(type,buffer);
+        return this._bufferCache(type, buffer);
     }
 
-    private _getNormalBuffer(type:any) {
+    private _getNormalBuffer(type: any) {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.normal, 3);
 
-        return this._bufferCache(type,buffer);
+        return this._bufferCache(type, buffer);
     }
 
-    private _getIndiceBuffer(type:any) {
+    private _getIndiceBuffer(type: any) {
 
         // var buffer: Buffer = ArrayBuffer.create(this.geometryData.indice, 3);
 
         // return this._bufferCache(type,buffer);
 
     }
-    private _getTexCoordBuffer(type:any):Buffer{
+    private _getTexCoordBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.texCoord, 3);
-        return this._bufferCache(type,buffer);
+        return this._bufferCache(type, buffer);
     }
 
-    private _bufferCache(type:any,buffer:any):Buffer{
+    private _bufferCache(type: any, buffer: any): Buffer {
         if (this._bufferList.hasChild(type)) {
             return this._bufferList.getChild(type);
         } else {

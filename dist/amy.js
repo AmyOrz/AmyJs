@@ -1600,6 +1600,512 @@
 	    return Shader;
 	}(Component));
 
+	var TriangleShader = (function (_super) {
+	    __extends(TriangleShader, _super);
+	    function TriangleShader() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.VSource = "attribute vec4 a_Position;" +
+	            "attribute vec4 a_Color;" +
+	            "uniform mat4 u_mMatrix;" +
+	            "uniform mat4 u_vMatrix;" +
+	            "uniform mat4 u_pMatrix;" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
+	            "   v_Color = a_Color;" +
+	            "}";
+	        _this.FSource = "#ifdef GL_ES\n" +
+	            "precision mediump float;\n" +
+	            "#endif\n" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_FragColor = v_Color;" +
+	            "}";
+	        return _this;
+	    }
+	    TriangleShader.create = function (geometry) {
+	        var obj = new this();
+	        obj.geometry = geometry;
+	        return obj;
+	    };
+	    TriangleShader.prototype.initProgram = function () {
+	        this.program.initProgramWithShader(this);
+	    };
+	    TriangleShader.prototype.sendShaderAttribute = function () {
+	        var verticeBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.VERTICE);
+	        var colorBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.COLOR);
+	        this.sendAttributeBuffer("a_Position", verticeBuffer);
+	        this.sendAttributeBuffer("a_Color", colorBuffer);
+	        this.program.sendAllBufferData();
+	    };
+	    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
+	        this.program.use();
+	        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
+	        this.sendUniformData("u_vMatrix", renderCmd.vMatrix);
+	        this.sendUniformData("u_pMatrix", renderCmd.pMatrix);
+	    };
+	    return TriangleShader;
+	}(Shader));
+
+	var TriangleGeometry = (function (_super) {
+	    __extends(TriangleGeometry, _super);
+	    function TriangleGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.width = 1;
+	        _this.height = 1;
+	        return _this;
+	    }
+	    TriangleGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    TriangleGeometry.prototype.getShader = function () {
+	        return TriangleShader.create(this);
+	    };
+	    TriangleGeometry.prototype.computeData = function () {
+	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
+	        vertice = [
+	            0.0, up, 0,
+	            left, down, 0,
+	            right, down, 0
+	        ];
+	        indice = [
+	            0, 1, 2
+	        ];
+	        texCoord = [
+	            0.5, 1.0,
+	            0.0, 0.0,
+	            1.0, 0.0
+	        ];
+	        normal = [
+	            0, 0, 1,
+	            0, 0, 1,
+	            0, 0, 1
+	        ];
+	        color = [
+	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
+	        ];
+	        return {
+	            vertice: vertice,
+	            texCoord: texCoord,
+	            color: color,
+	            normal: normal,
+	            indice: indice
+	        };
+	    };
+	    return TriangleGeometry;
+	}(Geometry));
+
+	var JudgeUtils$1 = (function () {
+	    function JudgeUtils() {
+	    }
+	    JudgeUtils.isArray = function (arr) {
+	        var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
+	        var length = arr && arr.length;
+	        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
+	    };
+	    JudgeUtils.isArrayExactly = function (arr) {
+	        return Object.prototype.toString.call(arr) === "[object Array]";
+	    };
+	    JudgeUtils.isNumber = function (num) {
+	        return typeof num == "number";
+	    };
+	    JudgeUtils.isNumberExactly = function (num) {
+	        return Object.prototype.toString.call(num) === "[object Number]";
+	    };
+	    JudgeUtils.isString = function (str) {
+	        return typeof str == "string";
+	    };
+	    JudgeUtils.isStringExactly = function (str) {
+	        return Object.prototype.toString.call(str) === "[object String]";
+	    };
+	    JudgeUtils.isBoolean = function (bool) {
+	        return bool === true || bool === false || toString.call(bool) === '[boolect Boolean]';
+	    };
+	    JudgeUtils.isDom = function (obj) {
+	        return !!(obj && obj.nodeType === 1);
+	    };
+	    JudgeUtils.isObject = function (obj) {
+	        var type = typeof obj;
+	        return type === 'function' || type === 'object' && !!obj;
+	    };
+	    JudgeUtils.isDirectObject = function (obj) {
+	        return Object.prototype.toString.call(obj) === "[object Object]";
+	    };
+	    JudgeUtils.isHostMethod = function (object, property) {
+	        var type = typeof object[property];
+	        return type === "function" ||
+	            (type === "object" && !!object[property]);
+	    };
+	    JudgeUtils.isNodeJs = function () {
+	        return ((typeof global != "undefined" && global.module) || (typeof module != "undefined")) && typeof module.exports != "undefined";
+	    };
+	    JudgeUtils.isFunction = function (func) {
+	        return true;
+	    };
+	    return JudgeUtils;
+	}());
+	if (typeof /./ != 'function' && typeof Int8Array != 'object') {
+	    JudgeUtils$1.isFunction = function (func) {
+	        return typeof func == 'function';
+	    };
+	}
+	else {
+	    JudgeUtils$1.isFunction = function (func) {
+	        return Object.prototype.toString.call(func) === "[object Function]";
+	    };
+	}
+
+	var $BREAK$1 = {
+	    break: true
+	};
+
+	var List$1 = (function () {
+	    function List() {
+	        this.children = null;
+	    }
+	    List.prototype.getCount = function () {
+	        return this.children.length;
+	    };
+	    List.prototype.hasChild = function (child) {
+	        var c = null, children = this.children;
+	        for (var i = 0, len = children.length; i < len; i++) {
+	            c = children[i];
+	            if (child.uid && c.uid && child.uid == c.uid) {
+	                return true;
+	            }
+	            else if (child === c) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    };
+	    List.prototype.hasChildWithFunc = function (func) {
+	        for (var i = 0, len = this.children.length; i < len; i++) {
+	            if (func(this.children[i], i)) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    };
+	    List.prototype.getChildren = function () {
+	        return this.children;
+	    };
+	    List.prototype.getChild = function (index) {
+	        return this.children[index];
+	    };
+	    List.prototype.addChild = function (child) {
+	        this.children.push(child);
+	        return this;
+	    };
+	    List.prototype.addChildren = function (arg) {
+	        if (JudgeUtils$1.isArray(arg)) {
+	            var children = arg;
+	            this.children = this.children.concat(children);
+	        }
+	        else if (arg instanceof List) {
+	            var children = arg;
+	            this.children = this.children.concat(children.getChildren());
+	        }
+	        else {
+	            var child = arg;
+	            this.addChild(child);
+	        }
+	        return this;
+	    };
+	    List.prototype.setChildren = function (children) {
+	        this.children = children;
+	        return this;
+	    };
+	    List.prototype.unShiftChild = function (child) {
+	        this.children.unshift(child);
+	    };
+	    List.prototype.removeAllChildren = function () {
+	        this.children = [];
+	        return this;
+	    };
+	    List.prototype.forEach = function (func, context) {
+	        this._forEach(this.children, func, context);
+	        return this;
+	    };
+	    List.prototype.toArray = function () {
+	        return this.children;
+	    };
+	    List.prototype.copyChildren = function () {
+	        return this.children.slice(0);
+	    };
+	    List.prototype.removeChildHelper = function (arg) {
+	        var result = null;
+	        if (JudgeUtils$1.isFunction(arg)) {
+	            var func = arg;
+	            result = this._removeChild(this.children, func);
+	        }
+	        else if (arg.uid) {
+	            result = this._removeChild(this.children, function (e) {
+	                if (!e.uid) {
+	                    return false;
+	                }
+	                return e.uid === arg.uid;
+	            });
+	        }
+	        else {
+	            result = this._removeChild(this.children, function (e) {
+	                return e === arg;
+	            });
+	        }
+	        return result;
+	    };
+	    List.prototype._forEach = function (arr, func, context) {
+	        var scope = context, i = 0, len = arr.length;
+	        for (i = 0; i < len; i++) {
+	            if (func.call(scope, arr[i], i) === $BREAK$1) {
+	                break;
+	            }
+	        }
+	    };
+	    List.prototype._removeChild = function (arr, func) {
+	        var self = this, removedElementArr = [], remainElementArr = [];
+	        this._forEach(arr, function (e, index) {
+	            if (!!func.call(self, e)) {
+	                removedElementArr.push(e);
+	            }
+	            else {
+	                remainElementArr.push(e);
+	            }
+	        });
+	        this.children = remainElementArr;
+	        return removedElementArr;
+	    };
+	    return List;
+	}());
+
+	var Queue = (function (_super) {
+	    __extends(Queue, _super);
+	    function Queue(children) {
+	        if (children === void 0) { children = []; }
+	        var _this = _super.call(this) || this;
+	        _this.children = children;
+	        return _this;
+	    }
+	    Queue.create = function (children) {
+	        if (children === void 0) { children = []; }
+	        var obj = new this(children);
+	        return obj;
+	    };
+	    Object.defineProperty(Queue.prototype, "front", {
+	        get: function () {
+	            return this.children[this.children.length - 1];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Queue.prototype, "rear", {
+	        get: function () {
+	            return this.children[0];
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Queue.prototype.push = function (element) {
+	        this.children.unshift(element);
+	    };
+	    Queue.prototype.pop = function () {
+	        return this.children.pop();
+	    };
+	    Queue.prototype.clear = function () {
+	        this.removeAllChildren();
+	    };
+	    return Queue;
+	}(List$1));
+
+	var WebglState = (function () {
+	    function WebglState() {
+	    }
+	    WebglState.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    WebglState.prototype.setClearColor = function (r, g, b, a) {
+	        var gl = exports.Device.getInstance().gl;
+	        gl.clearColor(r, g, b, a);
+	    };
+	    WebglState.prototype.init = function () {
+	        this._depthTest();
+	        this._clear();
+	    };
+	    WebglState.prototype._depthTest = function () {
+	        var gl = exports.Device.getInstance().gl;
+	        gl.enable(gl.DEPTH_TEST);
+	    };
+	    WebglState.prototype._clear = function () {
+	        var gl = exports.Device.getInstance().gl;
+	        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+	    };
+	    return WebglState;
+	}());
+
+	var Renderer = (function () {
+	    function Renderer() {
+	        this._wegbglState = WebglState.create();
+	    }
+	    Object.defineProperty(Renderer.prototype, "webglState", {
+	        get: function () {
+	            return this._wegbglState;
+	        },
+	        set: function (webglState) {
+	            this._wegbglState = webglState;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Renderer.prototype.setClearColor = function (r, g, b, a) {
+	        this._wegbglState.setClearColor(r, g, b, a);
+	    };
+	    return Renderer;
+	}());
+
+	var WebglRenderer = (function (_super) {
+	    __extends(WebglRenderer, _super);
+	    function WebglRenderer() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this._commandQueue = new Queue();
+	        return _this;
+	    }
+	    WebglRenderer.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    WebglRenderer.prototype.init = function () {
+	        this.webglState.init();
+	    };
+	    WebglRenderer.prototype.render = function () {
+	        this._commandQueue.forEach(function (renderCmd) {
+	            renderCmd.draw();
+	        });
+	    };
+	    WebglRenderer.prototype.addCommand = function (renderCmd) {
+	        this._commandQueue.addChild(renderCmd);
+	    };
+	    return WebglRenderer;
+	}(Renderer));
+
+	var JudgeUtils$2 = (function (_super) {
+	    __extends(JudgeUtils$$1, _super);
+	    function JudgeUtils$$1() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    JudgeUtils$$1.isPromise = function (obj) {
+	        return !!obj
+	            && !_super.isFunction.call(this, obj.subscribe)
+	            && _super.isFunction.call(this, obj.then);
+	    };
+	    JudgeUtils$$1.isEqual = function (ob1, ob2) {
+	        return ob1.uid === ob2.uid;
+	    };
+	    JudgeUtils$$1.isIObserver = function (i) {
+	        return i.next && i.error && i.completed;
+	    };
+	    return JudgeUtils$$1;
+	}(JudgeUtils$1));
+
+	var EntityManager = (function (_super) {
+	    __extends(EntityManager, _super);
+	    function EntityManager(_entityDispatcher) {
+	        var _this = _super.call(this) || this;
+	        _this._entityDispatcher = _entityDispatcher;
+	        _this._objectList = new Collection();
+	        return _this;
+	    }
+	    EntityManager.create = function (entityDispatcher) {
+	        var obj = new this(entityDispatcher);
+	        return obj;
+	    };
+	    EntityManager.prototype.init = function () {
+	        this.forEach(function (child) {
+	            child.init();
+	        });
+	    };
+	    EntityManager.prototype.dispose = function () {
+	        this.forEach(function (child) {
+	            child.init();
+	        });
+	    };
+	    EntityManager.prototype.hasChild = function (child) {
+	        return this._objectList.hasChild(child);
+	    };
+	    EntityManager.prototype.addChild = function (child) {
+	        this._objectList.addChild(child);
+	        return this;
+	    };
+	    EntityManager.prototype.addChildren = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var addChild = args[1] == void 0 ? this.addChild : args[1];
+	        if (JudgeUtils$2.isArray(args[0])) {
+	            var children = args[0];
+	            for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
+	                var child = children_1[_a];
+	                addChild(child);
+	            }
+	        }
+	        else
+	            addChild(args[0]);
+	        return this;
+	    };
+	    EntityManager.prototype.forEach = function (func) {
+	        this._objectList.forEach(func);
+	        return this;
+	    };
+	    EntityManager.prototype.filter = function (func) {
+	        return this._objectList.filter(func);
+	    };
+	    EntityManager.prototype.getChildren = function () {
+	        return this._objectList;
+	    };
+	    EntityManager.prototype.getAllChildren = function () {
+	        var res = Collection.create();
+	        var getChildren = function (children) {
+	            res.addChildren(children.getChildren());
+	            children.forEach(function (child) {
+	                getChildren(child);
+	            });
+	        };
+	        getChildren(this._entityDispatcher);
+	        return res;
+	    };
+	    EntityManager.prototype.getChild = function (index) {
+	        return this._objectList.getChild(index);
+	    };
+	    EntityManager.prototype.findChildById = function (uid) {
+	        return this._objectList.findOne(function (child) {
+	            return child.uid == uid;
+	        });
+	    };
+	    EntityManager.prototype.findChildByName = function (name) {
+	        return this._objectList.findOne(function (child) {
+	            return child.name.search(name) > -1;
+	        });
+	    };
+	    EntityManager.prototype.findChildrenByName = function (name) {
+	        return this.filter(function (child) {
+	            return child.name.search(name) > -1;
+	        });
+	    };
+	    EntityManager.prototype.removeChild = function (child) {
+	        this._objectList.removeChild(child);
+	        return this;
+	    };
+	    EntityManager.prototype.removeAllChildren = function () {
+	        var _this = this;
+	        this._objectList.forEach(function (child) {
+	            _this.removeChild(child);
+	        }, this);
+	    };
+	    return EntityManager;
+	}(Entity));
+
 	var Vector3 = (function () {
 	    function Vector3(opt_src) {
 	        var v = new Float32Array(3);
@@ -2180,516 +2686,6 @@
 	    return Matrix4;
 	}());
 
-	var TriangleShader = (function (_super) {
-	    __extends(TriangleShader, _super);
-	    function TriangleShader() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.VSource = "attribute vec4 a_Position;" +
-	            "attribute vec4 a_Color;" +
-	            "uniform mat4 u_mMatrix;" +
-	            "uniform mat4 u_vMatrix;" +
-	            "uniform mat4 u_pMatrix;" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
-	            "   v_Color = a_Color;" +
-	            "}";
-	        _this.FSource = "#ifdef GL_ES\n" +
-	            "precision mediump float;\n" +
-	            "#endif\n" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_FragColor = v_Color;" +
-	            "}";
-	        return _this;
-	    }
-	    TriangleShader.create = function (geometry) {
-	        var obj = new this();
-	        obj.geometry = geometry;
-	        return obj;
-	    };
-	    TriangleShader.prototype.initProgram = function () {
-	        this.program.initProgramWithShader(this);
-	    };
-	    TriangleShader.prototype.sendShaderAttribute = function () {
-	        var verticeBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.VERTICE);
-	        var colorBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.COLOR);
-	        this.sendAttributeBuffer("a_Position", verticeBuffer);
-	        this.sendAttributeBuffer("a_Color", colorBuffer);
-	        this.program.sendAllBufferData();
-	    };
-	    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
-	        this.program.use();
-	        var viewMatrix = new Matrix4();
-	        var projMatrix = new Matrix4();
-	        viewMatrix.lookAt(9, 1, 3, 0, 0, 0, 0, 1, 0);
-	        projMatrix.perspective(45, exports.Device.getInstance().canvas.width / exports.Device.getInstance().canvas.height, 1, 100);
-	        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
-	        this.sendUniformData("u_vMatrix", viewMatrix);
-	        this.sendUniformData("u_pMatrix", projMatrix);
-	    };
-	    return TriangleShader;
-	}(Shader));
-
-	var TriangleGeometry = (function (_super) {
-	    __extends(TriangleGeometry, _super);
-	    function TriangleGeometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.width = 1;
-	        _this.height = 1;
-	        return _this;
-	    }
-	    TriangleGeometry.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    TriangleGeometry.prototype.getShader = function () {
-	        return TriangleShader.create(this);
-	    };
-	    TriangleGeometry.prototype.computeData = function () {
-	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
-	        vertice = [
-	            0.0, up, 0,
-	            left, down, 0,
-	            right, down, 0
-	        ];
-	        indice = [
-	            0, 1, 2
-	        ];
-	        texCoord = [
-	            0.5, 1.0,
-	            0.0, 0.0,
-	            1.0, 0.0
-	        ];
-	        normal = [
-	            0, 0, 1,
-	            0, 0, 1,
-	            0, 0, 1
-	        ];
-	        color = [
-	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-	        ];
-	        return {
-	            vertice: vertice,
-	            texCoord: texCoord,
-	            color: color,
-	            normal: normal,
-	            indice: indice
-	        };
-	    };
-	    return TriangleGeometry;
-	}(Geometry));
-
-	var JudgeUtils$1 = (function () {
-	    function JudgeUtils() {
-	    }
-	    JudgeUtils.isArray = function (arr) {
-	        var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-	        var length = arr && arr.length;
-	        return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
-	    };
-	    JudgeUtils.isArrayExactly = function (arr) {
-	        return Object.prototype.toString.call(arr) === "[object Array]";
-	    };
-	    JudgeUtils.isNumber = function (num) {
-	        return typeof num == "number";
-	    };
-	    JudgeUtils.isNumberExactly = function (num) {
-	        return Object.prototype.toString.call(num) === "[object Number]";
-	    };
-	    JudgeUtils.isString = function (str) {
-	        return typeof str == "string";
-	    };
-	    JudgeUtils.isStringExactly = function (str) {
-	        return Object.prototype.toString.call(str) === "[object String]";
-	    };
-	    JudgeUtils.isBoolean = function (bool) {
-	        return bool === true || bool === false || toString.call(bool) === '[boolect Boolean]';
-	    };
-	    JudgeUtils.isDom = function (obj) {
-	        return !!(obj && obj.nodeType === 1);
-	    };
-	    JudgeUtils.isObject = function (obj) {
-	        var type = typeof obj;
-	        return type === 'function' || type === 'object' && !!obj;
-	    };
-	    JudgeUtils.isDirectObject = function (obj) {
-	        return Object.prototype.toString.call(obj) === "[object Object]";
-	    };
-	    JudgeUtils.isHostMethod = function (object, property) {
-	        var type = typeof object[property];
-	        return type === "function" ||
-	            (type === "object" && !!object[property]);
-	    };
-	    JudgeUtils.isNodeJs = function () {
-	        return ((typeof global != "undefined" && global.module) || (typeof module != "undefined")) && typeof module.exports != "undefined";
-	    };
-	    JudgeUtils.isFunction = function (func) {
-	        return true;
-	    };
-	    return JudgeUtils;
-	}());
-	if (typeof /./ != 'function' && typeof Int8Array != 'object') {
-	    JudgeUtils$1.isFunction = function (func) {
-	        return typeof func == 'function';
-	    };
-	}
-	else {
-	    JudgeUtils$1.isFunction = function (func) {
-	        return Object.prototype.toString.call(func) === "[object Function]";
-	    };
-	}
-
-	var $BREAK$1 = {
-	    break: true
-	};
-
-	var List$1 = (function () {
-	    function List() {
-	        this.children = null;
-	    }
-	    List.prototype.getCount = function () {
-	        return this.children.length;
-	    };
-	    List.prototype.hasChild = function (child) {
-	        var c = null, children = this.children;
-	        for (var i = 0, len = children.length; i < len; i++) {
-	            c = children[i];
-	            if (child.uid && c.uid && child.uid == c.uid) {
-	                return true;
-	            }
-	            else if (child === c) {
-	                return true;
-	            }
-	        }
-	        return false;
-	    };
-	    List.prototype.hasChildWithFunc = function (func) {
-	        for (var i = 0, len = this.children.length; i < len; i++) {
-	            if (func(this.children[i], i)) {
-	                return true;
-	            }
-	        }
-	        return false;
-	    };
-	    List.prototype.getChildren = function () {
-	        return this.children;
-	    };
-	    List.prototype.getChild = function (index) {
-	        return this.children[index];
-	    };
-	    List.prototype.addChild = function (child) {
-	        this.children.push(child);
-	        return this;
-	    };
-	    List.prototype.addChildren = function (arg) {
-	        if (JudgeUtils$1.isArray(arg)) {
-	            var children = arg;
-	            this.children = this.children.concat(children);
-	        }
-	        else if (arg instanceof List) {
-	            var children = arg;
-	            this.children = this.children.concat(children.getChildren());
-	        }
-	        else {
-	            var child = arg;
-	            this.addChild(child);
-	        }
-	        return this;
-	    };
-	    List.prototype.setChildren = function (children) {
-	        this.children = children;
-	        return this;
-	    };
-	    List.prototype.unShiftChild = function (child) {
-	        this.children.unshift(child);
-	    };
-	    List.prototype.removeAllChildren = function () {
-	        this.children = [];
-	        return this;
-	    };
-	    List.prototype.forEach = function (func, context) {
-	        this._forEach(this.children, func, context);
-	        return this;
-	    };
-	    List.prototype.toArray = function () {
-	        return this.children;
-	    };
-	    List.prototype.copyChildren = function () {
-	        return this.children.slice(0);
-	    };
-	    List.prototype.removeChildHelper = function (arg) {
-	        var result = null;
-	        if (JudgeUtils$1.isFunction(arg)) {
-	            var func = arg;
-	            result = this._removeChild(this.children, func);
-	        }
-	        else if (arg.uid) {
-	            result = this._removeChild(this.children, function (e) {
-	                if (!e.uid) {
-	                    return false;
-	                }
-	                return e.uid === arg.uid;
-	            });
-	        }
-	        else {
-	            result = this._removeChild(this.children, function (e) {
-	                return e === arg;
-	            });
-	        }
-	        return result;
-	    };
-	    List.prototype._forEach = function (arr, func, context) {
-	        var scope = context, i = 0, len = arr.length;
-	        for (i = 0; i < len; i++) {
-	            if (func.call(scope, arr[i], i) === $BREAK$1) {
-	                break;
-	            }
-	        }
-	    };
-	    List.prototype._removeChild = function (arr, func) {
-	        var self = this, removedElementArr = [], remainElementArr = [];
-	        this._forEach(arr, function (e, index) {
-	            if (!!func.call(self, e)) {
-	                removedElementArr.push(e);
-	            }
-	            else {
-	                remainElementArr.push(e);
-	            }
-	        });
-	        this.children = remainElementArr;
-	        return removedElementArr;
-	    };
-	    return List;
-	}());
-
-	var Queue = (function (_super) {
-	    __extends(Queue, _super);
-	    function Queue(children) {
-	        if (children === void 0) { children = []; }
-	        var _this = _super.call(this) || this;
-	        _this.children = children;
-	        return _this;
-	    }
-	    Queue.create = function (children) {
-	        if (children === void 0) { children = []; }
-	        var obj = new this(children);
-	        return obj;
-	    };
-	    Object.defineProperty(Queue.prototype, "front", {
-	        get: function () {
-	            return this.children[this.children.length - 1];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Object.defineProperty(Queue.prototype, "rear", {
-	        get: function () {
-	            return this.children[0];
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Queue.prototype.push = function (element) {
-	        this.children.unshift(element);
-	    };
-	    Queue.prototype.pop = function () {
-	        return this.children.pop();
-	    };
-	    Queue.prototype.clear = function () {
-	        this.removeAllChildren();
-	    };
-	    return Queue;
-	}(List$1));
-
-	var WebglState = (function () {
-	    function WebglState() {
-	    }
-	    WebglState.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    WebglState.prototype.setClearColor = function (r, g, b, a) {
-	        var gl = exports.Device.getInstance().gl;
-	        gl.clearColor(r, g, b, a);
-	    };
-	    WebglState.prototype.init = function () {
-	        this._depthTest();
-	        this._clear();
-	    };
-	    WebglState.prototype._depthTest = function () {
-	        var gl = exports.Device.getInstance().gl;
-	        gl.enable(gl.DEPTH_TEST);
-	    };
-	    WebglState.prototype._clear = function () {
-	        var gl = exports.Device.getInstance().gl;
-	        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-	    };
-	    return WebglState;
-	}());
-
-	var Renderer = (function () {
-	    function Renderer() {
-	        this._wegbglState = WebglState.create();
-	    }
-	    Object.defineProperty(Renderer.prototype, "webglState", {
-	        get: function () {
-	            return this._wegbglState;
-	        },
-	        set: function (webglState) {
-	            this._wegbglState = webglState;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Renderer.prototype.setClearColor = function (r, g, b, a) {
-	        this._wegbglState.setClearColor(r, g, b, a);
-	    };
-	    return Renderer;
-	}());
-
-	var WebglRenderer = (function (_super) {
-	    __extends(WebglRenderer, _super);
-	    function WebglRenderer() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this._commandQueue = new Queue();
-	        return _this;
-	    }
-	    WebglRenderer.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    WebglRenderer.prototype.init = function () {
-	        this.webglState.init();
-	    };
-	    WebglRenderer.prototype.render = function () {
-	        this._commandQueue.forEach(function (renderCmd) {
-	            renderCmd.draw();
-	        });
-	    };
-	    WebglRenderer.prototype.addCommand = function (renderCmd) {
-	        this._commandQueue.addChild(renderCmd);
-	    };
-	    return WebglRenderer;
-	}(Renderer));
-
-	var JudgeUtils$2 = (function (_super) {
-	    __extends(JudgeUtils$$1, _super);
-	    function JudgeUtils$$1() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    JudgeUtils$$1.isPromise = function (obj) {
-	        return !!obj
-	            && !_super.isFunction.call(this, obj.subscribe)
-	            && _super.isFunction.call(this, obj.then);
-	    };
-	    JudgeUtils$$1.isEqual = function (ob1, ob2) {
-	        return ob1.uid === ob2.uid;
-	    };
-	    JudgeUtils$$1.isIObserver = function (i) {
-	        return i.next && i.error && i.completed;
-	    };
-	    return JudgeUtils$$1;
-	}(JudgeUtils$1));
-
-	var EntityManager = (function (_super) {
-	    __extends(EntityManager, _super);
-	    function EntityManager(_entityDispatcher) {
-	        var _this = _super.call(this) || this;
-	        _this._entityDispatcher = _entityDispatcher;
-	        _this._objectList = new Collection();
-	        return _this;
-	    }
-	    EntityManager.create = function (entityDispatcher) {
-	        var obj = new this(entityDispatcher);
-	        return obj;
-	    };
-	    EntityManager.prototype.init = function () {
-	        this.forEach(function (child) {
-	            child.init();
-	        });
-	    };
-	    EntityManager.prototype.dispose = function () {
-	        this.forEach(function (child) {
-	            child.init();
-	        });
-	    };
-	    EntityManager.prototype.hasChild = function (child) {
-	        return this._objectList.hasChild(child);
-	    };
-	    EntityManager.prototype.addChild = function (child) {
-	        this._objectList.addChild(child);
-	        return this;
-	    };
-	    EntityManager.prototype.addChildren = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var addChild = args[1] == void 0 ? this.addChild : args[1];
-	        if (JudgeUtils$2.isArray(args[0])) {
-	            var children = args[0];
-	            for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
-	                var child = children_1[_a];
-	                addChild(child);
-	            }
-	        }
-	        else
-	            addChild(args[0]);
-	        return this;
-	    };
-	    EntityManager.prototype.forEach = function (func) {
-	        this._objectList.forEach(func);
-	        return this;
-	    };
-	    EntityManager.prototype.filter = function (func) {
-	        return this._objectList.filter(func);
-	    };
-	    EntityManager.prototype.getChildren = function () {
-	        return this._objectList;
-	    };
-	    EntityManager.prototype.getAllChildren = function () {
-	        var res = Collection.create();
-	        var getChildren = function (children) {
-	            res.addChildren(children.getChildren());
-	            children.forEach(function (child) {
-	                getChildren(child);
-	            });
-	        };
-	        getChildren(this._entityDispatcher);
-	        return res;
-	    };
-	    EntityManager.prototype.getChild = function (index) {
-	        return this._objectList.getChild(index);
-	    };
-	    EntityManager.prototype.findChildById = function (uid) {
-	        return this._objectList.findOne(function (child) {
-	            return child.uid == uid;
-	        });
-	    };
-	    EntityManager.prototype.findChildByName = function (name) {
-	        return this._objectList.findOne(function (child) {
-	            return child.name.search(name) > -1;
-	        });
-	    };
-	    EntityManager.prototype.findChildrenByName = function (name) {
-	        return this.filter(function (child) {
-	            return child.name.search(name) > -1;
-	        });
-	    };
-	    EntityManager.prototype.removeChild = function (child) {
-	        this._objectList.removeChild(child);
-	        return this;
-	    };
-	    EntityManager.prototype.removeAllChildren = function () {
-	        var _this = this;
-	        this._objectList.forEach(function (child) {
-	            _this.removeChild(child);
-	        }, this);
-	    };
-	    return EntityManager;
-	}(Entity));
-
 	var Transform = (function (_super) {
 	    __extends(Transform, _super);
 	    function Transform() {
@@ -2754,6 +2750,42 @@
 	    return RenderCommand;
 	}());
 
+	var CameraController = (function (_super) {
+	    __extends(CameraController, _super);
+	    function CameraController() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.camera = null;
+	        return _this;
+	    }
+	    CameraController.create = function (camera) {
+	        var obj = new this();
+	        obj.camera = camera;
+	        return obj;
+	    };
+	    Object.defineProperty(CameraController.prototype, "pMatrix", {
+	        get: function () {
+	            return this.camera.pMatrix;
+	        },
+	        set: function (pMatrix) {
+	            this.camera.pMatrix = pMatrix;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(CameraController.prototype, "vMatrix", {
+	        get: function () {
+	            return this.camera.vMatrix;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    CameraController.prototype.init = function () {
+	        this.camera.entityObject = this.entityObject;
+	        this.camera.init();
+	    };
+	    return CameraController;
+	}(Component));
+
 	var MeshRenderer = (function (_super) {
 	    __extends(MeshRenderer, _super);
 	    function MeshRenderer() {
@@ -2763,16 +2795,19 @@
 	        var obj = new this();
 	        return obj;
 	    };
-	    MeshRenderer.prototype.render = function (renderer, targetObject) {
-	        renderer.addCommand(this._createCmd(targetObject));
+	    MeshRenderer.prototype.render = function (renderer, targetObject, camera) {
+	        renderer.addCommand(this._createCmd(targetObject, camera));
 	    };
-	    MeshRenderer.prototype._createCmd = function (targetObject) {
+	    MeshRenderer.prototype._createCmd = function (targetObject, camera) {
 	        var geometry = targetObject.geometry;
 	        var renderCmd = RenderCommand.create();
+	        var cameraComponent = camera.getComponent(CameraController);
 	        renderCmd.shader = geometry.shader;
 	        renderCmd.buffers = geometry.bufferContainer;
 	        renderCmd.targetObject = targetObject;
 	        renderCmd.mMatrix = targetObject.transform.mMatrix;
+	        renderCmd.vMatrix = cameraComponent.vMatrix;
+	        renderCmd.pMatrix = cameraComponent.pMatrix;
 	        return renderCmd;
 	    };
 	    return MeshRenderer;
@@ -2807,6 +2842,17 @@
 	        }
 	        this._componentList.addChild(component);
 	        component.addToObject(this._entityObject);
+	    };
+	    ComponentManager.prototype.getComponent = function (componentClass) {
+	        return this._componentList.findOne(function (component) {
+	            return component instanceof componentClass;
+	        });
+	    };
+	    ComponentManager.prototype.hasComponent = function (componentClass) {
+	        var res = this._componentList.hasChildWithFunc(function (component) {
+	            return component instanceof componentClass;
+	        });
+	        return res;
 	    };
 	    ComponentManager.prototype.getRenderComponent = function () {
 	        return this._renderComponent;
@@ -2846,12 +2892,12 @@
 	        this._entityManager.init();
 	        return this;
 	    };
-	    EntityObject.prototype.render = function (renderer) {
+	    EntityObject.prototype.render = function (renderer, camera) {
 	        var renderComponent = this._componentManager.getRenderComponent();
 	        if (renderComponent != void 0)
-	            renderComponent.render(renderer, this);
+	            renderComponent.render(renderer, this, camera);
 	        this.getChildren().forEach(function (child) {
-	            child.render(renderer);
+	            child.render(renderer, camera);
 	        });
 	    };
 	    EntityObject.prototype.dispose = function () {
@@ -2907,6 +2953,12 @@
 	    EntityObject.prototype.addComponent = function (component) {
 	        this._componentManager.addComponent(component);
 	    };
+	    EntityObject.prototype.getComponent = function (componentClass) {
+	        return this._componentManager.getComponent(componentClass);
+	    };
+	    EntityObject.prototype.hasComponent = function (componentClass) {
+	        return this._componentManager.hasComponent(componentClass);
+	    };
 	    return EntityObject;
 	}(Entity));
 
@@ -2940,8 +2992,25 @@
 	        obj.initWhenCreate();
 	        return obj;
 	    };
+	    Object.defineProperty(GameObjectScene.prototype, "currentCamera", {
+	        get: function () {
+	            return this._currentCamera;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
 	    GameObjectScene.prototype.initWhenCreate = function () {
 	        this.name = "GameObjectScene" + this.uid;
+	    };
+	    GameObjectScene.prototype.render = function (renderer) {
+	        _super.prototype.render.call(this, renderer, this.currentCamera);
+	    };
+	    GameObjectScene.prototype.addChild = function (child) {
+	        if (child.hasComponent(CameraController)) {
+	            this._currentCamera = child;
+	        }
+	        _super.prototype.addChild.call(this, child);
+	        return this;
 	    };
 	    GameObjectScene.prototype.createTransform = function () {
 	        return null;
@@ -3005,6 +3074,115 @@
 	    singleton(true)
 	], exports.Director);
 
+	var Vector = (function () {
+	    function Vector(x, y, z, w) {
+	        if (x === void 0) { x = 0; }
+	        if (y === void 0) { y = 0; }
+	        if (z === void 0) { z = 0; }
+	        if (w === void 0) { w = 1; }
+	        this.x = 0;
+	        this.y = 0;
+	        this.z = 0;
+	        this.w = 0;
+	        this.x = x;
+	        this.y = y;
+	        this.z = z;
+	        this.w = w;
+	    }
+	    return Vector;
+	}());
+
+	var Camera = (function () {
+	    function Camera() {
+	        this._pMatrix = new Matrix4();
+	        this._vMatrix = new Matrix4();
+	        this.view = new Vector();
+	        this.entityObject = null;
+	    }
+	    Object.defineProperty(Camera.prototype, "near", {
+	        get: function () {
+	            return this._near;
+	        },
+	        set: function (near) {
+	            this._near = near;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Camera.prototype, "far", {
+	        get: function () {
+	            return this._far;
+	        },
+	        set: function (far) {
+	            this._far = far;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Camera.prototype, "pMatrix", {
+	        get: function () {
+	            return this._pMatrix;
+	        },
+	        set: function (pMatrix) {
+	            this._pMatrix = pMatrix;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Camera.prototype, "vMatrix", {
+	        get: function () {
+	            return this._vMatrix;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Camera.prototype.translate = function (x, y, z) {
+	        this.view.x = x;
+	        this.view.y = y;
+	        this.view.z = z;
+	    };
+	    Camera.prototype.init = function () {
+	        this.updateProjectionMatrix();
+	    };
+	    return Camera;
+	}());
+
+	var PerspectiveCamera = (function (_super) {
+	    __extends(PerspectiveCamera, _super);
+	    function PerspectiveCamera() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    PerspectiveCamera.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Object.defineProperty(PerspectiveCamera.prototype, "fovy", {
+	        get: function () {
+	            return this._fovy;
+	        },
+	        set: function (fovy) {
+	            this._fovy = fovy;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(PerspectiveCamera.prototype, "aspect", {
+	        get: function () {
+	            return this._aspect;
+	        },
+	        set: function (aspect) {
+	            this._aspect = aspect;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    PerspectiveCamera.prototype.updateProjectionMatrix = function () {
+	        this.pMatrix.perspective(this._fovy, this._aspect, this.near, this.far);
+	        this.vMatrix.lookAt(this.view.x, this.view.y, this.view.z, 0, 0, 0, 0, 1, 0);
+	    };
+	    return PerspectiveCamera;
+	}(Camera));
+
 	var Test = (function () {
 	    function Test() {
 	    }
@@ -3020,6 +3198,7 @@
 	        director.renderer.setClearColor(0, 0, 0, 1);
 	        director.scene.addChild(gameobj);
 	        director.scene.addChild(object);
+	        director.scene.addChild(this.createCamera());
 	        director.start();
 	    };
 	    Test.prototype.createTriangle = function () {
@@ -3028,6 +3207,17 @@
 	        gameObject.addComponent(triangle);
 	        gameObject.addComponent(MeshRenderer.create());
 	        return gameObject;
+	    };
+	    Test.prototype.createCamera = function () {
+	        var camera = GameObject.create(), view = exports.Device.getInstance().view, cameraComponent = PerspectiveCamera.create();
+	        cameraComponent.fovy = 45;
+	        cameraComponent.aspect = view.width / view.height;
+	        cameraComponent.near = 1;
+	        cameraComponent.far = 100;
+	        cameraComponent.translate(2, 1, 2);
+	        var cameraControll = CameraController.create(cameraComponent);
+	        camera.addComponent(cameraControll);
+	        return camera;
 	    };
 	    return Test;
 	}());
@@ -3094,6 +3284,55 @@
 	]);
 	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
 
+	var PlaneGeometry = (function (_super) {
+	    __extends(PlaneGeometry, _super);
+	    function PlaneGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.width = 1;
+	        _this.height = 1;
+	        return _this;
+	    }
+	    PlaneGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    PlaneGeometry.prototype.getShader = function () {
+	        return TriangleShader.create(this);
+	    };
+	    PlaneGeometry.prototype.computeData = function () {
+	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
+	        vertice = [
+	            0.0, up, 0,
+	            left, down, 0,
+	            right, down, 0
+	        ];
+	        indice = [
+	            0, 1, 2
+	        ];
+	        texCoord = [
+	            0.5, 1.0,
+	            0.0, 0.0,
+	            1.0, 0.0
+	        ];
+	        normal = [
+	            0, 0, 1,
+	            0, 0, 1,
+	            0, 0, 1
+	        ];
+	        color = [
+	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
+	        ];
+	        return {
+	            vertice: vertice,
+	            texCoord: texCoord,
+	            color: color,
+	            normal: normal,
+	            indice: indice
+	        };
+	    };
+	    return PlaneGeometry;
+	}(Geometry));
+
 	var ThreeDTransform = (function (_super) {
 	    __extends(ThreeDTransform, _super);
 	    function ThreeDTransform() {
@@ -3107,11 +3346,15 @@
 	})(exports.EScreenSize || (exports.EScreenSize = {}));
 
 	exports.Test = Test;
+	exports.Camera = Camera;
+	exports.CameraController = CameraController;
+	exports.PerspectiveCamera = PerspectiveCamera;
 	exports.BufferContainer = BufferContainer;
 	exports.CubeData = CubeData;
 	exports.GeometryData = GeometryData;
 	exports.PlaneData = PlaneData;
 	exports.Geometry = Geometry;
+	exports.PlaneGeometry = PlaneGeometry;
 	exports.TriangleGeometry = TriangleGeometry;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
@@ -3139,6 +3382,7 @@
 	exports.GameObjectScene = GameObjectScene;
 	exports.Scene = Scene;
 	exports.Matrix4 = Matrix4;
+	exports.Vector = Vector;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
 	exports.singleton = singleton;

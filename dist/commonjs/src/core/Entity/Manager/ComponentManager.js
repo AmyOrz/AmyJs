@@ -34,6 +34,17 @@ var ComponentManager = (function () {
         this._componentList.addChild(component);
         component.addToObject(this._entityObject);
     };
+    ComponentManager.prototype.getComponent = function (componentClass) {
+        return this._componentList.findOne(function (component) {
+            return component instanceof componentClass;
+        });
+    };
+    ComponentManager.prototype.hasComponent = function (componentClass) {
+        var res = this._componentList.hasChildWithFunc(function (component) {
+            return component instanceof componentClass;
+        });
+        return res;
+    };
     ComponentManager.prototype.getRenderComponent = function () {
         return this._renderComponent;
     };

@@ -3,6 +3,9 @@ import { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
 import { Director } from "./core/Director";
 import { GameObject } from "./core/Entity/GameObject";
 import { MeshRenderer } from "./Component/Render/MeshRender/MeshRenderer";
+import { Device } from "./core/device/Device";
+import { PerspectiveCamera } from "./Component/Camera/PerspectiveCamera";
+import { CameraController } from "./Component/Camera/Controll/CameraController";
 
 export class Test {
 
@@ -24,6 +27,7 @@ export class Test {
         director.renderer.setClearColor(0, 0, 0, 1);
         director.scene.addChild(gameobj);
         director.scene.addChild(object);
+        director.scene.addChild(this.createCamera());
 
         director.start();
     }
@@ -36,6 +40,25 @@ export class Test {
         gameObject.addComponent(MeshRenderer.create());
 
         return gameObject;
+    }
+
+    private createCamera() {
+        var camera = GameObject.create(),
+            view = Device.getInstance().view,
+            cameraComponent = PerspectiveCamera.create();
+
+        cameraComponent.fovy = 45;
+        cameraComponent.aspect = view.width / view.height;
+        cameraComponent.near = 1;
+        cameraComponent.far = 100;
+
+        cameraComponent.translate(2, 1, 2);
+
+        var cameraControll = CameraController.create(cameraComponent);
+
+        camera.addComponent(cameraControll);
+
+        return camera;
     }
 }
 var a = new Test();
