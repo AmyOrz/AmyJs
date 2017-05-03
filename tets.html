@@ -3,8 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #ct{
+            width:700px;
+            height:800px;
+            background: #000088;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+        .c1{
+            margin:5px;
+            width:210px;
+            height:250px;
+            background: #8a4182;
+        }
+        .c2{
+            order:-1;
+            flex-grow: 2;
+            margin:5px;
+            width:210px;
+            height:250px;
+            background: #ca3a11;
+        }
+    </style>
 </head>
 <body>
+    <div id = "ct">
+        <div class = "c1"></div>
+        <div class = "c2"></div>
+    </div>
 </body>
-<script src = "./dist/amy.js"></script>
+<!--<script src = "./dist/amy.js"></script>-->
 </html>
