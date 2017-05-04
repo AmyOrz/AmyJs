@@ -36,4 +36,18 @@
     </div>
 </body>
 <!--<script src = "./dist/amy.js"></script>-->
+<script>
+    function fck(){
+    }
+    fck.prototype.setName = function (name) {
+        console.log(name)
+    }
+    var a = new fck();
+    var b = a;
+    var c = a;
+    b.setName("fasd");
+    c.setName("asdasdwef");
+    console.log(b == c)
+
+</script>
 </html>

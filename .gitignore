@@ -58,3 +58,5 @@ typings/
 
 # dotenv environment variables file
 .env
+src/Component/Render/Shader/lib/
+test/unit/core/Entity/

@@ -1,7 +1,5 @@
 import { EntityObject } from "../Entity/EntityObject";
 import { Renderer } from "../renderer/render/Renderer";
-import {GameObject} from "../Entity/GameObject";
-import {Camera} from "../../Component/Camera/Camera";
 import {CameraController} from "../../Component/Camera/Controll/CameraController";
 export class GameObjectScene extends EntityObject {
     public static create() {
