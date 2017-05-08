@@ -1,5 +1,4 @@
 import { Geometry, GeometryDataType } from "./Geometry";
-import { TriangleShader } from "../Render/Shader/shader/TriangleShader";
 
 export class TriangleGeometry extends Geometry {
     public static create() {
@@ -9,10 +8,6 @@ export class TriangleGeometry extends Geometry {
     }
     public width: number = 1;
     public height: number = 1;
-
-    public getShader() {
-        return TriangleShader.create(this);
-    }
 
     public computeData(): GeometryDataType {
         var width = this.width,

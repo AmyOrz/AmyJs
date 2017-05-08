@@ -33,7 +33,7 @@ export abstract class Camera {
     }
 
     public view: Vector = new Vector();
-    public transform(x: number, y: number, z) {
+    public translate(x: number, y: number, z) {
         this.view.x = x;
         this.view.y = y;
         this.view.z = z;

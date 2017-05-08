@@ -5,5 +5,5 @@ export declare enum EDrawMode {
     LINE_STRIP,
     TRIANGLES,
     TRIANGLE_STRIP,
-    TRANGLE_FAN,
+    TRIANGLE_FAN,
 }

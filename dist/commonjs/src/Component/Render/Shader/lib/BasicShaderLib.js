@@ -10,11 +10,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Shader_1 = require("./Shader");
-var EBufferDataType_1 = require("../../../Geometry/BufferContainer/EBufferDataType");
-var TriangleShader = (function (_super) {
-    __extends(TriangleShader, _super);
-    function TriangleShader() {
+var ShaderLib_1 = require("./ShaderLib");
+var BasicShaderLib = (function (_super) {
+    __extends(BasicShaderLib, _super);
+    function BasicShaderLib() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.VSource = "attribute vec4 a_Position;" +
             "attribute vec4 a_Color;" +
@@ -35,28 +34,18 @@ var TriangleShader = (function (_super) {
             "}";
         return _this;
     }
-    TriangleShader.create = function (geometry) {
+    BasicShaderLib.create = function () {
         var obj = new this();
-        obj.geometry = geometry;
         return obj;
     };
-    TriangleShader.prototype.initProgram = function () {
-        this.program.initProgramWithShader(this);
+    BasicShaderLib.prototype.init = function () {
+        this._attributes.push("a_Position");
+        this._attributes.push("a_Color");
+        this._uniforms.push("u_mMatrix");
+        this._uniforms.push("u_vMatrix");
+        this._uniforms.push("u_pMatrix");
     };
-    TriangleShader.prototype.sendShaderAttribute = function () {
-        var verticeBuffer = this.geometry.bufferContainer.getChild(EBufferDataType_1.EBufferDataType.VERTICE);
-        var colorBuffer = this.geometry.bufferContainer.getChild(EBufferDataType_1.EBufferDataType.COLOR);
-        this.sendAttributeBuffer("a_Position", verticeBuffer);
-        this.sendAttributeBuffer("a_Color", colorBuffer);
-        this.program.sendAllBufferData();
-    };
-    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
-        this.program.use();
-        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
-        this.sendUniformData("u_vMatrix", renderCmd.vMatrix);
-        this.sendUniformData("u_pMatrix", renderCmd.pMatrix);
-    };
-    return TriangleShader;
-}(Shader_1.Shader));
-exports.TriangleShader = TriangleShader;
-//# sourceMappingURL=TriangleShader.js.map
+    return BasicShaderLib;
+}(ShaderLib_1.ShaderLib));
+exports.BasicShaderLib = BasicShaderLib;
+//# sourceMappingURL=BasicShaderLib.js.map

@@ -18,7 +18,7 @@ var Geometry = (function (_super) {
     function Geometry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.bufferContainer = null;
-        _this.shader = null;
+        _this.material = null;
         return _this;
     }
     Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -29,12 +29,11 @@ var Geometry = (function (_super) {
         configurable: true
     });
     Geometry.prototype.init = function () {
-        this.shader = this.getShader();
         var computeData = this.computeData();
         this.bufferContainer = BufferContainer_1.BufferContainer.create();
         this.bufferContainer.geometryData = this.createGeometryData(computeData);
         this.bufferContainer.init();
-        this.shader.init();
+        this.material.init();
     };
     Geometry.prototype.createGeometryData = function (computeData) {
         var vertice = computeData.vertice, color = computeData.color, texCoord = computeData.texCoord, normal = computeData.normal, indice = computeData.indice;

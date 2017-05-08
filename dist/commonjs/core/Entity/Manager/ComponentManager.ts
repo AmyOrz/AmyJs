@@ -49,7 +49,7 @@ export class ComponentManager {
     }
 
     public hasComponent<T>(componentClass: any): boolean {
-        var res =  this._componentList.hasChildWithFunc((component: Component) => {
+        var res = this._componentList.hasChildWithFunc((component: Component) => {
             return component instanceof componentClass;
         })
         return res;

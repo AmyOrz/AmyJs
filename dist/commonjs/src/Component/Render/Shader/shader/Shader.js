@@ -18,11 +18,26 @@ var Shader = (function (_super) {
     function Shader() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.program = Program_1.Program.create();
+        _this._shaderLib = _this.createShaderLib();
         return _this;
     }
+    Object.defineProperty(Shader.prototype, "VSource", {
+        get: function () {
+            return this._shaderLib.VSource;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Shader.prototype, "FSource", {
+        get: function () {
+            return this._shaderLib.FSource;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Shader.prototype.init = function () {
         this.initProgram();
-        this.sendShaderAttribute();
+        this._shaderLib.init();
     };
     Shader.prototype.sendAttributeBuffer = function (name, data) {
         this.program.sendAttributeBuffer(name, data);

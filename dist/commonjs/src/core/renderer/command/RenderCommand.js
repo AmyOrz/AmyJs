@@ -10,8 +10,8 @@ var RenderCommand = (function () {
         this.vMatrix = null;
         this.pMatrix = null;
         this.targetObject = null;
-        this.shader = null;
-        this._drawMode = EDrawMode_1.EDrawMode.TRIANGLES;
+        this.material = null;
+        this._drawMode = EDrawMode_1.EDrawMode.TRIANGLE_FAN;
     }
     RenderCommand.create = function () {
         var obj = new this();
@@ -19,7 +19,7 @@ var RenderCommand = (function () {
     };
     RenderCommand.prototype.draw = function () {
         var startOffset = 0, gl = Device_1.Device.getInstance().gl;
-        this.shader.sendShaderUniform(this);
+        this.material.update(this);
         var verticeBuffer = this.buffers.getChild(EBufferDataType_1.EBufferDataType.VERTICE);
         gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
     };

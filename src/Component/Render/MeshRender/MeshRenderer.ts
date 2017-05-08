@@ -21,7 +21,7 @@ export class MeshRenderer extends RendererComponent {
         var renderCmd: RenderCommand = RenderCommand.create();
         var cameraComponent = camera.getComponent<CameraController>(CameraController);
 
-        renderCmd.shader = geometry.shader;
+        renderCmd.material = geometry.material;
         renderCmd.buffers = geometry.bufferContainer;
         renderCmd.targetObject = targetObject;
 

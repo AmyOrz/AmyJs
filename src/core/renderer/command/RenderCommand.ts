@@ -6,6 +6,7 @@ import { Matrix4 } from "../../../Math/Matrix4";
 import { Shader } from "../../../Component/Render/Shader/shader/Shader";
 import { EntityObject } from "../../Entity/EntityObject";
 import { EBufferDataType } from "../../../Component/Geometry/BufferContainer/EBufferDataType";
+import { Material } from "../../../Component/Material/Material";
 
 export class RenderCommand {
     public static create() {
@@ -20,17 +21,17 @@ export class RenderCommand {
     public pMatrix: Matrix4 = null;
 
     public targetObject: EntityObject = null;
-    // public material = null;
-    public shader: Shader = null;
+    public material: Material = null;
+    // public shader: Shader = null;
 
 
-    private _drawMode: EDrawMode = EDrawMode.TRIANGLES;
+    private _drawMode: EDrawMode = EDrawMode.TRIANGLE_FAN;
 
     public draw() {
         var startOffset: number = 0,
             gl = Device.getInstance().gl;
 
-        this.shader.sendShaderUniform(this);
+        this.material.update(this);
 
         var verticeBuffer: ArrayBuffer = this.buffers.getChild(EBufferDataType.VERTICE);
         gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);

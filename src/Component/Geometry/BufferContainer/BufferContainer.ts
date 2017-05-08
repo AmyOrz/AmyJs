@@ -50,7 +50,6 @@ export class BufferContainer {
 
     private _getVerticeBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.vertice, 3);
-
         return this._bufferCache(type, buffer);
     }
 

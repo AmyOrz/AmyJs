@@ -2,16 +2,24 @@ import { Program } from "../../Program/Program";
 import { VariableLib } from "../VariableLib";
 import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
 import { Component } from "../../../../core/Component";
+import { Material } from "../../../Material/Material";
+import { ShaderLib } from "../lib/ShaderLib";
 export abstract class Shader extends Component {
 
-    public VSource: string;
-    public FSource: string;
+    get VSource() {
+        return this._shaderLib.VSource;
+    }
+
+    get FSource() {
+        return this._shaderLib.FSource;
+    }
 
     public program: Program = Program.create();
+    protected _shaderLib: ShaderLib = this.createShaderLib();
 
     public init() {
         this.initProgram();
-        this.sendShaderAttribute();
+        this._shaderLib.init();
     }
 
     protected sendAttributeBuffer(name: string, data: any) {
@@ -22,7 +30,6 @@ export abstract class Shader extends Component {
     }
 
     public abstract initProgram();
-    public abstract sendShaderAttribute();
-    public abstract sendShaderUniform(renderCommand: RenderCommand);
-    // public abstract sendShaderUniform();
+    public abstract createShaderLib();
+    public abstract update(cmd: RenderCommand, material: Material);
 }

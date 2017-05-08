@@ -1267,7 +1267,7 @@
 	    function Geometry() {
 	        var _this = _super !== null && _super.apply(this, arguments) || this;
 	        _this.bufferContainer = null;
-	        _this.shader = null;
+	        _this.material = null;
 	        return _this;
 	    }
 	    Object.defineProperty(Geometry.prototype, "geometryData", {
@@ -1278,12 +1278,11 @@
 	        configurable: true
 	    });
 	    Geometry.prototype.init = function () {
-	        this.shader = this.getShader();
 	        var computeData = this.computeData();
 	        this.bufferContainer = BufferContainer.create();
 	        this.bufferContainer.geometryData = this.createGeometryData(computeData);
 	        this.bufferContainer.init();
-	        this.shader.init();
+	        this.material.init();
 	    };
 	    Geometry.prototype.createGeometryData = function (computeData) {
 	        var vertice = computeData.vertice, color = computeData.color, texCoord = computeData.texCoord, normal = computeData.normal, indice = computeData.indice;
@@ -1298,355 +1297,6 @@
 	    return Geometry;
 	}(Component));
 
-	(function (EVariableType) {
-	    EVariableType[EVariableType["FLOAT_1"] = "FLOAT_1"] = "FLOAT_1";
-	    EVariableType[EVariableType["FLOAT_2"] = "FLOAT_2"] = "FLOAT_2";
-	    EVariableType[EVariableType["FLOAT_3"] = "FLOAT_3"] = "FLOAT_3";
-	    EVariableType[EVariableType["FLOAT_4"] = "FLOAT_4"] = "FLOAT_4";
-	    EVariableType[EVariableType["VECTOR_2"] = "VECTOR_2"] = "VECTOR_2";
-	    EVariableType[EVariableType["VECTOR_3"] = "VECTOR_3"] = "VECTOR_3";
-	    EVariableType[EVariableType["VECTOR_4"] = "VECTOR_4"] = "VECTOR_4";
-	    EVariableType[EVariableType["COLOR_3"] = "COLOR_3"] = "COLOR_3";
-	    EVariableType[EVariableType["FLOAT_MAT3"] = "FLOAT_MAT3"] = "FLOAT_MAT3";
-	    EVariableType[EVariableType["FLOAT_MAT4"] = "FLOAT_MAT4"] = "FLOAT_MAT4";
-	    EVariableType[EVariableType["BUFFER"] = "BUFFER"] = "BUFFER";
-	    EVariableType[EVariableType["SAMPLER_CUBE"] = "SAMPLER_CUBE"] = "SAMPLER_CUBE";
-	    EVariableType[EVariableType["SAMPLER_2D"] = "SAMPLER_2D"] = "SAMPLER_2D";
-	    EVariableType[EVariableType["NUMBER_1"] = "NUMBER_1"] = "NUMBER_1";
-	    EVariableType[EVariableType["STRUCTURE"] = "STRUCTURE"] = "STRUCTURE";
-	    EVariableType[EVariableType["STRUCTURES"] = "STRUCTURES"] = "STRUCTURES";
-	    EVariableType[EVariableType["SAMPLER_ARRAY"] = "SAMPLER_ARRAY"] = "SAMPLER_ARRAY";
-	    EVariableType[EVariableType["FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY";
-	})(exports.EVariableType || (exports.EVariableType = {}));
-
-	var GLSLDataSender = (function () {
-	    function GLSLDataSender(_program) {
-	        this._program = _program;
-	        this._getUniformLocationCache = {};
-	        this._toSendBufferArr = [];
-	    }
-	    GLSLDataSender.create = function (program) {
-	        var obj = new this(program);
-	        return obj;
-	    };
-	    GLSLDataSender.prototype.addBufferToSendList = function (pos, buffer) {
-	        this._toSendBufferArr[pos] = buffer;
-	    };
-	    GLSLDataSender.prototype.sendAllBufferData = function () {
-	        for (var pos = 0, len = this._toSendBufferArr.length; pos < len; pos++) {
-	            this.sendBuffer(pos, this._toSendBufferArr[pos]);
-	        }
-	    };
-	    GLSLDataSender.prototype.sendBuffer = function (pos, buffer) {
-	        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
-	        this._getGl().vertexAttribPointer(pos, buffer.size, this._getGl()[buffer.type], false, 0, 0);
-	        this._getGl().enableVertexAttribArray(pos);
-	    };
-	    GLSLDataSender.prototype.sendFloat1 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform1f(uniform, data);
-	    };
-	    GLSLDataSender.prototype.sendFloat2 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform2f(uniform, data[0], data[1]);
-	    };
-	    GLSLDataSender.prototype.sendFloat3 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform3f(uniform, data[0], data[1], data[2]);
-	    };
-	    GLSLDataSender.prototype.sendFloat4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform4f(uniform, data[0], data[1], data[2], data[3]);
-	    };
-	    GLSLDataSender.prototype.sendVector2 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform2f(uniform, data.x, data.y);
-	    };
-	    GLSLDataSender.prototype.sendVector3 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform3f(uniform, data.x, data.y, data.z);
-	    };
-	    GLSLDataSender.prototype.sendVector4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform4f(uniform, data.x, data.y, data.z, data.w);
-	    };
-	    GLSLDataSender.prototype.sendNum1 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniform1i(uniform, data);
-	    };
-	    GLSLDataSender.prototype.sendMatrix4 = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniformMatrix4fv(uniform, false, data.elements);
-	    };
-	    GLSLDataSender.prototype.sendMatrix4Array = function (name, data) {
-	        var uniform = this.getUniformLocation(name);
-	        this._getGl().uniformMatrix4fv(uniform, false, data);
-	    };
-	    GLSLDataSender.prototype.getUniformLocation = function (name) {
-	        if (this._getUniformLocationCache[name] != void 0) {
-	            return this._getUniformLocationCache[name];
-	        }
-	        var uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
-	        if (uniform == void 0) {
-	            throw new TypeError("the uniform is not find");
-	        }
-	        this._getUniformLocationCache[name] = uniform;
-	        return uniform;
-	    };
-	    GLSLDataSender.prototype._getGl = function () {
-	        return exports.Device.getInstance().gl;
-	    };
-	    return GLSLDataSender;
-	}());
-
-	var Program = (function (_super) {
-	    __extends(Program, _super);
-	    function Program() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.glProgram = null;
-	        _this._attributeList = new Hash();
-	        _this._glslSend = GLSLDataSender.create(_this);
-	        return _this;
-	    }
-	    Program.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    Program.prototype.use = function () {
-	        this._getGl().useProgram(this.glProgram);
-	    };
-	    Program.prototype.getAttribLocation = function (name) {
-	        var pos = this._attributeList.getChild(name);
-	        if (pos !== void 0)
-	            return pos;
-	        var attribute = this._getGl().getAttribLocation(this.glProgram, name);
-	        this._attributeList.addChild(name, attribute);
-	        return attribute;
-	    };
-	    Program.prototype.getUniformLocation = function (name) {
-	        return this._glslSend.getUniformLocation(name);
-	    };
-	    Program.prototype.sendAttributeBuffer = function (name, buffer) {
-	        var pos = this.getAttribLocation(name);
-	        if (pos == -1) {
-	            throw new TypeError("the attribute is not find");
-	        }
-	        
-	        this._glslSend.addBufferToSendList(pos, buffer);
-	    };
-	    Program.prototype.sendAllBufferData = function () {
-	        this._glslSend.sendAllBufferData();
-	    };
-	    Program.prototype.sendUniformData = function (name, type, data) {
-	        if (data === null) {
-	            return;
-	        }
-	        switch (type) {
-	            case exports.EVariableType.FLOAT_1:
-	                this._glslSend.sendFloat1(name, data);
-	                break;
-	            case exports.EVariableType.FLOAT_2:
-	                this._glslSend.sendFloat2(name, data);
-	                break;
-	            case exports.EVariableType.FLOAT_3:
-	                this._glslSend.sendFloat3(name, data);
-	                break;
-	            case exports.EVariableType.FLOAT_4:
-	                this._glslSend.sendFloat4(name, data);
-	                break;
-	            case exports.EVariableType.VECTOR_2:
-	                this._glslSend.sendVector2(name, data);
-	                break;
-	            case exports.EVariableType.VECTOR_3:
-	                this._glslSend.sendVector3(name, data);
-	                break;
-	            case exports.EVariableType.VECTOR_4:
-	                this._glslSend.sendVector4(name, data);
-	                break;
-	            case exports.EVariableType.FLOAT_MAT4:
-	                this._glslSend.sendMatrix4(name, data);
-	                break;
-	            case exports.EVariableType.NUMBER_1:
-	            case exports.EVariableType.SAMPLER_CUBE:
-	            case exports.EVariableType.SAMPLER_2D:
-	                this._glslSend.sendNum1(name, data);
-	                break;
-	            case exports.EVariableType.FLOAT_MAT4_ARRAY:
-	                this._glslSend.sendMatrix4Array(name, data);
-	                break;
-	            default:
-	                console.log("the type is not find");
-	                break;
-	        }
-	    };
-	    Program.prototype.sendFloat1 = function (name, data) {
-	        this._glslSend.sendFloat1(name, data);
-	    };
-	    Program.prototype.sendFloat2 = function (name, data) {
-	        this._glslSend.sendFloat2(name, data);
-	    };
-	    Program.prototype.sendFloat3 = function (name, data) {
-	        this._glslSend.sendFloat3(name, data);
-	    };
-	    Program.prototype.sendFloat4 = function (name, data) {
-	        this._glslSend.sendFloat4(name, data);
-	    };
-	    Program.prototype.sendVector2 = function (name, data) {
-	        this._glslSend.sendVector2(name, data);
-	    };
-	    Program.prototype.sendVector3 = function (name, data) {
-	        this._glslSend.sendVector3(name, data);
-	    };
-	    Program.prototype.sendVector4 = function (name, data) {
-	        this._glslSend.sendVector4(name, data);
-	    };
-	    Program.prototype.sendNum1 = function (name, data) {
-	        this._glslSend.sendNum1(name, data);
-	    };
-	    Program.prototype.sendMatrix4 = function (name, data) {
-	        this._glslSend.sendMatrix4(name, data);
-	    };
-	    Program.prototype.sendMatrix4Array = function (name, data) {
-	        this._glslSend.sendMatrix4Array(name, data);
-	    };
-	    Program.prototype.initProgramWithShader = function (shader) {
-	        var gl = exports.Device.getInstance().gl;
-	        var program = gl.createProgram();
-	        var vshader = this._loadShader(gl, gl.VERTEX_SHADER, shader.VSource);
-	        var fshader = this._loadShader(gl, gl.FRAGMENT_SHADER, shader.FSource);
-	        if (!vshader || !fshader) {
-	            return;
-	        }
-	        gl.attachShader(program, vshader);
-	        gl.attachShader(program, fshader);
-	        gl.linkProgram(program);
-	        var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
-	        if (!linked) {
-	            var err = gl.getProgramInfoLog(program);
-	            console.log("faild to link _program:" + err);
-	            gl.deleteProgram(program);
-	            gl.deleteShader(vshader);
-	            gl.deleteShader(vshader);
-	            return;
-	        }
-	        if (!program)
-	            console.log("program error");
-	        this.glProgram = program;
-	    };
-	    Program.prototype._loadShader = function (gl, type, value) {
-	        var shader = gl.createShader(type);
-	        if (shader == null) {
-	            console.log("unable to create shader");
-	            return;
-	        }
-	        gl.shaderSource(shader, value);
-	        gl.compileShader(shader);
-	        var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-	        if (!compiled) {
-	            var error = gl.getShaderInfoLog(shader);
-	            console.log("faild to compile shader:" + error);
-	            gl.deleteShader(shader);
-	            return;
-	        }
-	        return shader;
-	    };
-	    Program.prototype._getGl = function () {
-	        return exports.Device.getInstance().gl;
-	    };
-	    return Program;
-	}(Entity));
-
-	var VariableLib = (function () {
-	    function VariableLib() {
-	    }
-	    return VariableLib;
-	}());
-	VariableLib.a_Position = {
-	    type: exports.EVariableType.FLOAT_3
-	};
-	VariableLib.a_Color = {
-	    type: exports.EVariableType.FLOAT_3
-	};
-	VariableLib.u_mMatrix = {
-	    type: exports.EVariableType.FLOAT_MAT4,
-	};
-	VariableLib.u_vMatrix = {
-	    type: exports.EVariableType.FLOAT_MAT4,
-	};
-	VariableLib.u_pMatrix = {
-	    type: exports.EVariableType.FLOAT_MAT4,
-	};
-	VariableLib.u_mvpMatrix = {
-	    type: exports.EVariableType.FLOAT_MAT4,
-	};
-
-	var Shader = (function (_super) {
-	    __extends(Shader, _super);
-	    function Shader() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.program = Program.create();
-	        return _this;
-	    }
-	    Shader.prototype.init = function () {
-	        this.initProgram();
-	        this.sendShaderAttribute();
-	    };
-	    Shader.prototype.sendAttributeBuffer = function (name, data) {
-	        this.program.sendAttributeBuffer(name, data);
-	    };
-	    Shader.prototype.sendUniformData = function (name, data) {
-	        this.program.sendUniformData(name, VariableLib[name].type, data);
-	    };
-	    return Shader;
-	}(Component));
-
-	var TriangleShader = (function (_super) {
-	    __extends(TriangleShader, _super);
-	    function TriangleShader() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.VSource = "attribute vec4 a_Position;" +
-	            "attribute vec4 a_Color;" +
-	            "uniform mat4 u_mMatrix;" +
-	            "uniform mat4 u_vMatrix;" +
-	            "uniform mat4 u_pMatrix;" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
-	            "   v_Color = a_Color;" +
-	            "}";
-	        _this.FSource = "#ifdef GL_ES\n" +
-	            "precision mediump float;\n" +
-	            "#endif\n" +
-	            "varying vec4 v_Color;" +
-	            "void main(){" +
-	            "   gl_FragColor = v_Color;" +
-	            "}";
-	        return _this;
-	    }
-	    TriangleShader.create = function (geometry) {
-	        var obj = new this();
-	        obj.geometry = geometry;
-	        return obj;
-	    };
-	    TriangleShader.prototype.initProgram = function () {
-	        this.program.initProgramWithShader(this);
-	    };
-	    TriangleShader.prototype.sendShaderAttribute = function () {
-	        var verticeBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.VERTICE);
-	        var colorBuffer = this.geometry.bufferContainer.getChild(exports.EBufferDataType.COLOR);
-	        this.sendAttributeBuffer("a_Position", verticeBuffer);
-	        this.sendAttributeBuffer("a_Color", colorBuffer);
-	        this.program.sendAllBufferData();
-	    };
-	    TriangleShader.prototype.sendShaderUniform = function (renderCmd) {
-	        this.program.use();
-	        this.sendUniformData("u_mMatrix", renderCmd.mMatrix);
-	        this.sendUniformData("u_vMatrix", renderCmd.vMatrix);
-	        this.sendUniformData("u_pMatrix", renderCmd.pMatrix);
-	    };
-	    return TriangleShader;
-	}(Shader));
-
 	var TriangleGeometry = (function (_super) {
 	    __extends(TriangleGeometry, _super);
 	    function TriangleGeometry() {
@@ -1658,9 +1308,6 @@
 	    TriangleGeometry.create = function () {
 	        var obj = new this();
 	        return obj;
-	    };
-	    TriangleGeometry.prototype.getShader = function () {
-	        return TriangleShader.create(this);
 	    };
 	    TriangleGeometry.prototype.computeData = function () {
 	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
@@ -2724,7 +2371,7 @@
 	    EDrawMode[EDrawMode["LINE_STRIP"] = "LINE_STRIP"] = "LINE_STRIP";
 	    EDrawMode[EDrawMode["TRIANGLES"] = "TRIANGLES"] = "TRIANGLES";
 	    EDrawMode[EDrawMode["TRIANGLE_STRIP"] = "TRIANGLE_STRIP"] = "TRIANGLE_STRIP";
-	    EDrawMode[EDrawMode["TRANGLE_FAN"] = "TRIANGLE_FAN"] = "TRANGLE_FAN";
+	    EDrawMode[EDrawMode["TRIANGLE_FAN"] = "TRIANGLE_FAN"] = "TRIANGLE_FAN";
 	})(exports.EDrawMode || (exports.EDrawMode = {}));
 
 	var RenderCommand = (function () {
@@ -2734,8 +2381,8 @@
 	        this.vMatrix = null;
 	        this.pMatrix = null;
 	        this.targetObject = null;
-	        this.shader = null;
-	        this._drawMode = exports.EDrawMode.TRIANGLES;
+	        this.material = null;
+	        this._drawMode = exports.EDrawMode.TRIANGLE_FAN;
 	    }
 	    RenderCommand.create = function () {
 	        var obj = new this();
@@ -2743,7 +2390,7 @@
 	    };
 	    RenderCommand.prototype.draw = function () {
 	        var startOffset = 0, gl = exports.Device.getInstance().gl;
-	        this.shader.sendShaderUniform(this);
+	        this.material.update(this);
 	        var verticeBuffer = this.buffers.getChild(exports.EBufferDataType.VERTICE);
 	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
 	    };
@@ -2802,7 +2449,7 @@
 	        var geometry = targetObject.geometry;
 	        var renderCmd = RenderCommand.create();
 	        var cameraComponent = camera.getComponent(CameraController);
-	        renderCmd.shader = geometry.shader;
+	        renderCmd.material = geometry.material;
 	        renderCmd.buffers = geometry.bufferContainer;
 	        renderCmd.targetObject = targetObject;
 	        renderCmd.mMatrix = targetObject.transform.mMatrix;
@@ -3183,6 +2830,486 @@
 	    return PerspectiveCamera;
 	}(Camera));
 
+	var Material = (function () {
+	    function Material() {
+	        this._shader = null;
+	    }
+	    Object.defineProperty(Material.prototype, "program", {
+	        get: function () {
+	            return this._shader.program;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Material.prototype.initWhenCreate = function () {
+	        this._shader = this.getShader();
+	    };
+	    Material.prototype.init = function () {
+	        this._shader.init();
+	    };
+	    Material.prototype.update = function (cmd) {
+	        this._shader.update(cmd, this);
+	    };
+	    return Material;
+	}());
+
+	(function (EVariableType) {
+	    EVariableType[EVariableType["FLOAT_1"] = "FLOAT_1"] = "FLOAT_1";
+	    EVariableType[EVariableType["FLOAT_2"] = "FLOAT_2"] = "FLOAT_2";
+	    EVariableType[EVariableType["FLOAT_3"] = "FLOAT_3"] = "FLOAT_3";
+	    EVariableType[EVariableType["FLOAT_4"] = "FLOAT_4"] = "FLOAT_4";
+	    EVariableType[EVariableType["VECTOR_2"] = "VECTOR_2"] = "VECTOR_2";
+	    EVariableType[EVariableType["VECTOR_3"] = "VECTOR_3"] = "VECTOR_3";
+	    EVariableType[EVariableType["VECTOR_4"] = "VECTOR_4"] = "VECTOR_4";
+	    EVariableType[EVariableType["COLOR_3"] = "COLOR_3"] = "COLOR_3";
+	    EVariableType[EVariableType["FLOAT_MAT3"] = "FLOAT_MAT3"] = "FLOAT_MAT3";
+	    EVariableType[EVariableType["FLOAT_MAT4"] = "FLOAT_MAT4"] = "FLOAT_MAT4";
+	    EVariableType[EVariableType["BUFFER"] = "BUFFER"] = "BUFFER";
+	    EVariableType[EVariableType["SAMPLER_CUBE"] = "SAMPLER_CUBE"] = "SAMPLER_CUBE";
+	    EVariableType[EVariableType["SAMPLER_2D"] = "SAMPLER_2D"] = "SAMPLER_2D";
+	    EVariableType[EVariableType["NUMBER_1"] = "NUMBER_1"] = "NUMBER_1";
+	    EVariableType[EVariableType["STRUCTURE"] = "STRUCTURE"] = "STRUCTURE";
+	    EVariableType[EVariableType["STRUCTURES"] = "STRUCTURES"] = "STRUCTURES";
+	    EVariableType[EVariableType["SAMPLER_ARRAY"] = "SAMPLER_ARRAY"] = "SAMPLER_ARRAY";
+	    EVariableType[EVariableType["FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY"] = "FLOAT_MAT4_ARRAY";
+	})(exports.EVariableType || (exports.EVariableType = {}));
+
+	var GLSLDataSender = (function () {
+	    function GLSLDataSender(_program) {
+	        this._program = _program;
+	        this._getUniformLocationCache = {};
+	        this._toSendBufferArr = [];
+	    }
+	    GLSLDataSender.create = function (program) {
+	        var obj = new this(program);
+	        return obj;
+	    };
+	    GLSLDataSender.prototype.addBufferToSendList = function (pos, buffer) {
+	        this._toSendBufferArr[pos] = buffer;
+	    };
+	    GLSLDataSender.prototype.sendAllBufferData = function () {
+	        for (var pos = 0, len = this._toSendBufferArr.length; pos < len; pos++) {
+	            this.sendBuffer(pos, this._toSendBufferArr[pos]);
+	        }
+	    };
+	    GLSLDataSender.prototype.sendBuffer = function (pos, buffer) {
+	        this._getGl().bindBuffer(this._getGl().ARRAY_BUFFER, buffer.buffer);
+	        this._getGl().vertexAttribPointer(pos, buffer.size, this._getGl()[buffer.type], false, 0, 0);
+	        this._getGl().enableVertexAttribArray(pos);
+	    };
+	    GLSLDataSender.prototype.sendFloat1 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform1f(uniform, data);
+	    };
+	    GLSLDataSender.prototype.sendFloat2 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform2f(uniform, data[0], data[1]);
+	    };
+	    GLSLDataSender.prototype.sendFloat3 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform3f(uniform, data[0], data[1], data[2]);
+	    };
+	    GLSLDataSender.prototype.sendFloat4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform4f(uniform, data[0], data[1], data[2], data[3]);
+	    };
+	    GLSLDataSender.prototype.sendVector2 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform2f(uniform, data.x, data.y);
+	    };
+	    GLSLDataSender.prototype.sendVector3 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform3f(uniform, data.x, data.y, data.z);
+	    };
+	    GLSLDataSender.prototype.sendVector4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform4f(uniform, data.x, data.y, data.z, data.w);
+	    };
+	    GLSLDataSender.prototype.sendNum1 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniform1i(uniform, data);
+	    };
+	    GLSLDataSender.prototype.sendMatrix4 = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniformMatrix4fv(uniform, false, data.elements);
+	    };
+	    GLSLDataSender.prototype.sendMatrix4Array = function (name, data) {
+	        var uniform = this.getUniformLocation(name);
+	        this._getGl().uniformMatrix4fv(uniform, false, data);
+	    };
+	    GLSLDataSender.prototype.getUniformLocation = function (name) {
+	        if (this._getUniformLocationCache[name] != void 0) {
+	            return this._getUniformLocationCache[name];
+	        }
+	        var uniform = this._getGl().getUniformLocation(this._program.glProgram, name);
+	        if (uniform == void 0) {
+	            throw new TypeError("the uniform is not find");
+	        }
+	        this._getUniformLocationCache[name] = uniform;
+	        return uniform;
+	    };
+	    GLSLDataSender.prototype._getGl = function () {
+	        return exports.Device.getInstance().gl;
+	    };
+	    return GLSLDataSender;
+	}());
+
+	var Program = (function (_super) {
+	    __extends(Program, _super);
+	    function Program() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.glProgram = null;
+	        _this._attributeList = new Hash();
+	        _this._glslSend = GLSLDataSender.create(_this);
+	        return _this;
+	    }
+	    Program.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Program.prototype.use = function () {
+	        this._getGl().useProgram(this.glProgram);
+	    };
+	    Program.prototype.getAttribLocation = function (name) {
+	        var pos = this._attributeList.getChild(name);
+	        if (pos !== void 0)
+	            return pos;
+	        var attribute = this._getGl().getAttribLocation(this.glProgram, name);
+	        this._attributeList.addChild(name, attribute);
+	        return attribute;
+	    };
+	    Program.prototype.getUniformLocation = function (name) {
+	        return this._glslSend.getUniformLocation(name);
+	    };
+	    Program.prototype.sendAttributeBuffer = function (name, buffer) {
+	        var pos = this.getAttribLocation(name);
+	        if (pos == -1) {
+	            throw new TypeError("the attribute is not find");
+	        }
+	        
+	        this._glslSend.addBufferToSendList(pos, buffer);
+	    };
+	    Program.prototype.sendAllBufferData = function () {
+	        this._glslSend.sendAllBufferData();
+	    };
+	    Program.prototype.sendUniformData = function (name, type, data) {
+	        if (data === null) {
+	            return;
+	        }
+	        switch (type) {
+	            case exports.EVariableType.FLOAT_1:
+	                this._glslSend.sendFloat1(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_2:
+	                this._glslSend.sendFloat2(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_3:
+	                this._glslSend.sendFloat3(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_4:
+	                this._glslSend.sendFloat4(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_2:
+	                this._glslSend.sendVector2(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_3:
+	                this._glslSend.sendVector3(name, data);
+	                break;
+	            case exports.EVariableType.VECTOR_4:
+	                this._glslSend.sendVector4(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_MAT4:
+	                this._glslSend.sendMatrix4(name, data);
+	                break;
+	            case exports.EVariableType.NUMBER_1:
+	            case exports.EVariableType.SAMPLER_CUBE:
+	            case exports.EVariableType.SAMPLER_2D:
+	                this._glslSend.sendNum1(name, data);
+	                break;
+	            case exports.EVariableType.FLOAT_MAT4_ARRAY:
+	                this._glslSend.sendMatrix4Array(name, data);
+	                break;
+	            default:
+	                console.log("the type is not find");
+	                break;
+	        }
+	    };
+	    Program.prototype.sendFloat1 = function (name, data) {
+	        this._glslSend.sendFloat1(name, data);
+	    };
+	    Program.prototype.sendFloat2 = function (name, data) {
+	        this._glslSend.sendFloat2(name, data);
+	    };
+	    Program.prototype.sendFloat3 = function (name, data) {
+	        this._glslSend.sendFloat3(name, data);
+	    };
+	    Program.prototype.sendFloat4 = function (name, data) {
+	        this._glslSend.sendFloat4(name, data);
+	    };
+	    Program.prototype.sendVector2 = function (name, data) {
+	        this._glslSend.sendVector2(name, data);
+	    };
+	    Program.prototype.sendVector3 = function (name, data) {
+	        this._glslSend.sendVector3(name, data);
+	    };
+	    Program.prototype.sendVector4 = function (name, data) {
+	        this._glslSend.sendVector4(name, data);
+	    };
+	    Program.prototype.sendNum1 = function (name, data) {
+	        this._glslSend.sendNum1(name, data);
+	    };
+	    Program.prototype.sendMatrix4 = function (name, data) {
+	        this._glslSend.sendMatrix4(name, data);
+	    };
+	    Program.prototype.sendMatrix4Array = function (name, data) {
+	        this._glslSend.sendMatrix4Array(name, data);
+	    };
+	    Program.prototype.initProgramWithShader = function (shader) {
+	        var gl = exports.Device.getInstance().gl;
+	        var program = gl.createProgram();
+	        var vshader = this._loadShader(gl, gl.VERTEX_SHADER, shader.VSource);
+	        var fshader = this._loadShader(gl, gl.FRAGMENT_SHADER, shader.FSource);
+	        if (!vshader || !fshader) {
+	            return;
+	        }
+	        gl.attachShader(program, vshader);
+	        gl.attachShader(program, fshader);
+	        gl.linkProgram(program);
+	        var linked = gl.getProgramParameter(program, gl.LINK_STATUS);
+	        if (!linked) {
+	            var err = gl.getProgramInfoLog(program);
+	            console.log("faild to link _program:" + err);
+	            gl.deleteProgram(program);
+	            gl.deleteShader(vshader);
+	            gl.deleteShader(vshader);
+	            return;
+	        }
+	        if (!program)
+	            console.log("program error");
+	        this.glProgram = program;
+	    };
+	    Program.prototype._loadShader = function (gl, type, value) {
+	        var shader = gl.createShader(type);
+	        if (shader == null) {
+	            console.log("unable to create shader");
+	            return;
+	        }
+	        gl.shaderSource(shader, value);
+	        gl.compileShader(shader);
+	        var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
+	        if (!compiled) {
+	            var error = gl.getShaderInfoLog(shader);
+	            console.log("faild to compile shader:" + error);
+	            gl.deleteShader(shader);
+	            return;
+	        }
+	        return shader;
+	    };
+	    Program.prototype._getGl = function () {
+	        return exports.Device.getInstance().gl;
+	    };
+	    return Program;
+	}(Entity));
+
+	var VariableLib = (function () {
+	    function VariableLib() {
+	    }
+	    return VariableLib;
+	}());
+	VariableLib.a_Position = {
+	    type: exports.EVariableType.FLOAT_3,
+	    buffer: exports.EBufferDataType.VERTICE
+	};
+	VariableLib.a_Color = {
+	    type: exports.EVariableType.FLOAT_3,
+	    buffer: exports.EBufferDataType.COLOR
+	};
+	VariableLib.u_mMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	    buffer: "mMatrix"
+	};
+	VariableLib.u_vMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	    buffer: "vMatrix"
+	};
+	VariableLib.u_pMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	    buffer: "pMatrix"
+	};
+	VariableLib.u_mvpMatrix = {
+	    type: exports.EVariableType.FLOAT_MAT4,
+	};
+
+	var Shader = (function (_super) {
+	    __extends(Shader, _super);
+	    function Shader() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.program = Program.create();
+	        _this._shaderLib = _this.createShaderLib();
+	        return _this;
+	    }
+	    Object.defineProperty(Shader.prototype, "VSource", {
+	        get: function () {
+	            return this._shaderLib.VSource;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Object.defineProperty(Shader.prototype, "FSource", {
+	        get: function () {
+	            return this._shaderLib.FSource;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Shader.prototype.init = function () {
+	        this.initProgram();
+	        this._shaderLib.init();
+	    };
+	    Shader.prototype.sendAttributeBuffer = function (name, data) {
+	        this.program.sendAttributeBuffer(name, data);
+	    };
+	    Shader.prototype.sendUniformData = function (name, data) {
+	        this.program.sendUniformData(name, VariableLib[name].type, data);
+	    };
+	    return Shader;
+	}(Component));
+
+	var ShaderLib = (function () {
+	    function ShaderLib() {
+	        this._attributes = [];
+	        this._uniforms = [];
+	    }
+	    ShaderLib.prototype.getAttributes = function () {
+	        return this._attributes;
+	    };
+	    ShaderLib.prototype.getUniforms = function () {
+	        return this._uniforms;
+	    };
+	    
+	    return ShaderLib;
+	}());
+
+	var BasicShaderLib = (function (_super) {
+	    __extends(BasicShaderLib, _super);
+	    function BasicShaderLib() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.VSource = "attribute vec4 a_Position;" +
+	            "attribute vec4 a_Color;" +
+	            "uniform mat4 u_mMatrix;" +
+	            "uniform mat4 u_vMatrix;" +
+	            "uniform mat4 u_pMatrix;" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
+	            "   v_Color = a_Color;" +
+	            "}";
+	        _this.FSource = "#ifdef GL_ES\n" +
+	            "precision mediump float;\n" +
+	            "#endif\n" +
+	            "varying vec4 v_Color;" +
+	            "void main(){" +
+	            "   gl_FragColor = v_Color;" +
+	            "}";
+	        return _this;
+	    }
+	    BasicShaderLib.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    BasicShaderLib.prototype.init = function () {
+	        this._attributes.push("a_Position");
+	        this._attributes.push("a_Color");
+	        this._uniforms.push("u_mMatrix");
+	        this._uniforms.push("u_vMatrix");
+	        this._uniforms.push("u_pMatrix");
+	    };
+	    return BasicShaderLib;
+	}(ShaderLib));
+
+	var BasicShader = (function (_super) {
+	    __extends(BasicShader, _super);
+	    function BasicShader() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    BasicShader.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    BasicShader.prototype.initProgram = function () {
+	        this.program.initProgramWithShader(this);
+	    };
+	    BasicShader.prototype.createShaderLib = function () {
+	        return BasicShaderLib.create();
+	    };
+	    BasicShader.prototype.update = function (cmd, material) {
+	        var _this = this;
+	        this.program.use();
+	        this._shaderLib.getAttributes().forEach(function (item) {
+	            console.log(item, cmd.buffers);
+	            var buffer = cmd.buffers.getChild(VariableLib[item].buffer);
+	            _this.sendAttributeBuffer(item, buffer);
+	        });
+	        this.program.sendAllBufferData();
+	        this._shaderLib.getUniforms().forEach(function (item) {
+	            _this.sendUniformData(item, cmd[VariableLib[item].buffer]);
+	        });
+	    };
+	    return BasicShader;
+	}(Shader));
+
+	var BasicMaterial = (function (_super) {
+	    __extends(BasicMaterial, _super);
+	    function BasicMaterial() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    BasicMaterial.create = function () {
+	        var obj = new this();
+	        obj.initWhenCreate();
+	        return obj;
+	    };
+	    BasicMaterial.prototype.getShader = function () {
+	        return BasicShader.create();
+	    };
+	    return BasicMaterial;
+	}(Material));
+
+	var PlaneGeometry = (function (_super) {
+	    __extends(PlaneGeometry, _super);
+	    function PlaneGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.width = 1;
+	        _this.height = 1;
+	        _this.widthSegments = 1;
+	        _this.heightSegments = 1;
+	        return _this;
+	    }
+	    PlaneGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    PlaneGeometry.prototype.computeData = function () {
+	        var width = this.width, height = this.height, widthSegments = this.widthSegments, heightSegments = this.heightSegments, x = null, y = null, z = null, u = null, v = null, i = null, j = null, vertices = [], texCoords = [], normals = [], color = [], indices = [];
+	        color = [
+	            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0
+	        ];
+	        indices = [0, 1, 2, 0, 2, 3];
+	        texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
+	        vertices = [
+	            1.0, 1.0, 0.0,
+	            -1.0, 1.0, 0.0,
+	            -1.0, -1.0, 0.0,
+	            1.0, -1.0, 0.0
+	        ];
+	        return {
+	            vertice: vertices,
+	            texCoord: texCoords,
+	            color: color
+	        };
+	    };
+	    return PlaneGeometry;
+	}(Geometry));
+
 	var Test = (function () {
 	    function Test() {
 	    }
@@ -3191,7 +3318,7 @@
 	        var gameobj = this.createTriangle();
 	        gameobj.transform.rotate(45, 1, 1, 0);
 	        gameobj.transform.translate(0.4, 0, 0);
-	        var object = this.createTriangle();
+	        var object = this.createPlane();
 	        object.transform.translate(-0.4, -0.2, 0);
 	        object.transform.rotate(30, 0, 0, 1);
 	        var director = exports.Director.getInstance();
@@ -3203,18 +3330,29 @@
 	    };
 	    Test.prototype.createTriangle = function () {
 	        var gameObject = GameObject.create();
+	        var material = BasicMaterial.create();
 	        var triangle = TriangleGeometry.create();
+	        triangle.material = material;
 	        gameObject.addComponent(triangle);
+	        return gameObject;
+	        gameObject.addComponent(MeshRenderer.create());
+	    };
+	    Test.prototype.createPlane = function () {
+	        var gameObject = GameObject.create();
+	        var material = BasicMaterial.create();
+	        var geometry = PlaneGeometry.create();
+	        geometry.material = material;
+	        gameObject.addComponent(geometry);
 	        gameObject.addComponent(MeshRenderer.create());
 	        return gameObject;
 	    };
 	    Test.prototype.createCamera = function () {
 	        var camera = GameObject.create(), view = exports.Device.getInstance().view, cameraComponent = PerspectiveCamera.create();
-	        cameraComponent.fovy = 45;
+	        cameraComponent.fovy = 30;
 	        cameraComponent.aspect = view.width / view.height;
 	        cameraComponent.near = 1;
 	        cameraComponent.far = 100;
-	        cameraComponent.translate(2, 1, 2);
+	        cameraComponent.translate(0, 0, -9);
 	        var cameraControll = CameraController.create(cameraComponent);
 	        camera.addComponent(cameraControll);
 	        return camera;
@@ -3284,55 +3422,6 @@
 	]);
 	PlaneData.indices = new Uint8Array([0, 1, 2, 0, 2, 3]);
 
-	var PlaneGeometry = (function (_super) {
-	    __extends(PlaneGeometry, _super);
-	    function PlaneGeometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.width = 1;
-	        _this.height = 1;
-	        return _this;
-	    }
-	    PlaneGeometry.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    PlaneGeometry.prototype.getShader = function () {
-	        return TriangleShader.create(this);
-	    };
-	    PlaneGeometry.prototype.computeData = function () {
-	        var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;
-	        vertice = [
-	            0.0, up, 0,
-	            left, down, 0,
-	            right, down, 0
-	        ];
-	        indice = [
-	            0, 1, 2
-	        ];
-	        texCoord = [
-	            0.5, 1.0,
-	            0.0, 0.0,
-	            1.0, 0.0
-	        ];
-	        normal = [
-	            0, 0, 1,
-	            0, 0, 1,
-	            0, 0, 1
-	        ];
-	        color = [
-	            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-	        ];
-	        return {
-	            vertice: vertice,
-	            texCoord: texCoord,
-	            color: color,
-	            normal: normal,
-	            indice: indice
-	        };
-	    };
-	    return PlaneGeometry;
-	}(Geometry));
-
 	var ThreeDTransform = (function (_super) {
 	    __extends(ThreeDTransform, _super);
 	    function ThreeDTransform() {
@@ -3356,14 +3445,18 @@
 	exports.Geometry = Geometry;
 	exports.PlaneGeometry = PlaneGeometry;
 	exports.TriangleGeometry = TriangleGeometry;
+	exports.BasicMaterial = BasicMaterial;
+	exports.Material = Material;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
 	exports.MeshRenderer = MeshRenderer;
 	exports.RendererComponent = RendererComponent;
 	exports.GLSLDataSender = GLSLDataSender;
 	exports.Program = Program;
+	exports.BasicShaderLib = BasicShaderLib;
+	exports.ShaderLib = ShaderLib;
+	exports.BasicShader = BasicShader;
 	exports.Shader = Shader;
-	exports.TriangleShader = TriangleShader;
 	exports.VariableLib = VariableLib;
 	exports.ThreeDTransform = ThreeDTransform;
 	exports.Transform = Transform;

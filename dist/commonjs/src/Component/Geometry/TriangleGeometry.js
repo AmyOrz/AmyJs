@@ -11,7 +11,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Geometry_1 = require("./Geometry");
-var TriangleShader_1 = require("../Render/Shader/shader/TriangleShader");
 var TriangleGeometry = (function (_super) {
     __extends(TriangleGeometry, _super);
     function TriangleGeometry() {
@@ -23,9 +22,6 @@ var TriangleGeometry = (function (_super) {
     TriangleGeometry.create = function () {
         var obj = new this();
         return obj;
-    };
-    TriangleGeometry.prototype.getShader = function () {
-        return TriangleShader_1.TriangleShader.create(this);
     };
     TriangleGeometry.prototype.computeData = function () {
         var width = this.width, height = this.height, left = -width / 2, right = width / 2, up = height / 2, down = -height / 2, vertice = null, texCoord = null, indice = null, color = null, normal = null;

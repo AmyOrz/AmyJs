@@ -118,7 +118,7 @@ export abstract class EntityObject extends Entity {
         return this._componentManager.getComponent<T>(componentClass);
     }
 
-    public hasComponent<T>(componentClass:any):boolean{
+    public hasComponent<T>(componentClass: any): boolean {
         return this._componentManager.hasComponent<T>(componentClass);
     }
 }
