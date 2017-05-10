@@ -112,6 +112,12 @@ var EntityObject = (function (_super) {
     EntityObject.prototype.hasComponent = function (componentClass) {
         return this._componentManager.hasComponent(componentClass);
     };
+    EntityObject.prototype.removeComponent = function (component) {
+        this._componentManager.removeComponent(component);
+    };
+    EntityObject.prototype.removeAllComponent = function () {
+        this._componentManager.removeAllComponent();
+    };
     return EntityObject;
 }(Entity_1.Entity));
 exports.EntityObject = EntityObject;

@@ -3,6 +3,7 @@ import { GeometryData } from "../Data/GeometryData";
 import { Hash } from "../../../../node_modules/wonder-commonlib/dist/commonjs/Hash";
 import { Buffer } from "../../Render/Buffer/Buffer";
 import { ArrayBuffer } from "../../Render/Buffer/ArrayBuffer";
+import { ElementBuffer } from "../../Render/Buffer/ElementBuffer";
 
 export class BufferContainer {
     public static create() {
@@ -59,6 +60,7 @@ export class BufferContainer {
         return this._bufferCache(type, buffer);
     }
 
+
     private _getNormalBuffer(type: any) {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.normal, 3);
 
@@ -66,12 +68,11 @@ export class BufferContainer {
     }
 
     private _getIndiceBuffer(type: any) {
+        var buffer: Buffer = ElementBuffer.create(this.geometryData.indice);
 
-        // var buffer: Buffer = ArrayBuffer.create(this.geometryData.indice, 3);
-
-        // return this._bufferCache(type,buffer);
-
+        return this._bufferCache(type, buffer);
     }
+
     private _getTexCoordBuffer(type: any): Buffer {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.texCoord, 3);
         return this._bufferCache(type, buffer);

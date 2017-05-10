@@ -7,7 +7,7 @@ import { Device } from "./core/device/Device";
 import { PerspectiveCamera } from "./Component/Camera/PerspectiveCamera";
 import { CameraController } from "./Component/Camera/Controll/CameraController";
 import { BasicMaterial } from "./Component/Material/BasicMaterial";
-import {PlaneGeometry} from "./Component/Geometry/PlaneGeometry";
+import { PlaneGeometry } from "./Component/Geometry/PlaneGeometry";
 
 export class Test {
 
@@ -18,7 +18,7 @@ export class Test {
         var gameobj = this.createTriangle();
 
         gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(0.4, 0, 0);
+        gameobj.transform.translate(0.4, 0, 0.2);
 
         var object = this.createPlane();
 
@@ -45,7 +45,7 @@ export class Test {
 
         gameObject.addComponent(triangle);
         gameObject.addComponent(MeshRenderer.create());
-        
+
         return gameObject;
 
     }

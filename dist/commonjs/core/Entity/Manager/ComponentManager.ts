@@ -55,7 +55,15 @@ export class ComponentManager {
         return res;
     }
 
+    public removeComponent(component:Component){
+        this._componentList.removeChild(component);
+    }
+
     public getRenderComponent() {
         return this._renderComponent;
+    }
+
+    public removeAllComponent(){
+        this._componentList.removeAllChildren();
     }
 }

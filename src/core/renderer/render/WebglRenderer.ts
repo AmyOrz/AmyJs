@@ -22,4 +22,7 @@ export class WebglRenderer extends Renderer {
     public addCommand(renderCmd: RenderCommand) {
         this._commandQueue.addChild(renderCmd);
     }
+    public hasCommand(){
+        return this._commandQueue.getCount() > 0;
+    }
 }

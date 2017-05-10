@@ -3,10 +3,10 @@ import { EDrawMode } from "./EDrawMode";
 import { ArrayBuffer } from "../../../Component/Render/Buffer/ArrayBuffer";
 import { BufferContainer } from "../../../Component/Geometry/BufferContainer/BufferContainer";
 import { Matrix4 } from "../../../Math/Matrix4";
-import { Shader } from "../../../Component/Render/Shader/shader/Shader";
 import { EntityObject } from "../../Entity/EntityObject";
 import { EBufferDataType } from "../../../Component/Geometry/BufferContainer/EBufferDataType";
 import { Material } from "../../../Component/Material/Material";
+import { ElementBuffer } from "../../../Component/Render/Buffer/ElementBuffer";
 
 export class RenderCommand {
     public static create() {
@@ -22,10 +22,8 @@ export class RenderCommand {
 
     public targetObject: EntityObject = null;
     public material: Material = null;
-    // public shader: Shader = null;
 
-
-    private _drawMode: EDrawMode = EDrawMode.TRIANGLE_FAN;
+    private _drawMode: EDrawMode = EDrawMode.TRIANGLES;
 
     public draw() {
         var startOffset: number = 0,
@@ -33,7 +31,13 @@ export class RenderCommand {
 
         this.material.update(this);
 
+        var elementBuffer: ElementBuffer = this.buffers.getChild(EBufferDataType.INDICE);
         var verticeBuffer: ArrayBuffer = this.buffers.getChild(EBufferDataType.VERTICE);
-        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
+
+        if (elementBuffer != void 0)
+            gl.drawElements(gl[this._drawMode], elementBuffer.count, gl[elementBuffer.type], 0);
+        else
+            gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
+
     }
 }

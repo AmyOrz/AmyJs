@@ -6,4 +6,5 @@ export declare class WebglRenderer extends Renderer {
     init(): void;
     render(): void;
     addCommand(renderCmd: RenderCommand): void;
+    hasCommand(): boolean;
 }

@@ -15,5 +15,7 @@ export declare class ComponentManager {
     addComponent(component: Component): void;
     getComponent<T>(componentClass: any): T;
     hasComponent<T>(componentClass: any): boolean;
+    removeComponent(component: Component): void;
     getRenderComponent(): MeshRenderer;
+    removeAllComponent(): void;
 }

@@ -32,7 +32,6 @@ var BasicShader = (function (_super) {
         var _this = this;
         this.program.use();
         this._shaderLib.getAttributes().forEach(function (item) {
-            console.log(item, cmd.buffers);
             var buffer = cmd.buffers.getChild(VariableLib_1.VariableLib[item].buffer);
             _this.sendAttributeBuffer(item, buffer);
         });

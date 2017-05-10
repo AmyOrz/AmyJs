@@ -14,22 +14,19 @@ var Geometry_1 = require("./Geometry");
 var PlaneGeometry = (function (_super) {
     __extends(PlaneGeometry, _super);
     function PlaneGeometry() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.width = 1;
-        _this.height = 1;
-        _this.widthSegments = 1;
-        _this.heightSegments = 1;
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     PlaneGeometry.create = function () {
         var obj = new this();
         return obj;
     };
     PlaneGeometry.prototype.computeData = function () {
-        var width = this.width, height = this.height, widthSegments = this.widthSegments, heightSegments = this.heightSegments, x = null, y = null, z = null, u = null, v = null, i = null, j = null, vertices = [], texCoords = [], normals = [], color = [], indices = [];
+        var vertices = [], texCoords = [], normals = [], color = [], indices = [];
         color = [
             1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0
         ];
+        indices = [0, 1, 2, 0, 2, 3];
+        texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
         vertices = [
             1.0, 1.0, 0.0,
             -1.0, 1.0, 0.0,
@@ -39,7 +36,8 @@ var PlaneGeometry = (function (_super) {
         return {
             vertice: vertices,
             texCoord: texCoords,
-            color: color
+            color: color,
+            indice: indices
         };
     };
     return PlaneGeometry;

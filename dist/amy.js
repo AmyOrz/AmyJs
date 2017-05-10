@@ -1186,6 +1186,45 @@
 	    return ArrayBuffer;
 	}(Buffer));
 
+	var ElementBuffer = (function (_super) {
+	    __extends(ElementBuffer, _super);
+	    function ElementBuffer() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.type = null;
+	        _this.count = null;
+	        _this.usage = null;
+	        _this.data = null;
+	        return _this;
+	    }
+	    ElementBuffer.create = function (data, type, useage) {
+	        if (type === void 0) { type = exports.EBufferType.UNSIGNED_BYTE; }
+	        if (useage === void 0) { useage = exports.EBufferUseage.STATIC_DRAW; }
+	        var obj = new this();
+	        obj.initWhenCreate(data, type, useage);
+	        return obj;
+	    };
+	    ElementBuffer.prototype.initWhenCreate = function (data, type, useage) {
+	        if (data == void 0)
+	            return null;
+	        var gl = exports.Device.getInstance().gl;
+	        var typeData = new Uint8Array(data);
+	        var buffer = gl.createBuffer();
+	        if (!buffer)
+	            console.log("element Buffer create buffer error");
+	        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+	        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, typeData, gl[useage]);
+	        this._saveData(typeData, type, useage);
+	        this.buffer = buffer;
+	    };
+	    ElementBuffer.prototype._saveData = function (data, type, useage) {
+	        this.data = data;
+	        this.type = type;
+	        this.usage = useage;
+	        this.count = data.length;
+	    };
+	    return ElementBuffer;
+	}(Buffer));
+
 	var BufferContainer = (function () {
 	    function BufferContainer() {
 	        this.geometryData = null;
@@ -1245,6 +1284,8 @@
 	        return this._bufferCache(type, buffer);
 	    };
 	    BufferContainer.prototype._getIndiceBuffer = function (type) {
+	        var buffer = ElementBuffer.create(this.geometryData.indice);
+	        return this._bufferCache(type, buffer);
 	    };
 	    BufferContainer.prototype._getTexCoordBuffer = function (type) {
 	        var buffer = ArrayBuffer.create(this.geometryData.texCoord, 3);
@@ -1632,6 +1673,9 @@
 	    };
 	    WebglRenderer.prototype.addCommand = function (renderCmd) {
 	        this._commandQueue.addChild(renderCmd);
+	    };
+	    WebglRenderer.prototype.hasCommand = function () {
+	        return this._commandQueue.getCount() > 0;
 	    };
 	    return WebglRenderer;
 	}(Renderer));
@@ -2382,7 +2426,7 @@
 	        this.pMatrix = null;
 	        this.targetObject = null;
 	        this.material = null;
-	        this._drawMode = exports.EDrawMode.TRIANGLE_FAN;
+	        this._drawMode = exports.EDrawMode.TRIANGLES;
 	    }
 	    RenderCommand.create = function () {
 	        var obj = new this();
@@ -2391,8 +2435,12 @@
 	    RenderCommand.prototype.draw = function () {
 	        var startOffset = 0, gl = exports.Device.getInstance().gl;
 	        this.material.update(this);
+	        var elementBuffer = this.buffers.getChild(exports.EBufferDataType.INDICE);
 	        var verticeBuffer = this.buffers.getChild(exports.EBufferDataType.VERTICE);
-	        gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
+	        if (elementBuffer != void 0)
+	            gl.drawElements(gl[this._drawMode], elementBuffer.count, gl[elementBuffer.type], 0);
+	        else
+	            gl.drawArrays(gl[this._drawMode], startOffset, verticeBuffer.count);
 	    };
 	    return RenderCommand;
 	}());
@@ -2501,8 +2549,14 @@
 	        });
 	        return res;
 	    };
+	    ComponentManager.prototype.removeComponent = function (component) {
+	        this._componentList.removeChild(component);
+	    };
 	    ComponentManager.prototype.getRenderComponent = function () {
 	        return this._renderComponent;
+	    };
+	    ComponentManager.prototype.removeAllComponent = function () {
+	        this._componentList.removeAllChildren();
 	    };
 	    return ComponentManager;
 	}());
@@ -2605,6 +2659,12 @@
 	    };
 	    EntityObject.prototype.hasComponent = function (componentClass) {
 	        return this._componentManager.hasComponent(componentClass);
+	    };
+	    EntityObject.prototype.removeComponent = function (component) {
+	        this._componentManager.removeComponent(component);
+	    };
+	    EntityObject.prototype.removeAllComponent = function () {
+	        this._componentManager.removeAllComponent();
 	    };
 	    return EntityObject;
 	}(Entity));
@@ -3246,7 +3306,6 @@
 	        var _this = this;
 	        this.program.use();
 	        this._shaderLib.getAttributes().forEach(function (item) {
-	            console.log(item, cmd.buffers);
 	            var buffer = cmd.buffers.getChild(VariableLib[item].buffer);
 	            _this.sendAttributeBuffer(item, buffer);
 	        });
@@ -3277,19 +3336,14 @@
 	var PlaneGeometry = (function (_super) {
 	    __extends(PlaneGeometry, _super);
 	    function PlaneGeometry() {
-	        var _this = _super !== null && _super.apply(this, arguments) || this;
-	        _this.width = 1;
-	        _this.height = 1;
-	        _this.widthSegments = 1;
-	        _this.heightSegments = 1;
-	        return _this;
+	        return _super !== null && _super.apply(this, arguments) || this;
 	    }
 	    PlaneGeometry.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
 	    PlaneGeometry.prototype.computeData = function () {
-	        var width = this.width, height = this.height, widthSegments = this.widthSegments, heightSegments = this.heightSegments, x = null, y = null, z = null, u = null, v = null, i = null, j = null, vertices = [], texCoords = [], normals = [], color = [], indices = [];
+	        var vertices = [], texCoords = [], normals = [], color = [], indices = [];
 	        color = [
 	            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0
 	        ];
@@ -3304,7 +3358,8 @@
 	        return {
 	            vertice: vertices,
 	            texCoord: texCoords,
-	            color: color
+	            color: color,
+	            indice: indices
 	        };
 	    };
 	    return PlaneGeometry;
@@ -3317,7 +3372,7 @@
 	        Main.setCanvas("webgl").init();
 	        var gameobj = this.createTriangle();
 	        gameobj.transform.rotate(45, 1, 1, 0);
-	        gameobj.transform.translate(0.4, 0, 0);
+	        gameobj.transform.translate(0.4, 0, 0.2);
 	        var object = this.createPlane();
 	        object.transform.translate(-0.4, -0.2, 0);
 	        object.transform.rotate(30, 0, 0, 1);
@@ -3334,8 +3389,8 @@
 	        var triangle = TriangleGeometry.create();
 	        triangle.material = material;
 	        gameObject.addComponent(triangle);
-	        return gameObject;
 	        gameObject.addComponent(MeshRenderer.create());
+	        return gameObject;
 	    };
 	    Test.prototype.createPlane = function () {
 	        var gameObject = GameObject.create();
@@ -3449,6 +3504,7 @@
 	exports.Material = Material;
 	exports.ArrayBuffer = ArrayBuffer;
 	exports.Buffer = Buffer;
+	exports.ElementBuffer = ElementBuffer;
 	exports.MeshRenderer = MeshRenderer;
 	exports.RendererComponent = RendererComponent;
 	exports.GLSLDataSender = GLSLDataSender;

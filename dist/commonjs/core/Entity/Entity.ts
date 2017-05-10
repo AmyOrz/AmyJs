@@ -5,5 +5,4 @@ export abstract class Entity {
         Entity._count++;
     }
     public uid: number;
-
 }

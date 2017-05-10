@@ -45,8 +45,14 @@ var ComponentManager = (function () {
         });
         return res;
     };
+    ComponentManager.prototype.removeComponent = function (component) {
+        this._componentList.removeChild(component);
+    };
     ComponentManager.prototype.getRenderComponent = function () {
         return this._renderComponent;
+    };
+    ComponentManager.prototype.removeAllComponent = function () {
+        this._componentList.removeAllChildren();
     };
     return ComponentManager;
 }());

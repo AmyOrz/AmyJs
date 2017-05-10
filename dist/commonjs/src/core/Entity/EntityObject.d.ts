@@ -37,4 +37,6 @@ export declare abstract class EntityObject extends Entity {
     addComponent(component: Component): void;
     getComponent<T>(componentClass: any): T;
     hasComponent<T>(componentClass: any): boolean;
+    removeComponent(component: Component): void;
+    removeAllComponent(): void;
 }

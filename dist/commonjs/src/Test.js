@@ -17,7 +17,7 @@ var Test = (function () {
         Main_1.Main.setCanvas("webgl").init();
         var gameobj = this.createTriangle();
         gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(0.4, 0, 0);
+        gameobj.transform.translate(0.4, 0, 0.2);
         var object = this.createPlane();
         object.transform.translate(-0.4, -0.2, 0);
         object.transform.rotate(30, 0, 0, 1);

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var EBufferDataType_1 = require("./EBufferDataType");
 var Hash_1 = require("../../../../node_modules/wonder-commonlib/dist/commonjs/Hash");
 var ArrayBuffer_1 = require("../../Render/Buffer/ArrayBuffer");
+var ElementBuffer_1 = require("../../Render/Buffer/ElementBuffer");
 var BufferContainer = (function () {
     function BufferContainer() {
         this.geometryData = null;
@@ -62,6 +63,8 @@ var BufferContainer = (function () {
         return this._bufferCache(type, buffer);
     };
     BufferContainer.prototype._getIndiceBuffer = function (type) {
+        var buffer = ElementBuffer_1.ElementBuffer.create(this.geometryData.indice);
+        return this._bufferCache(type, buffer);
     };
     BufferContainer.prototype._getTexCoordBuffer = function (type) {
         var buffer = ArrayBuffer_1.ArrayBuffer.create(this.geometryData.texCoord, 3);

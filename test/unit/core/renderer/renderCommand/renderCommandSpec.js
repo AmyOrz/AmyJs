@@ -1,6 +1,6 @@
 describe("renderCommandSpec operation",function(){
     var sandbox,gl,device,pos = 100;
-    var renderCmd,shader,buffers,geometry;
+    var renderCmd,geometry,material;
     beforeEach(function () {
         sandbox = sinon.sandbox.create();
         device = amy.Device.getInstance();
@@ -11,20 +11,23 @@ describe("renderCommandSpec operation",function(){
 
         renderCmd = amy.RenderCommand.create();
         geometry = amy.TriangleGeometry.create();
+        material = amy.BasicMaterial.create();
+        geometry.material = material;
 
         geometry.init();
-        renderCmd.shader = geometry.shader;
+        renderCmd.material = geometry.material;
         renderCmd.buffers = geometry.bufferContainer;
         renderCmd.mMatrix = new amy.Matrix4();
+        renderCmd.vMatrix = new amy.Matrix4();
+        renderCmd.pMatrix = new amy.Matrix4();
     });
 
     afterEach(function () {
         sandbox.restore();
     });
 
-    it("draw method should call gl.drawArrays", function () {
+    it("draw方法判断是否存在elementBuffer，存在则调用drawElements，否则则调用drawArrays", function () {
         renderCmd.draw();
-
-        expect(gl.drawArrays).toCalledWith(gl.TRIANGLES,0,3);
+        expect(gl.drawElements).toCalledWith(gl.TRIANGLES,3,gl.UNSIGNED_BYTE,0);
     })
 });

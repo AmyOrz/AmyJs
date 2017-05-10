@@ -13,17 +13,17 @@ export class VariableLib {
 
     public static u_mMatrix = {
         type: EVariableType.FLOAT_MAT4,
-        buffer:"mMatrix"
+        buffer: "mMatrix"
     };
 
     public static u_vMatrix = {
         type: EVariableType.FLOAT_MAT4,
-        buffer:"vMatrix"
+        buffer: "vMatrix"
     };
 
     public static u_pMatrix = {
         type: EVariableType.FLOAT_MAT4,
-        buffer:"pMatrix"
+        buffer: "pMatrix"
     };
 
     public static u_mvpMatrix = {

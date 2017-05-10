@@ -34,6 +34,9 @@ var WebglRenderer = (function (_super) {
     WebglRenderer.prototype.addCommand = function (renderCmd) {
         this._commandQueue.addChild(renderCmd);
     };
+    WebglRenderer.prototype.hasCommand = function () {
+        return this._commandQueue.getCount() > 0;
+    };
     return WebglRenderer;
 }(Renderer_1.Renderer));
 exports.WebglRenderer = WebglRenderer;

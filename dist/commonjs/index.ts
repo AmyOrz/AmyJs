@@ -16,6 +16,7 @@ export { ArrayBuffer } from "./Component/Render/Buffer/ArrayBuffer";
 export { Buffer } from "./Component/Render/Buffer/Buffer";
 export { EBufferType } from "./Component/Render/Buffer/EBufferType";
 export { EBufferUseage } from "./Component/Render/Buffer/EBufferUseage";
+export { ElementBuffer } from "./Component/Render/Buffer/ElementBuffer";
 export { MeshRenderer } from "./Component/Render/MeshRender/MeshRenderer";
 export { RendererComponent } from "./Component/Render/MeshRender/RendererComponent";
 export { EVariableType } from "./Component/Render/Program/EVariableType";

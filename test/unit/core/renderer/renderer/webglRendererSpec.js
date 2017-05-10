@@ -20,7 +20,7 @@ describe("webglRenderer operation",function(){
     });
 
     it("addCommand method should add to commandQueue", function () {
-        expect(webglRenderer._commandQueue.getCount()).toEqual(2);
+        expect(webglRenderer.hasCommand()).toBeTruthy();
     });
 
     it("render should get all renderCmd execute draw",function () {
