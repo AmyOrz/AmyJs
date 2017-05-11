@@ -13,17 +13,11 @@ var format = wonderPackage.format;
 
 var config = require("./build/gulp_task/common/config");
 
-
-
-
 var tsFilePaths = config.tsFilePaths;
 var tsFileDir = config.tsFileDir;
 var distPath = config.distPath;
 var tsconfigFile = config.tsconfigFile;
 var indexFileDir = config.indexFileDir;
-
-
-
 
 require("./build/gulp_task/clean/clean");
 
