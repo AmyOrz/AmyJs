@@ -1,14 +1,19 @@
 import { EVariableType } from "../Program/EVariableType";
 import { EBufferDataType } from "../../Geometry/BufferContainer/EBufferDataType";
 export class VariableLib {
-    public static a_Position = {
+    public static a_position = {
         type: EVariableType.FLOAT_3,
         buffer: EBufferDataType.VERTICE
     }
 
-    public static a_Color = {
+    public static u_color = {
         type: EVariableType.FLOAT_3,
-        buffer: EBufferDataType.COLOR
+        buffer: "color"
+    }
+
+    public static u_a = {
+        type: EVariableType.FLOAT_1,
+        buffer: "opacity"
     }
 
     public static u_mMatrix = {

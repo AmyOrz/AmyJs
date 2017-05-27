@@ -22,9 +22,6 @@ var PlaneGeometry = (function (_super) {
     };
     PlaneGeometry.prototype.computeData = function () {
         var vertices = [], texCoords = [], normals = [], color = [], indices = [];
-        color = [
-            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0
-        ];
         indices = [0, 1, 2, 0, 2, 3];
         texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
         vertices = [
@@ -36,7 +33,6 @@ var PlaneGeometry = (function (_super) {
         return {
             vertice: vertices,
             texCoord: texCoords,
-            color: color,
             indice: indices
         };
     };

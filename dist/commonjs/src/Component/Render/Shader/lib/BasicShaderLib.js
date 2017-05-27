@@ -15,22 +15,20 @@ var BasicShaderLib = (function (_super) {
     __extends(BasicShaderLib, _super);
     function BasicShaderLib() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.VSource = "attribute vec4 a_Position;" +
-            "attribute vec4 a_Color;" +
+        _this.VSource = "attribute vec4 a_position;" +
             "uniform mat4 u_mMatrix;" +
             "uniform mat4 u_vMatrix;" +
             "uniform mat4 u_pMatrix;" +
-            "varying vec4 v_Color;" +
             "void main(){" +
-            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
-            "   v_Color = a_Color;" +
+            "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_position;" +
             "}";
         _this.FSource = "#ifdef GL_ES\n" +
             "precision mediump float;\n" +
             "#endif\n" +
-            "varying vec4 v_Color;" +
+            "uniform vec3 u_color;" +
+            "uniform float u_a;" +
             "void main(){" +
-            "   gl_FragColor = v_Color;" +
+            "   gl_FragColor = vec4(u_color,u_a);" +
             "}";
         return _this;
     }
@@ -39,8 +37,9 @@ var BasicShaderLib = (function (_super) {
         return obj;
     };
     BasicShaderLib.prototype.init = function () {
-        this._attributes.push("a_Position");
-        this._attributes.push("a_Color");
+        this._attributes.push("a_position");
+        this._uniforms.push("u_color");
+        this._uniforms.push("u_a");
         this._uniforms.push("u_mMatrix");
         this._uniforms.push("u_vMatrix");
         this._uniforms.push("u_pMatrix");

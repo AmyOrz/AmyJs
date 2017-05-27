@@ -8,17 +8,24 @@ import { PerspectiveCamera } from "./Component/Camera/PerspectiveCamera";
 import { CameraController } from "./Component/Camera/Controll/CameraController";
 import { BasicMaterial } from "./Component/Material/BasicMaterial";
 import { PlaneGeometry } from "./Component/Geometry/PlaneGeometry";
+import { ObjLoader } from "./until/ObjLoader";
+import { Color } from "./Math/Color";
+import { BoxGeometry } from "./Component/Geometry/BoxGeometry";
 
 export class Test {
 
     public testCanvas() {
+
+        ObjLoader.create("./build/cube.obj").parse()
+
         Main.setCanvas("webgl").init();
 
 
         var gameobj = this.createTriangle();
 
         gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(0.4, 0, 0.2);
+        gameobj.transform.translate(-1.4, 2, 0.2);
+
 
         var object = this.createPlane();
 
@@ -38,9 +45,10 @@ export class Test {
         var gameObject = GameObject.create();
 
         var material = BasicMaterial.create();
+        material.color = Color.create("#0000ff");
+        material.opacity = 0.5;
 
-
-        var triangle = TriangleGeometry.create();
+        var triangle = BoxGeometry.create();
         triangle.material = material;
 
         gameObject.addComponent(triangle);
@@ -53,7 +61,7 @@ export class Test {
         var gameObject = GameObject.create();
 
         var material = BasicMaterial.create();
-
+        material.color = Color.create("#ff0000");
 
         var geometry = PlaneGeometry.create();
         geometry.material = material;

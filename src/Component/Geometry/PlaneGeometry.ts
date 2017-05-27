@@ -14,9 +14,6 @@ export class PlaneGeometry extends Geometry {
             color = [],
             indices = [];
 
-        color = [
-            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0
-        ];
         indices = [0, 1, 2, 0, 2, 3];
 
         texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
@@ -31,7 +28,6 @@ export class PlaneGeometry extends Geometry {
             vertice: vertices,
             // faces: GeometryUtils.convertToFaces(indices, normals),
             texCoord: texCoords,
-            color: color,
             indice: indices
         };
     }

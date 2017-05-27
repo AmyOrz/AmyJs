@@ -29,13 +29,14 @@ export default {
             ],
             extensions: [".js", ".ts"]
         }),
-        // commonjs({
-        //     namedExports: {
-        //         "./node_modules/bowser/src/bowser.js": ["version", "chrome","msie", "firefox", "mobile"],
-        //         "./node_modules/wonder-expect.js/index.js": ["expect"]
-        //     },
-        //     extensions: [".js", ".ts"]
-        // })
+        commonjs({
+            namedExports: {
+                // "./node_modules/bowser/src/bowser.js": ["version", "chrome","msie", "firefox", "mobile"],
+                // "./node_modules/wonder-expect.js/index.js": ["expect"],
+                "./node_modules/rsvp/dist/rsvp.js": ["Promise"]
+            },
+            extensions: [".js", ".ts"]
+        })
     ],
     // banner:banner,
     targets: [
@@ -45,10 +46,10 @@ export default {
             moduleName: "amy",
             dest: "./dist/amy.js"
         }
-/*        {
-            sourceMap: true,
-            format: "es",
-            dest: "./dist/wd.module.js"
-        }*/
+        /*        {
+         sourceMap: true,
+         format: "es",
+         dest: "./dist/wd.module.js"
+         }*/
     ]
 };

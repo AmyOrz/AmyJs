@@ -14,6 +14,13 @@ export class RenderCommand {
 
         return obj;
     }
+    get color() {
+        return this.material.color.toArray();
+    }
+
+    get opacity() {
+        return this.material.opacity;
+    }
 
     public buffers: BufferContainer = null;
     public mMatrix: Matrix4 = null;

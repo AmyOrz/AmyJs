@@ -7,13 +7,17 @@ var VariableLib = (function () {
     }
     return VariableLib;
 }());
-VariableLib.a_Position = {
+VariableLib.a_position = {
     type: EVariableType_1.EVariableType.FLOAT_3,
     buffer: EBufferDataType_1.EBufferDataType.VERTICE
 };
-VariableLib.a_Color = {
+VariableLib.u_color = {
     type: EVariableType_1.EVariableType.FLOAT_3,
-    buffer: EBufferDataType_1.EBufferDataType.COLOR
+    buffer: "color"
+};
+VariableLib.u_a = {
+    type: EVariableType_1.EVariableType.FLOAT_1,
+    buffer: "opacity"
 };
 VariableLib.u_mMatrix = {
     type: EVariableType_1.EVariableType.FLOAT_MAT4,

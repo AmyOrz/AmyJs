@@ -55,7 +55,7 @@ export class ComponentManager {
         return res;
     }
 
-    public removeComponent(component:Component){
+    public removeComponent(component: Component) {
         this._componentList.removeChild(component);
     }
 
@@ -63,7 +63,7 @@ export class ComponentManager {
         return this._renderComponent;
     }
 
-    public removeAllComponent(){
+    public removeAllComponent() {
         this._componentList.removeAllChildren();
     }
 }

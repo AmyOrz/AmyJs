@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Main_1 = require("./core/Main");
-var TriangleGeometry_1 = require("./Component/Geometry/TriangleGeometry");
 var Director_1 = require("./core/Director");
 var GameObject_1 = require("./core/Entity/GameObject");
 var MeshRenderer_1 = require("./Component/Render/MeshRender/MeshRenderer");
@@ -10,14 +9,18 @@ var PerspectiveCamera_1 = require("./Component/Camera/PerspectiveCamera");
 var CameraController_1 = require("./Component/Camera/Controll/CameraController");
 var BasicMaterial_1 = require("./Component/Material/BasicMaterial");
 var PlaneGeometry_1 = require("./Component/Geometry/PlaneGeometry");
+var ObjLoader_1 = require("./until/ObjLoader");
+var Color_1 = require("./Math/Color");
+var BoxGeometry_1 = require("./Component/Geometry/BoxGeometry");
 var Test = (function () {
     function Test() {
     }
     Test.prototype.testCanvas = function () {
+        ObjLoader_1.ObjLoader.create("./build/cube.obj").parse();
         Main_1.Main.setCanvas("webgl").init();
         var gameobj = this.createTriangle();
         gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(0.4, 0, 0.2);
+        gameobj.transform.translate(-1.4, 2, 0.2);
         var object = this.createPlane();
         object.transform.translate(-0.4, -0.2, 0);
         object.transform.rotate(30, 0, 0, 1);
@@ -31,7 +34,9 @@ var Test = (function () {
     Test.prototype.createTriangle = function () {
         var gameObject = GameObject_1.GameObject.create();
         var material = BasicMaterial_1.BasicMaterial.create();
-        var triangle = TriangleGeometry_1.TriangleGeometry.create();
+        material.color = Color_1.Color.create("#0000ff");
+        material.opacity = 0.5;
+        var triangle = BoxGeometry_1.BoxGeometry.create();
         triangle.material = material;
         gameObject.addComponent(triangle);
         gameObject.addComponent(MeshRenderer_1.MeshRenderer.create());
@@ -40,6 +45,7 @@ var Test = (function () {
     Test.prototype.createPlane = function () {
         var gameObject = GameObject_1.GameObject.create();
         var material = BasicMaterial_1.BasicMaterial.create();
+        material.color = Color_1.Color.create("#ff0000");
         var geometry = PlaneGeometry_1.PlaneGeometry.create();
         geometry.material = material;
         gameObject.addComponent(geometry);

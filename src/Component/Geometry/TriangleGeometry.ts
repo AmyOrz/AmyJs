@@ -43,13 +43,9 @@ export class TriangleGeometry extends Geometry {
             0, 0, 1,
             0, 0, 1
         ];
-        color = [
-            1.0, 0.5, 0.4, 0.0, 0.7, 0.8, 0.0, 1.0, 0.5
-        ];
         return {
             vertice: vertice,
             texCoord: texCoord,
-            color: color,
             normal: normal,
             indice: indice
         };

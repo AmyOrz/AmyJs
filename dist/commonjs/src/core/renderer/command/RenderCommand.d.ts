@@ -4,6 +4,8 @@ import { EntityObject } from "../../Entity/EntityObject";
 import { Material } from "../../../Component/Material/Material";
 export declare class RenderCommand {
     static create(): RenderCommand;
+    readonly color: number[];
+    readonly opacity: number;
     buffers: BufferContainer;
     mMatrix: Matrix4;
     vMatrix: Matrix4;

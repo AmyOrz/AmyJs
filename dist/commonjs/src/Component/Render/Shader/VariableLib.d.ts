@@ -1,13 +1,17 @@
 import { EVariableType } from "../Program/EVariableType";
 import { EBufferDataType } from "../../Geometry/BufferContainer/EBufferDataType";
 export declare class VariableLib {
-    static a_Position: {
+    static a_position: {
         type: EVariableType;
         buffer: EBufferDataType;
     };
-    static a_Color: {
+    static u_color: {
         type: EVariableType;
-        buffer: EBufferDataType;
+        buffer: string;
+    };
+    static u_a: {
+        type: EVariableType;
+        buffer: string;
     };
     static u_mMatrix: {
         type: EVariableType;

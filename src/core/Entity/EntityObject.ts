@@ -122,11 +122,11 @@ export abstract class EntityObject extends Entity {
         return this._componentManager.hasComponent<T>(componentClass);
     }
 
-    public removeComponent(component:Component){
+    public removeComponent(component: Component) {
         this._componentManager.removeComponent(component);
     }
 
-    public removeAllComponent(){
+    public removeAllComponent() {
         this._componentManager.removeAllComponent();
     }
 }

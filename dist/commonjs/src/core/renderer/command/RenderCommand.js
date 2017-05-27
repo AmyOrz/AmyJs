@@ -17,6 +17,20 @@ var RenderCommand = (function () {
         var obj = new this();
         return obj;
     };
+    Object.defineProperty(RenderCommand.prototype, "color", {
+        get: function () {
+            return this.material.color.toArray();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RenderCommand.prototype, "opacity", {
+        get: function () {
+            return this.material.opacity;
+        },
+        enumerable: true,
+        configurable: true
+    });
     RenderCommand.prototype.draw = function () {
         var startOffset = 0, gl = Device_1.Device.getInstance().gl;
         this.material.update(this);

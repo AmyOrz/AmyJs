@@ -27,6 +27,7 @@
     "wonder-tool-generate_es2015_index": "^0.1.2"
   },
   "dependencies": {
+    "rsvp": "^3.5.0",
     "wonder-frp": "^0.1.16"
   }
 }

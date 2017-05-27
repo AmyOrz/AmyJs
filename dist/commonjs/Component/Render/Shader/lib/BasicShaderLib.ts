@@ -7,29 +7,29 @@ export class BasicShaderLib extends ShaderLib {
     }
 
     public VSource: string =
-    "attribute vec4 a_Position;" +
-    "attribute vec4 a_Color;" +
+    "attribute vec4 a_position;" +
     "uniform mat4 u_mMatrix;" +
     "uniform mat4 u_vMatrix;" +
     "uniform mat4 u_pMatrix;" +
-    "varying vec4 v_Color;" +
     "void main(){" +
-    "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_Position;" +
-    "   v_Color = a_Color;" +
+    "   gl_Position = u_pMatrix * u_vMatrix * u_mMatrix * a_position;" +
     "}";
     public FSource: string =
     "#ifdef GL_ES\n" +
     "precision mediump float;\n" +
     "#endif\n" +
-    "varying vec4 v_Color;" +
+    "uniform vec3 u_color;" +
+    "uniform float u_a;" +
     "void main(){" +
-    "   gl_FragColor = v_Color;" +
+    "   gl_FragColor = vec4(u_color,u_a);" +
     "}";
 
-    public init() {
-        this._attributes.push("a_Position");
-        this._attributes.push("a_Color");
 
+    public init() {
+        this._attributes.push("a_position");
+
+        this._uniforms.push("u_color");
+        this._uniforms.push("u_a");
         this._uniforms.push("u_mMatrix");
         this._uniforms.push("u_vMatrix");
         this._uniforms.push("u_pMatrix");
