@@ -7,6 +7,7 @@ export { BufferContainer } from "./Component/Geometry/BufferContainer/BufferCont
 export { EBufferDataType } from "./Component/Geometry/BufferContainer/EBufferDataType";
 export { GeometryData } from "./Component/Geometry/Data/GeometryData";
 export { Geometry } from "./Component/Geometry/Geometry";
+export { ModelGeometry } from "./Component/Geometry/ModelGeometry";
 export { PlaneGeometry } from "./Component/Geometry/PlaneGeometry";
 export { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
 export { BasicMaterial } from "./Component/Material/BasicMaterial";

@@ -28,7 +28,9 @@ var ElementBuffer = (function (_super) {
         if (type === void 0) { type = EBufferType_1.EBufferType.UNSIGNED_BYTE; }
         if (useage === void 0) { useage = EBufferUseage_1.EBufferUseage.STATIC_DRAW; }
         var obj = new this();
-        obj.initWhenCreate(data, type, useage);
+        var result = obj.initWhenCreate(data, type, useage);
+        if (result == void 0)
+            return null;
         return obj;
     };
     ElementBuffer.prototype.initWhenCreate = function (data, type, useage) {

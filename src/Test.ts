@@ -1,4 +1,4 @@
-import { Main } from "./core/Main";
+import { Main } from "./core/Main";;
 import { TriangleGeometry } from "./Component/Geometry/TriangleGeometry";
 import { Director } from "./core/Director";
 import { GameObject } from "./core/Entity/GameObject";
@@ -7,16 +7,21 @@ import { Device } from "./core/device/Device";
 import { PerspectiveCamera } from "./Component/Camera/PerspectiveCamera";
 import { CameraController } from "./Component/Camera/Controll/CameraController";
 import { BasicMaterial } from "./Component/Material/BasicMaterial";
-import { PlaneGeometry } from "./Component/Geometry/PlaneGeometry";
-import { ObjLoader } from "./until/ObjLoader";
 import { Color } from "./Math/Color";
 import { BoxGeometry } from "./Component/Geometry/BoxGeometry";
+import {Loader} from "./until/Loader";
 
 export class Test {
 
-    public testCanvas() {
+    public init() {
 
-        ObjLoader.create("./build/cube.obj").parse()
+        Loader.of().convert("./build/cube.obj").subscribe((val)=>{
+            console.log(val)
+        });
+    }
+
+    public testCanvas(models) {
+
 
         Main.setCanvas("webgl").init();
 
@@ -27,15 +32,15 @@ export class Test {
         gameobj.transform.translate(-1.4, 2, 0.2);
 
 
-        var object = this.createPlane();
+        var object = this.createPlane(models[0]);
 
         object.transform.translate(-0.4, -0.2, 0);
-        object.transform.rotate(30, 0, 0, 1);
+        object.transform.rotate(30, 0, 1, 1);
 
 
         var director = Director.getInstance();
         director.renderer.setClearColor(0, 0, 0, 1);
-        director.scene.addChild(gameobj);
+        // director.scene.addChild(gameobj);
         director.scene.addChild(object);
         director.scene.addChild(this.createCamera());
 
@@ -57,13 +62,13 @@ export class Test {
         return gameObject;
 
     }
-    private createPlane() {
+    private createPlane(model) {
         var gameObject = GameObject.create();
 
         var material = BasicMaterial.create();
         material.color = Color.create("#ff0000");
 
-        var geometry = PlaneGeometry.create();
+        var geometry = model;
         geometry.material = material;
 
         gameObject.addComponent(geometry);
@@ -92,5 +97,5 @@ export class Test {
     }
 }
 var a = new Test();
-a.testCanvas();
+a.init();
 

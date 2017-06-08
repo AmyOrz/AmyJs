@@ -1,6 +1,7 @@
 export declare class Test {
-    testCanvas(): void;
+    init(): void;
+    testCanvas(models: any): void;
     private createTriangle();
-    private createPlane();
+    private createPlane(model);
     private createCamera();
 }

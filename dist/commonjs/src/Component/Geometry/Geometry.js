@@ -36,6 +36,7 @@ var Geometry = (function (_super) {
         this.material.init();
     };
     Geometry.prototype.createGeometryData = function (computeData) {
+        console.log(computeData);
         var vertice = computeData.vertice, color = computeData.color, texCoord = computeData.texCoord, normal = computeData.normal, indice = computeData.indice;
         var geometryData = GeometryData_1.GeometryData.create();
         geometryData.vertice = vertice;

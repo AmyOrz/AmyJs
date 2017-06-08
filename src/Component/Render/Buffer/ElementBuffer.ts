@@ -5,7 +5,8 @@ import { Device } from "../../../core/device/Device";
 export class ElementBuffer extends Buffer {
     public static create(data: number[], type: EBufferType = EBufferType.UNSIGNED_BYTE, useage: EBufferUseage = EBufferUseage.STATIC_DRAW) {
         var obj = new this();
-        obj.initWhenCreate(data, type, useage);
+        var result = obj.initWhenCreate(data, type, useage);
+        if(result == void 0)return null;
 
         return obj;
     }

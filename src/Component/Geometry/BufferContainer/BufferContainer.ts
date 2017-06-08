@@ -60,7 +60,6 @@ export class BufferContainer {
         return this._bufferCache(type, buffer);
     }
 
-
     private _getNormalBuffer(type: any) {
         var buffer: Buffer = ArrayBuffer.create(this.geometryData.normal, 3);
 
@@ -69,7 +68,6 @@ export class BufferContainer {
 
     private _getIndiceBuffer(type: any) {
         var buffer: Buffer = ElementBuffer.create(this.geometryData.indice);
-
         return this._bufferCache(type, buffer);
     }
 

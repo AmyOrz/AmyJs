@@ -1620,7 +1620,9 @@
 	        if (type === void 0) { type = exports.EBufferType.UNSIGNED_BYTE; }
 	        if (useage === void 0) { useage = exports.EBufferUseage.STATIC_DRAW; }
 	        var obj = new this();
-	        obj.initWhenCreate(data, type, useage);
+	        var result = obj.initWhenCreate(data, type, useage);
+	        if (result == void 0)
+	            return null;
 	        return obj;
 	    };
 	    ElementBuffer.prototype.initWhenCreate = function (data, type, useage) {
@@ -1746,6 +1748,7 @@
 	        this.material.init();
 	    };
 	    Geometry.prototype.createGeometryData = function (computeData) {
+	        console.log(computeData);
 	        var vertice = computeData.vertice, color = computeData.color, texCoord = computeData.texCoord, normal = computeData.normal, indice = computeData.indice;
 	        var geometryData = GeometryData.create();
 	        geometryData.vertice = vertice;
@@ -3445,33 +3448,1803 @@
 	    return BasicMaterial;
 	}(Material));
 
-	var PlaneGeometry = (function (_super) {
-	    __extends(PlaneGeometry, _super);
-	    function PlaneGeometry() {
+	var BoxGeometry = (function (_super) {
+	    __extends(BoxGeometry, _super);
+	    function BoxGeometry() {
 	        return _super !== null && _super.apply(this, arguments) || this;
 	    }
-	    PlaneGeometry.create = function () {
+	    BoxGeometry.create = function () {
 	        var obj = new this();
 	        return obj;
 	    };
-	    PlaneGeometry.prototype.computeData = function () {
-	        var vertices = [], texCoords = [], normals = [], color = [], indices = [];
-	        indices = [0, 1, 2, 0, 2, 3];
-	        texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
+	    BoxGeometry.prototype.computeData = function () {
+	        var vertices = [], texCoords = [], normals = [], indices = [];
+	        normals = [
+	            0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+	            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+	            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	            -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
+	            0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+	            0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
+	        ];
+	        indices = [
+	            0, 1, 2, 0, 2, 3,
+	            4, 5, 6, 4, 6, 7,
+	            8, 9, 10, 8, 10, 11,
+	            12, 13, 14, 12, 14, 15,
+	            16, 17, 18, 16, 18, 19,
+	            20, 21, 22, 20, 22, 23
+	        ];
+	        texCoords = [
+	            1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
+	            1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
+	            1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+	            0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
+	            0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
+	        ];
 	        vertices = [
-	            1.0, 1.0, 0.0,
-	            -1.0, 1.0, 0.0,
-	            -1.0, -1.0, 0.0,
-	            1.0, -1.0, 0.0
+	            1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
+	            1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
+	            1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
+	            -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
+	            -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
+	            1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
 	        ];
 	        return {
 	            vertice: vertices,
 	            texCoord: texCoords,
-	            indice: indices
+	            indice: indices,
+	            normal: normals
 	        };
 	    };
-	    return PlaneGeometry;
+	    return BoxGeometry;
 	}(Geometry));
+
+	var root$1;
+	if (JudgeUtils.isNodeJs() && typeof global != "undefined") {
+	    root$1 = global;
+	}
+	else if (typeof window != "undefined") {
+	    root$1 = window;
+	}
+	else if (typeof self != "undefined") {
+	    root$1 = self;
+	}
+	else {
+	    Log$1.error("no avaliable root!");
+	}
+
+	var Log$1 = (function () {
+	    function Log() {
+	    }
+	    Log.log = function () {
+	        var messages = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            messages[_i] = arguments[_i];
+	        }
+	        if (!this._exec("log", messages)) {
+	            root$1.alert(messages.join(","));
+	        }
+	        this._exec("trace", messages);
+	    };
+	    Log.assert = function (cond) {
+	        var messages = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            messages[_i - 1] = arguments[_i];
+	        }
+	        if (cond) {
+	            if (!this._exec("assert", arguments, 1)) {
+	                this.log.apply(this, Array.prototype.slice.call(arguments, 1));
+	            }
+	        }
+	    };
+	    Log.error = function (cond) {
+	        var message = [];
+	        for (var _i = 1; _i < arguments.length; _i++) {
+	            message[_i - 1] = arguments[_i];
+	        }
+	        if (cond) {
+	            throw new Error(Array.prototype.slice.call(arguments, 1).join("\n"));
+	        }
+	    };
+	    Log.warn = function () {
+	        var message = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            message[_i] = arguments[_i];
+	        }
+	        var result = this._exec("warn", arguments);
+	        if (!result) {
+	            this.log.apply(this, arguments);
+	        }
+	        else {
+	            this._exec("trace", ["warn trace"]);
+	        }
+	    };
+	    Log._exec = function (consoleMethod, args, sliceBegin) {
+	        if (sliceBegin === void 0) { sliceBegin = 0; }
+	        if (root$1.console && root$1.console[consoleMethod]) {
+	            root$1.console[consoleMethod].apply(root$1.console, Array.prototype.slice.call(args, sliceBegin));
+	            return true;
+	        }
+	        return false;
+	    };
+	    return Log;
+	}());
+	Log$1.info = {
+	    INVALID_PARAM: "invalid parameter",
+	    helperFunc: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var result = "";
+	        args.forEach(function (val) {
+	            result += String(val) + " ";
+	        });
+	        return result.slice(0, -1);
+	    },
+	    assertion: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        if (args.length === 2) {
+	            return this.helperFunc(args[0], args[1]);
+	        }
+	        else if (args.length === 3) {
+	            return this.helperFunc(args[1], args[0], args[2]);
+	        }
+	        else {
+	            throw new Error("args.length must <= 3");
+	        }
+	    },
+	    FUNC_INVALID: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("invalid");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_BE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must be");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_NOT_BE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must not be");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SHOULD: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("should");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SHOULD_NOT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("should not");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_SUPPORT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("support");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_NOT_SUPPORT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("not support");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_DEFINE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must define");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_MUST_NOT_DEFINE: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("must not define");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_UNKNOW: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("unknow");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_EXPECT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("expect");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_UNEXPECT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("unexpect");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_EXIST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("exist");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_NOT_EXIST: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("not exist");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_ONLY: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("only");
+	        return this.assertion.apply(this, args);
+	    },
+	    FUNC_CAN_NOT: function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        args.unshift("can't");
+	        return this.assertion.apply(this, args);
+	    }
+	};
+
+	var Entity$1 = (function () {
+	    function Entity(uidPre) {
+	        this._uid = null;
+	        this._uid = uidPre + String(Entity.UID++);
+	    }
+	    Object.defineProperty(Entity.prototype, "uid", {
+	        get: function () {
+	            return this._uid;
+	        },
+	        set: function (uid) {
+	            this._uid = uid;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    return Entity;
+	}());
+	Entity$1.UID = 1;
+
+	var ExtendUtils$1 = (function () {
+	    function ExtendUtils() {
+	    }
+	    ExtendUtils.extendDeep = function (parent, child, filter) {
+	        if (filter === void 0) { filter = function (val, i) { return true; }; }
+	        var i = null, len = 0, toStr = Object.prototype.toString, sArr = "[object Array]", sOb = "[object Object]", type = "", _child = null;
+	        if (toStr.call(parent) === sArr) {
+	            _child = child || [];
+	            for (i = 0, len = parent.length; i < len; i++) {
+	                var member = parent[i];
+	                if (!filter(member, i)) {
+	                    continue;
+	                }
+	                if (member.clone) {
+	                    _child[i] = member.clone();
+	                    continue;
+	                }
+	                type = toStr.call(member);
+	                if (type === sArr || type === sOb) {
+	                    _child[i] = type === sArr ? [] : {};
+	                    ExtendUtils.extendDeep(member, _child[i]);
+	                }
+	                else {
+	                    _child[i] = member;
+	                }
+	            }
+	        }
+	        else if (toStr.call(parent) === sOb) {
+	            _child = child || {};
+	            for (i in parent) {
+	                var member = parent[i];
+	                if (!filter(member, i)) {
+	                    continue;
+	                }
+	                if (member.clone) {
+	                    _child[i] = member.clone();
+	                    continue;
+	                }
+	                type = toStr.call(member);
+	                if (type === sArr || type === sOb) {
+	                    _child[i] = type === sArr ? [] : {};
+	                    ExtendUtils.extendDeep(member, _child[i]);
+	                }
+	                else {
+	                    _child[i] = member;
+	                }
+	            }
+	        }
+	        else {
+	            _child = parent;
+	        }
+	        return _child;
+	    };
+	    ExtendUtils.extend = function (destination, source) {
+	        var property = "";
+	        for (property in source) {
+	            destination[property] = source[property];
+	        }
+	        return destination;
+	    };
+	    ExtendUtils.copyPublicAttri = function (source) {
+	        var property = null, destination = {};
+	        this.extendDeep(source, destination, function (item, property) {
+	            return property.slice(0, 1) !== "_"
+	                && !JudgeUtils.isFunction(item);
+	        });
+	        return destination;
+	    };
+	    return ExtendUtils;
+	}());
+
+	var Collection$1 = (function (_super) {
+	    __extends(Collection, _super);
+	    function Collection(children) {
+	        if (children === void 0) { children = []; }
+	        var _this = _super.call(this) || this;
+	        _this.children = children;
+	        return _this;
+	    }
+	    Collection.create = function (children) {
+	        if (children === void 0) { children = []; }
+	        var obj = new this(children);
+	        return obj;
+	    };
+	    Collection.prototype.clone = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var target = null, isDeep = null;
+	        if (args.length === 0) {
+	            isDeep = false;
+	            target = Collection.create();
+	        }
+	        else if (args.length === 1) {
+	            if (JudgeUtils.isBoolean(args[0])) {
+	                target = Collection.create();
+	                isDeep = args[0];
+	            }
+	            else {
+	                target = args[0];
+	                isDeep = false;
+	            }
+	        }
+	        else {
+	            target = args[0];
+	            isDeep = args[1];
+	        }
+	        if (isDeep === true) {
+	            target.setChildren(ExtendUtils$1.extendDeep(this.children));
+	        }
+	        else {
+	            target.setChildren(ExtendUtils$1.extend([], this.children));
+	        }
+	        return target;
+	    };
+	    Collection.prototype.filter = function (func) {
+	        var children = this.children, result = [], value = null;
+	        for (var i = 0, len = children.length; i < len; i++) {
+	            value = children[i];
+	            if (func.call(children, value, i)) {
+	                result.push(value);
+	            }
+	        }
+	        return Collection.create(result);
+	    };
+	    Collection.prototype.findOne = function (func) {
+	        var scope = this.children, result = null;
+	        this.forEach(function (value, index) {
+	            if (!func.call(scope, value, index)) {
+	                return;
+	            }
+	            result = value;
+	            return $BREAK;
+	        });
+	        return result;
+	    };
+	    Collection.prototype.reverse = function () {
+	        return Collection.create(this.copyChildren().reverse());
+	    };
+	    Collection.prototype.removeChild = function (arg) {
+	        return Collection.create(this.removeChildHelper(arg));
+	    };
+	    Collection.prototype.sort = function (func, isSortSelf) {
+	        if (isSortSelf === void 0) { isSortSelf = false; }
+	        if (isSortSelf) {
+	            this.children.sort(func);
+	            return this;
+	        }
+	        return Collection.create(this.copyChildren().sort(func));
+	    };
+	    Collection.prototype.map = function (func) {
+	        var resultArr = [];
+	        this.forEach(function (e, index) {
+	            var result = func(e, index);
+	            if (result !== $REMOVE) {
+	                resultArr.push(result);
+	            }
+	        });
+	        return Collection.create(resultArr);
+	    };
+	    Collection.prototype.removeRepeatItems = function () {
+	        var noRepeatList = Collection.create();
+	        this.forEach(function (item) {
+	            if (noRepeatList.hasChild(item)) {
+	                return;
+	            }
+	            noRepeatList.addChild(item);
+	        });
+	        return noRepeatList;
+	    };
+	    Collection.prototype.hasRepeatItems = function () {
+	        var noRepeatList = Collection.create(), hasRepeat = false;
+	        this.forEach(function (item) {
+	            if (noRepeatList.hasChild(item)) {
+	                hasRepeat = true;
+	                return $BREAK;
+	            }
+	            noRepeatList.addChild(item);
+	        });
+	        return hasRepeat;
+	    };
+	    return Collection;
+	}(List));
+
+	var SubjectObserver = (function () {
+	    function SubjectObserver() {
+	        this.observers = Collection$1.create();
+	        this._disposable = null;
+	    }
+	    SubjectObserver.prototype.isEmpty = function () {
+	        return this.observers.getCount() === 0;
+	    };
+	    SubjectObserver.prototype.next = function (value) {
+	        this.observers.forEach(function (ob) {
+	            ob.next(value);
+	        });
+	    };
+	    SubjectObserver.prototype.error = function (error) {
+	        this.observers.forEach(function (ob) {
+	            ob.error(error);
+	        });
+	    };
+	    SubjectObserver.prototype.completed = function () {
+	        this.observers.forEach(function (ob) {
+	            ob.completed();
+	        });
+	    };
+	    SubjectObserver.prototype.addChild = function (observer) {
+	        this.observers.addChild(observer);
+	        observer.setDisposable(this._disposable);
+	    };
+	    SubjectObserver.prototype.removeChild = function (observer) {
+	        this.observers.removeChild(function (ob) {
+	            return JudgeUtils$2.isEqual(ob, observer);
+	        });
+	    };
+	    SubjectObserver.prototype.dispose = function () {
+	        this.observers.forEach(function (ob) {
+	            ob.dispose();
+	        });
+	        this.observers.removeAllChildren();
+	    };
+	    SubjectObserver.prototype.setDisposable = function (disposable) {
+	        this.observers.forEach(function (observer) {
+	            observer.setDisposable(disposable);
+	        });
+	        this._disposable = disposable;
+	    };
+	    return SubjectObserver;
+	}());
+
+	var Observer = (function (_super) {
+	    __extends(Observer, _super);
+	    function Observer() {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var _this = _super.call(this, "Observer") || this;
+	        _this._isDisposed = null;
+	        _this.onUserNext = null;
+	        _this.onUserError = null;
+	        _this.onUserCompleted = null;
+	        _this._isStop = false;
+	        _this._disposable = null;
+	        if (args.length === 1) {
+	            var observer_1 = args[0];
+	            _this.onUserNext = function (v) {
+	                observer_1.next(v);
+	            };
+	            _this.onUserError = function (e) {
+	                observer_1.error(e);
+	            };
+	            _this.onUserCompleted = function () {
+	                observer_1.completed();
+	            };
+	        }
+	        else {
+	            var onNext = args[0], onError = args[1], onCompleted = args[2];
+	            _this.onUserNext = onNext || function (v) { };
+	            _this.onUserError = onError || function (e) {
+	                throw e;
+	            };
+	            _this.onUserCompleted = onCompleted || function () { };
+	        }
+	        return _this;
+	    }
+	    Object.defineProperty(Observer.prototype, "isDisposed", {
+	        get: function () {
+	            return this._isDisposed;
+	        },
+	        set: function (isDisposed) {
+	            this._isDisposed = isDisposed;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Observer.prototype.next = function (value) {
+	        if (!this._isStop) {
+	            return this.onNext(value);
+	        }
+	    };
+	    Observer.prototype.error = function (error) {
+	        if (!this._isStop) {
+	            this._isStop = true;
+	            this.onError(error);
+	        }
+	    };
+	    Observer.prototype.completed = function () {
+	        if (!this._isStop) {
+	            this._isStop = true;
+	            this.onCompleted();
+	        }
+	    };
+	    Observer.prototype.dispose = function () {
+	        this._isStop = true;
+	        this._isDisposed = true;
+	        if (this._disposable) {
+	            this._disposable.dispose();
+	        }
+	    };
+	    Observer.prototype.setDisposable = function (disposable) {
+	        this._disposable = disposable;
+	    };
+	    return Observer;
+	}(Entity$1));
+
+	var Main$1 = (function () {
+	    function Main() {
+	    }
+	    return Main;
+	}());
+	Main$1.isTest = false;
+
+	function assert(cond, message) {
+	    if (message === void 0) { message = "contract error"; }
+	    Log$1.error(!cond, message);
+	}
+	function requireCheck(InFunc) {
+	    return function (target, name, descriptor) {
+	        var value = descriptor.value;
+	        descriptor.value = function () {
+	            var args = [];
+	            for (var _i = 0; _i < arguments.length; _i++) {
+	                args[_i] = arguments[_i];
+	            }
+	            if (Main$1.isTest) {
+	                InFunc.apply(this, args);
+	            }
+	            return value.apply(this, args);
+	        };
+	        return descriptor;
+	    };
+	}
+
+	var AutoDetachObserver = (function (_super) {
+	    __extends(AutoDetachObserver, _super);
+	    function AutoDetachObserver() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    AutoDetachObserver.create = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        if (args.length === 1) {
+	            return new this(args[0]);
+	        }
+	        else {
+	            return new this(args[0], args[1], args[2]);
+	        }
+	    };
+	    AutoDetachObserver.prototype.dispose = function () {
+	        if (this.isDisposed) {
+	            return;
+	        }
+	        _super.prototype.dispose.call(this);
+	    };
+	    AutoDetachObserver.prototype.onNext = function (value) {
+	        try {
+	            this.onUserNext(value);
+	        }
+	        catch (e) {
+	            this.onError(e);
+	        }
+	    };
+	    AutoDetachObserver.prototype.onError = function (error) {
+	        try {
+	            this.onUserError(error);
+	        }
+	        catch (e) {
+	            throw e;
+	        }
+	        finally {
+	            this.dispose();
+	        }
+	    };
+	    AutoDetachObserver.prototype.onCompleted = function () {
+	        try {
+	            this.onUserCompleted();
+	            this.dispose();
+	        }
+	        catch (e) {
+	            throw e;
+	        }
+	    };
+	    return AutoDetachObserver;
+	}(Observer));
+	__decorate([
+	    requireCheck(function () {
+	        if (this.isDisposed) {
+	            Log$1.warn("only can dispose once");
+	        }
+	    })
+	], AutoDetachObserver.prototype, "dispose", null);
+
+	var InnerSubscription = (function () {
+	    function InnerSubscription(subject, observer) {
+	        this._subject = null;
+	        this._observer = null;
+	        this._subject = subject;
+	        this._observer = observer;
+	    }
+	    InnerSubscription.create = function (subject, observer) {
+	        var obj = new this(subject, observer);
+	        return obj;
+	    };
+	    InnerSubscription.prototype.dispose = function () {
+	        this._subject.remove(this._observer);
+	        this._observer.dispose();
+	    };
+	    return InnerSubscription;
+	}());
+
+	var Subject = (function () {
+	    function Subject() {
+	        this._source = null;
+	        this._observer = new SubjectObserver();
+	    }
+	    Subject.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    Object.defineProperty(Subject.prototype, "source", {
+	        get: function () {
+	            return this._source;
+	        },
+	        set: function (source) {
+	            this._source = source;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Subject.prototype.subscribe = function (arg1, onError, onCompleted) {
+	        var observer = arg1 instanceof Observer
+	            ? arg1
+	            : AutoDetachObserver.create(arg1, onError, onCompleted);
+	        this._observer.addChild(observer);
+	        return InnerSubscription.create(this, observer);
+	    };
+	    Subject.prototype.next = function (value) {
+	        this._observer.next(value);
+	    };
+	    Subject.prototype.error = function (error) {
+	        this._observer.error(error);
+	    };
+	    Subject.prototype.completed = function () {
+	        this._observer.completed();
+	    };
+	    Subject.prototype.start = function () {
+	        if (!this._source) {
+	            return;
+	        }
+	        this._observer.setDisposable(this._source.buildStream(this));
+	    };
+	    Subject.prototype.remove = function (observer) {
+	        this._observer.removeChild(observer);
+	    };
+	    Subject.prototype.dispose = function () {
+	        this._observer.dispose();
+	    };
+	    return Subject;
+	}());
+
+	var SingleDisposable = (function (_super) {
+	    __extends(SingleDisposable, _super);
+	    function SingleDisposable(disposeHandler) {
+	        var _this = _super.call(this, "SingleDisposable") || this;
+	        _this._disposeHandler = null;
+	        _this._isDisposed = false;
+	        _this._disposeHandler = disposeHandler;
+	        return _this;
+	    }
+	    SingleDisposable.create = function (disposeHandler) {
+	        if (disposeHandler === void 0) { disposeHandler = function () { }; }
+	        var obj = new this(disposeHandler);
+	        return obj;
+	    };
+	    SingleDisposable.prototype.setDisposeHandler = function (handler) {
+	        this._disposeHandler = handler;
+	    };
+	    SingleDisposable.prototype.dispose = function () {
+	        if (this._isDisposed) {
+	            return;
+	        }
+	        this._isDisposed = true;
+	        this._disposeHandler();
+	    };
+	    return SingleDisposable;
+	}(Entity$1));
+
+	var ClassMapUtils = (function () {
+	    function ClassMapUtils() {
+	    }
+	    ClassMapUtils.addClassMap = function (className, _class) {
+	        this._classMap[className] = _class;
+	    };
+	    ClassMapUtils.getClass = function (className) {
+	        return this._classMap[className];
+	    };
+	    return ClassMapUtils;
+	}());
+	ClassMapUtils._classMap = {};
+
+	var FunctionUtils = (function () {
+	    function FunctionUtils() {
+	    }
+	    FunctionUtils.bind = function (object, func) {
+	        return function () {
+	            return func.apply(object, arguments);
+	        };
+	    };
+	    return FunctionUtils;
+	}());
+
+	var Stream = (function (_super) {
+	    __extends(Stream, _super);
+	    function Stream(subscribeFunc) {
+	        var _this = _super.call(this, "Stream") || this;
+	        _this.scheduler = null;
+	        _this.subscribeFunc = null;
+	        _this.subscribeFunc = subscribeFunc || function () { };
+	        return _this;
+	    }
+	    Stream.prototype.buildStream = function (observer) {
+	        return SingleDisposable.create((this.subscribeFunc(observer) || function () { }));
+	    };
+	    Stream.prototype.do = function (onNext, onError, onCompleted) {
+	        return ClassMapUtils.getClass("DoStream").create(this, onNext, onError, onCompleted);
+	    };
+	    Stream.prototype.map = function (selector) {
+	        return ClassMapUtils.getClass("MapStream").create(this, selector);
+	    };
+	    Stream.prototype.flatMap = function (selector) {
+	        return this.map(selector).mergeAll();
+	    };
+	    Stream.prototype.concatMap = function (selector) {
+	        return this.map(selector).concatAll();
+	    };
+	    Stream.prototype.mergeAll = function () {
+	        return ClassMapUtils.getClass("MergeAllStream").create(this);
+	    };
+	    Stream.prototype.concatAll = function () {
+	        return this.merge(1);
+	    };
+	    Stream.prototype.skipUntil = function (otherStream) {
+	        return ClassMapUtils.getClass("SkipUntilStream").create(this, otherStream);
+	    };
+	    Stream.prototype.takeUntil = function (otherStream) {
+	        return ClassMapUtils.getClass("TakeUntilStream").create(this, otherStream);
+	    };
+	    Stream.prototype.take = function (count) {
+	        if (count === void 0) { count = 1; }
+	        var self = this;
+	        if (count === 0) {
+	            return ClassMapUtils.getClass("Operator").empty();
+	        }
+	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	            self.subscribe(function (value) {
+	                if (count > 0) {
+	                    observer.next(value);
+	                }
+	                count--;
+	                if (count <= 0) {
+	                    observer.completed();
+	                }
+	            }, function (e) {
+	                observer.error(e);
+	            }, function () {
+	                observer.completed();
+	            });
+	        });
+	    };
+	    Stream.prototype.takeLast = function (count) {
+	        if (count === void 0) { count = 1; }
+	        var self = this;
+	        if (count === 0) {
+	            return ClassMapUtils.getClass("Operator").empty();
+	        }
+	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	            var queue = [];
+	            self.subscribe(function (value) {
+	                queue.push(value);
+	                if (queue.length > count) {
+	                    queue.shift();
+	                }
+	            }, function (e) {
+	                observer.error(e);
+	            }, function () {
+	                while (queue.length > 0) {
+	                    observer.next(queue.shift());
+	                }
+	                observer.completed();
+	            });
+	        });
+	    };
+	    Stream.prototype.takeWhile = function (predicate, thisArg) {
+	        if (thisArg === void 0) { thisArg = this; }
+	        var self = this, bindPredicate = null;
+	        bindPredicate = FunctionUtils.bind(thisArg, predicate);
+	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	            var i = 0, isStart = false;
+	            self.subscribe(function (value) {
+	                if (bindPredicate(value, i++, self)) {
+	                    try {
+	                        observer.next(value);
+	                        isStart = true;
+	                    }
+	                    catch (e) {
+	                        observer.error(e);
+	                        return;
+	                    }
+	                }
+	                else {
+	                    if (isStart) {
+	                        observer.completed();
+	                    }
+	                }
+	            }, function (e) {
+	                observer.error(e);
+	            }, function () {
+	                observer.completed();
+	            });
+	        });
+	    };
+	    Stream.prototype.lastOrDefault = function (defaultValue) {
+	        if (defaultValue === void 0) { defaultValue = null; }
+	        var self = this;
+	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	            var queue = [];
+	            self.subscribe(function (value) {
+	                queue.push(value);
+	                if (queue.length > 1) {
+	                    queue.shift();
+	                }
+	            }, function (e) {
+	                observer.error(e);
+	            }, function () {
+	                if (queue.length === 0) {
+	                    observer.next(defaultValue);
+	                }
+	                else {
+	                    while (queue.length > 0) {
+	                        observer.next(queue.shift());
+	                    }
+	                }
+	                observer.completed();
+	            });
+	        });
+	    };
+	    Stream.prototype.filter = function (predicate, thisArg) {
+	        if (thisArg === void 0) { thisArg = this; }
+	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
+	            var self = this;
+	            return self.internalFilter(predicate, thisArg);
+	        }
+	        return ClassMapUtils.getClass("FilterStream").create(this, predicate, thisArg);
+	    };
+	    Stream.prototype.filterWithState = function (predicate, thisArg) {
+	        if (thisArg === void 0) { thisArg = this; }
+	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
+	            var self = this;
+	            return self.internalFilter(predicate, thisArg);
+	        }
+	        return ClassMapUtils.getClass("FilterWithStateStream").create(this, predicate, thisArg);
+	    };
+	    Stream.prototype.concat = function () {
+	        var args = null;
+	        if (JudgeUtils$2.isArray(arguments[0])) {
+	            args = arguments[0];
+	        }
+	        else {
+	            args = Array.prototype.slice.call(arguments, 0);
+	        }
+	        args.unshift(this);
+	        return ClassMapUtils.getClass("ConcatStream").create(args);
+	    };
+	    Stream.prototype.merge = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        if (JudgeUtils$2.isNumber(args[0])) {
+	            var maxConcurrent = args[0];
+	            return ClassMapUtils.getClass("MergeStream").create(this, maxConcurrent);
+	        }
+	        if (JudgeUtils$2.isArray(args[0])) {
+	            args = arguments[0];
+	        }
+	        else {
+	        }
+	        var stream = null;
+	        args.unshift(this);
+	        stream = ClassMapUtils.getClass("Operator").fromArray(args).mergeAll();
+	        return stream;
+	    };
+	    Stream.prototype.repeat = function (count) {
+	        if (count === void 0) { count = -1; }
+	        return ClassMapUtils.getClass("RepeatStream").create(this, count);
+	    };
+	    Stream.prototype.ignoreElements = function () {
+	        return ClassMapUtils.getClass("IgnoreElementsStream").create(this);
+	    };
+	    Stream.prototype.handleSubject = function (subject) {
+	        if (this._isSubject(subject)) {
+	            this._setSubject(subject);
+	            return true;
+	        }
+	        return false;
+	    };
+	    Stream.prototype._isSubject = function (subject) {
+	        return subject instanceof Subject;
+	    };
+	    Stream.prototype._setSubject = function (subject) {
+	        subject.source = this;
+	    };
+	    return Stream;
+	}(Entity$1));
+	__decorate([
+	    requireCheck(function (count) {
+	        if (count === void 0) { count = 1; }
+	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
+	    })
+	], Stream.prototype, "take", null);
+	__decorate([
+	    requireCheck(function (count) {
+	        if (count === void 0) { count = 1; }
+	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
+	    })
+	], Stream.prototype, "takeLast", null);
+
+	var BaseStream = (function (_super) {
+	    __extends(BaseStream, _super);
+	    function BaseStream() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    BaseStream.prototype.subscribe = function (arg1, onError, onCompleted) {
+	        var observer = null;
+	        if (this.handleSubject(arg1)) {
+	            return;
+	        }
+	        observer = arg1 instanceof Observer
+	            ? AutoDetachObserver.create(arg1)
+	            : AutoDetachObserver.create(arg1, onError, onCompleted);
+	        observer.setDisposable(this.buildStream(observer));
+	        return observer;
+	    };
+	    BaseStream.prototype.buildStream = function (observer) {
+	        _super.prototype.buildStream.call(this, observer);
+	        return this.subscribeCore(observer);
+	    };
+	    return BaseStream;
+	}(Stream));
+
+	var MapObserver = (function (_super) {
+	    __extends(MapObserver, _super);
+	    function MapObserver(currentObserver, selector) {
+	        var _this = _super.call(this, null, null, null) || this;
+	        _this._currentObserver = null;
+	        _this._selector = null;
+	        _this._currentObserver = currentObserver;
+	        _this._selector = selector;
+	        return _this;
+	    }
+	    MapObserver.create = function (currentObserver, selector) {
+	        return new this(currentObserver, selector);
+	    };
+	    MapObserver.prototype.onNext = function (value) {
+	        var result = null;
+	        try {
+	            result = this._selector(value);
+	        }
+	        catch (e) {
+	            this._currentObserver.error(e);
+	        }
+	        finally {
+	            this._currentObserver.next(result);
+	        }
+	    };
+	    MapObserver.prototype.onError = function (error) {
+	        this._currentObserver.error(error);
+	    };
+	    MapObserver.prototype.onCompleted = function () {
+	        this._currentObserver.completed();
+	    };
+	    return MapObserver;
+	}(Observer));
+
+	function registerClass(className) {
+	    return function (target) {
+	        ClassMapUtils.addClassMap(className, target);
+	    };
+	}
+
+	var MapStream = (function (_super) {
+	    __extends(MapStream, _super);
+	    function MapStream(source, selector) {
+	        var _this = _super.call(this, null) || this;
+	        _this._source = null;
+	        _this._selector = null;
+	        _this._source = source;
+	        _this.scheduler = _this._source.scheduler;
+	        _this._selector = selector;
+	        return _this;
+	    }
+	    MapStream.create = function (source, selector) {
+	        var obj = new this(source, selector);
+	        return obj;
+	    };
+	    MapStream.prototype.subscribeCore = function (observer) {
+	        return this._source.buildStream(MapObserver.create(observer, this._selector));
+	    };
+	    return MapStream;
+	}(BaseStream));
+	MapStream = __decorate([
+	    registerClass("MapStream")
+	], MapStream);
+
+	var GroupDisposable = (function (_super) {
+	    __extends(GroupDisposable, _super);
+	    function GroupDisposable(disposable) {
+	        var _this = _super.call(this, "GroupDisposable") || this;
+	        _this._group = Collection$1.create();
+	        _this._isDisposed = false;
+	        if (disposable) {
+	            _this._group.addChild(disposable);
+	        }
+	        return _this;
+	    }
+	    GroupDisposable.create = function (disposable) {
+	        var obj = new this(disposable);
+	        return obj;
+	    };
+	    GroupDisposable.prototype.add = function (disposable) {
+	        this._group.addChild(disposable);
+	        return this;
+	    };
+	    GroupDisposable.prototype.remove = function (disposable) {
+	        this._group.removeChild(disposable);
+	        return this;
+	    };
+	    GroupDisposable.prototype.dispose = function () {
+	        if (this._isDisposed) {
+	            return;
+	        }
+	        this._isDisposed = true;
+	        this._group.forEach(function (disposable) {
+	            disposable.dispose();
+	        });
+	    };
+	    return GroupDisposable;
+	}(Entity$1));
+
+	var root$2;
+	if (JudgeUtils$2.isNodeJs() && typeof global != "undefined") {
+	    root$2 = global;
+	}
+	else if (typeof window != "undefined") {
+	    root$2 = window;
+	}
+	else if (typeof self != "undefined") {
+	    root$2 = self;
+	}
+	else {
+	    Log$1.error("no avaliable root!");
+	}
+
+	var Scheduler = (function () {
+	    function Scheduler() {
+	        this._requestLoopId = null;
+	    }
+	    Scheduler.create = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var obj = new this();
+	        return obj;
+	    };
+	    Object.defineProperty(Scheduler.prototype, "requestLoopId", {
+	        get: function () {
+	            return this._requestLoopId;
+	        },
+	        set: function (requestLoopId) {
+	            this._requestLoopId = requestLoopId;
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    Scheduler.prototype.publishRecursive = function (observer, initial, action) {
+	        action(initial);
+	    };
+	    Scheduler.prototype.publishInterval = function (observer, initial, interval, action) {
+	        return root$2.setInterval(function () {
+	            initial = action(initial);
+	        }, interval);
+	    };
+	    Scheduler.prototype.publishIntervalRequest = function (observer, action) {
+	        var self = this, loop = function (time) {
+	            var isEnd = action(time);
+	            if (isEnd) {
+	                return;
+	            }
+	            self._requestLoopId = root$2.requestNextAnimationFrame(loop);
+	        };
+	        this._requestLoopId = root$2.requestNextAnimationFrame(loop);
+	    };
+	    Scheduler.prototype.publishTimeout = function (observer, time, action) {
+	        return root$2.setTimeout(function () {
+	            action(time);
+	            observer.completed();
+	        }, time);
+	    };
+	    return Scheduler;
+	}());
+
+	var AnonymousStream = (function (_super) {
+	    __extends(AnonymousStream, _super);
+	    function AnonymousStream(subscribeFunc) {
+	        var _this = _super.call(this, subscribeFunc) || this;
+	        _this.scheduler = Scheduler.create();
+	        return _this;
+	    }
+	    AnonymousStream.create = function (subscribeFunc) {
+	        var obj = new this(subscribeFunc);
+	        return obj;
+	    };
+	    AnonymousStream.prototype.buildStream = function (observer) {
+	        return SingleDisposable.create((this.subscribeFunc(observer) || function () { }));
+	    };
+	    AnonymousStream.prototype.subscribe = function () {
+	        var args = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            args[_i] = arguments[_i];
+	        }
+	        var observer = null;
+	        if (args[0] instanceof Subject) {
+	            var subject = args[0];
+	            this.handleSubject(subject);
+	            return;
+	        }
+	        else if (JudgeUtils$2.isIObserver(args[0])) {
+	            observer = AutoDetachObserver.create(args[0]);
+	        }
+	        else {
+	            var onNext = args[0], onError = args[1] || null, onCompleted = args[2] || null;
+	            observer = AutoDetachObserver.create(onNext, onError, onCompleted);
+	        }
+	        observer.setDisposable(this.buildStream(observer));
+	        return observer;
+	    };
+	    return AnonymousStream;
+	}(Stream));
+
+	var FromArrayStream = (function (_super) {
+	    __extends(FromArrayStream, _super);
+	    function FromArrayStream(array, scheduler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._array = null;
+	        _this._array = array;
+	        _this.scheduler = scheduler;
+	        return _this;
+	    }
+	    FromArrayStream.create = function (array, scheduler) {
+	        var obj = new this(array, scheduler);
+	        return obj;
+	    };
+	    FromArrayStream.prototype.subscribeCore = function (observer) {
+	        var array = this._array, len = array.length;
+	        function loopRecursive(i) {
+	            if (i < len) {
+	                observer.next(array[i]);
+	                loopRecursive(i + 1);
+	            }
+	            else {
+	                observer.completed();
+	            }
+	        }
+	        this.scheduler.publishRecursive(observer, 0, loopRecursive);
+	        return SingleDisposable.create();
+	    };
+	    return FromArrayStream;
+	}(BaseStream));
+
+	var FromPromiseStream = (function (_super) {
+	    __extends(FromPromiseStream, _super);
+	    function FromPromiseStream(promise, scheduler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._promise = null;
+	        _this._promise = promise;
+	        _this.scheduler = scheduler;
+	        return _this;
+	    }
+	    FromPromiseStream.create = function (promise, scheduler) {
+	        var obj = new this(promise, scheduler);
+	        return obj;
+	    };
+	    FromPromiseStream.prototype.subscribeCore = function (observer) {
+	        this._promise.then(function (data) {
+	            observer.next(data);
+	            observer.completed();
+	        }, function (err) {
+	            observer.error(err);
+	        }, observer);
+	        return SingleDisposable.create();
+	    };
+	    return FromPromiseStream;
+	}(BaseStream));
+
+	var FromEventPatternStream = (function (_super) {
+	    __extends(FromEventPatternStream, _super);
+	    function FromEventPatternStream(addHandler, removeHandler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._addHandler = null;
+	        _this._removeHandler = null;
+	        _this._addHandler = addHandler;
+	        _this._removeHandler = removeHandler;
+	        return _this;
+	    }
+	    FromEventPatternStream.create = function (addHandler, removeHandler) {
+	        var obj = new this(addHandler, removeHandler);
+	        return obj;
+	    };
+	    FromEventPatternStream.prototype.subscribeCore = function (observer) {
+	        var self = this;
+	        function innerHandler(event) {
+	            observer.next(event);
+	        }
+	        this._addHandler(innerHandler);
+	        return SingleDisposable.create(function () {
+	            self._removeHandler(innerHandler);
+	        });
+	    };
+	    return FromEventPatternStream;
+	}(BaseStream));
+
+	var IntervalStream = (function (_super) {
+	    __extends(IntervalStream, _super);
+	    function IntervalStream(interval, scheduler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._interval = null;
+	        _this._interval = interval;
+	        _this.scheduler = scheduler;
+	        return _this;
+	    }
+	    IntervalStream.create = function (interval, scheduler) {
+	        var obj = new this(interval, scheduler);
+	        obj.initWhenCreate();
+	        return obj;
+	    };
+	    IntervalStream.prototype.initWhenCreate = function () {
+	        this._interval = this._interval <= 0 ? 1 : this._interval;
+	    };
+	    IntervalStream.prototype.subscribeCore = function (observer) {
+	        var self = this, id = null;
+	        id = this.scheduler.publishInterval(observer, 0, this._interval, function (count) {
+	            observer.next(count);
+	            return count + 1;
+	        });
+	        return SingleDisposable.create(function () {
+	            root$2.clearInterval(id);
+	        });
+	    };
+	    return IntervalStream;
+	}(BaseStream));
+
+	var IntervalRequestStream = (function (_super) {
+	    __extends(IntervalRequestStream, _super);
+	    function IntervalRequestStream(scheduler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._isEnd = false;
+	        _this.scheduler = scheduler;
+	        return _this;
+	    }
+	    IntervalRequestStream.create = function (scheduler) {
+	        var obj = new this(scheduler);
+	        return obj;
+	    };
+	    IntervalRequestStream.prototype.subscribeCore = function (observer) {
+	        var self = this;
+	        this.scheduler.publishIntervalRequest(observer, function (time) {
+	            observer.next(time);
+	            return self._isEnd;
+	        });
+	        return SingleDisposable.create(function () {
+	            root$2.cancelNextRequestAnimationFrame(self.scheduler.requestLoopId);
+	            self._isEnd = true;
+	        });
+	    };
+	    return IntervalRequestStream;
+	}(BaseStream));
+
+	var TimeoutStream = (function (_super) {
+	    __extends(TimeoutStream, _super);
+	    function TimeoutStream(time, scheduler) {
+	        var _this = _super.call(this, null) || this;
+	        _this._time = null;
+	        _this._time = time;
+	        _this.scheduler = scheduler;
+	        return _this;
+	    }
+	    TimeoutStream.create = function (time, scheduler) {
+	        var obj = new this(time, scheduler);
+	        return obj;
+	    };
+	    TimeoutStream.prototype.subscribeCore = function (observer) {
+	        var id = null;
+	        id = this.scheduler.publishTimeout(observer, this._time, function (time) {
+	            observer.next(time);
+	        });
+	        return SingleDisposable.create(function () {
+	            root$2.clearTimeout(id);
+	        });
+	    };
+	    return TimeoutStream;
+	}(BaseStream));
+	__decorate([
+	    requireCheck(function (time, scheduler) {
+	        assert(time > 0, Log$1.info.FUNC_SHOULD("time", "> 0"));
+	    })
+	], TimeoutStream, "create", null);
+
+	var DeferStream = (function (_super) {
+	    __extends(DeferStream, _super);
+	    function DeferStream(buildStreamFunc) {
+	        var _this = _super.call(this, null) || this;
+	        _this._buildStreamFunc = null;
+	        _this._buildStreamFunc = buildStreamFunc;
+	        return _this;
+	    }
+	    DeferStream.create = function (buildStreamFunc) {
+	        var obj = new this(buildStreamFunc);
+	        return obj;
+	    };
+	    DeferStream.prototype.subscribeCore = function (observer) {
+	        var group = GroupDisposable.create();
+	        group.add(this._buildStreamFunc().buildStream(observer));
+	        return group;
+	    };
+	    return DeferStream;
+	}(BaseStream));
+
+	var Operator = (function () {
+	    function Operator() {
+	    }
+	    Operator.empty = function () {
+	        return this.createStream(function (observer) {
+	            observer.completed();
+	        });
+	    };
+	    Operator.createStream = function (subscribeFunc) {
+	        return AnonymousStream.create(subscribeFunc);
+	    };
+	    Operator.fromArray = function (array, scheduler) {
+	        if (scheduler === void 0) { scheduler = Scheduler.create(); }
+	        return FromArrayStream.create(array, scheduler);
+	    };
+	    return Operator;
+	}());
+	Operator = __decorate([
+	    registerClass("Operator")
+	], Operator);
+
+
+
+	var fromPromise = function (promise, scheduler) {
+	    if (scheduler === void 0) { scheduler = Scheduler.create(); }
+	    return FromPromiseStream.create(promise, scheduler);
+	};
+
+	var MergeAllObserver = (function (_super) {
+	    __extends(MergeAllObserver, _super);
+	    function MergeAllObserver(currentObserver, streamGroup, groupDisposable) {
+	        var _this = _super.call(this, null, null, null) || this;
+	        _this.done = false;
+	        _this.currentObserver = null;
+	        _this._streamGroup = null;
+	        _this._groupDisposable = null;
+	        _this.currentObserver = currentObserver;
+	        _this._streamGroup = streamGroup;
+	        _this._groupDisposable = groupDisposable;
+	        return _this;
+	    }
+	    MergeAllObserver.create = function (currentObserver, streamGroup, groupDisposable) {
+	        return new this(currentObserver, streamGroup, groupDisposable);
+	    };
+	    MergeAllObserver.prototype.onNext = function (innerSource) {
+	        if (JudgeUtils$2.isPromise(innerSource)) {
+	            innerSource = fromPromise(innerSource);
+	        }
+	        this._streamGroup.addChild(innerSource);
+	        this._groupDisposable.add(innerSource.buildStream(InnerObserver.create(this, this._streamGroup, innerSource)));
+	    };
+	    MergeAllObserver.prototype.onError = function (error) {
+	        this.currentObserver.error(error);
+	    };
+	    MergeAllObserver.prototype.onCompleted = function () {
+	        this.done = true;
+	        if (this._streamGroup.getCount() === 0) {
+	            this.currentObserver.completed();
+	        }
+	    };
+	    return MergeAllObserver;
+	}(Observer));
+	__decorate([
+	    requireCheck(function (innerSource) {
+	        assert(innerSource instanceof Stream || JudgeUtils$2.isPromise(innerSource), Log$1.info.FUNC_MUST_BE("innerSource", "Stream or Promise"));
+	    })
+	], MergeAllObserver.prototype, "onNext", null);
+	var InnerObserver = (function (_super) {
+	    __extends(InnerObserver, _super);
+	    function InnerObserver(parent, streamGroup, currentStream) {
+	        var _this = _super.call(this, null, null, null) || this;
+	        _this._parent = null;
+	        _this._streamGroup = null;
+	        _this._currentStream = null;
+	        _this._parent = parent;
+	        _this._streamGroup = streamGroup;
+	        _this._currentStream = currentStream;
+	        return _this;
+	    }
+	    InnerObserver.create = function (parent, streamGroup, currentStream) {
+	        var obj = new this(parent, streamGroup, currentStream);
+	        return obj;
+	    };
+	    InnerObserver.prototype.onNext = function (value) {
+	        this._parent.currentObserver.next(value);
+	    };
+	    InnerObserver.prototype.onError = function (error) {
+	        this._parent.currentObserver.error(error);
+	    };
+	    InnerObserver.prototype.onCompleted = function () {
+	        var currentStream = this._currentStream, parent = this._parent;
+	        this._streamGroup.removeChild(function (stream) {
+	            return JudgeUtils$2.isEqual(stream, currentStream);
+	        });
+	        if (this._isAsync() && this._streamGroup.getCount() === 0) {
+	            parent.currentObserver.completed();
+	        }
+	    };
+	    InnerObserver.prototype._isAsync = function () {
+	        return this._parent.done;
+	    };
+	    return InnerObserver;
+	}(Observer));
+
+	var MergeAllStream = (function (_super) {
+	    __extends(MergeAllStream, _super);
+	    function MergeAllStream(source) {
+	        var _this = _super.call(this, null) || this;
+	        _this._source = null;
+	        _this._observer = null;
+	        _this._source = source;
+	        _this.scheduler = _this._source.scheduler;
+	        return _this;
+	    }
+	    MergeAllStream.create = function (source) {
+	        var obj = new this(source);
+	        return obj;
+	    };
+	    MergeAllStream.prototype.subscribeCore = function (observer) {
+	        var streamGroup = Collection$1.create(), groupDisposable = GroupDisposable.create();
+	        this._source.buildStream(MergeAllObserver.create(observer, streamGroup, groupDisposable));
+	        return groupDisposable;
+	    };
+	    return MergeAllStream;
+	}(BaseStream));
+	MergeAllStream = __decorate([
+	    registerClass("MergeAllStream")
+	], MergeAllStream);
+
+	var ObjLoader = (function () {
+	    function ObjLoader() {
+	        this.regexp = {
+	            vertex_pattern: /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
+	            normal_pattern: /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
+	            uv_pattern: /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
+	            face_pattern: /f\s(.+)/,
+	            face_vertex: /^f\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)(?:\s+(-?\d+))?/,
+	            face_vertex_uv: /^f\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+))?/,
+	            face_vertex_uv_normal: /^f\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+)\/(-?\d+))?/,
+	            face_vertex_normal: /^f\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)(?:\s+(-?\d+)\/\/(-?\d+))?/,
+	            object_pattern: /^[og]\s*(.+)?/,
+	            smoothing_pattern: /^s\s+(\d+|on|off)/,
+	            material_library_pattern: /^mtllib /,
+	            material_use_pattern: /^usemtl /
+	        };
+	        this.objects = new Collection$1();
+	        this.mtlFilePath = null;
+	        this.materialName = null;
+	        this.name = null;
+	        this._vertices = [];
+	        this._normals = [];
+	        this._texCoords = [];
+	        this._currentObject = null;
+	    }
+	    ObjLoader.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    ObjLoader.prototype.convert = function (result, fileContent, fileName) {
+	        this._convertObject(fileContent);
+	        var meshes = {};
+	        var meshId = fileName + "_mesh";
+	        result.meshes = meshes;
+	        meshes[meshId] = {
+	            name: meshId,
+	            primitives: this._buildPrimitiveArr()
+	        };
+	        return result;
+	    };
+	    ObjLoader.prototype._buildPrimitiveArr = function () {
+	        var me = this, arr = [];
+	        this.objects.forEach(function (objectModel) {
+	            console.log(objectModel);
+	            arr.push({
+	                name: objectModel.name,
+	                attributes: {
+	                    POSITION: me._vertices,
+	                    TEXCOORD: me._texCoords,
+	                    NORMAL: me._normals
+	                },
+	                verticeIndices: objectModel.verticeIndices,
+	                normalIndices: objectModel.normalIndices,
+	                texCoordIndices: objectModel.texCoordIndices,
+	                material: objectModel.materialName,
+	                mode: 4
+	            });
+	        });
+	        return arr;
+	    };
+	    ObjLoader.prototype._convertObject = function (fileContent) {
+	        if (fileContent.indexOf('\r\n') !== -1) {
+	            fileContent = fileContent.replace(/\r\n/g, '\n');
+	        }
+	        if (fileContent.indexOf('\\\n') !== -1) {
+	            fileContent = fileContent.replace(/\\\n/g, "");
+	        }
+	        var res = fileContent.split("\n"), result = [];
+	        for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
+	            var line = res_1[_i];
+	            line = line.trim();
+	            var lineFirst = line.charAt(0);
+	            if (lineFirst === "#" || lineFirst == '')
+	                continue;
+	            if (lineFirst === 'v') {
+	                var lineSecond = line.charAt(1);
+	                if (lineSecond === ' ' && (result = this.regexp.vertex_pattern.exec(line)) !== null) {
+	                    this._vertices.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+	                }
+	                else if (lineSecond === "n" && (result = this.regexp.normal_pattern.exec(line)) !== null) {
+	                    this._normals.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+	                }
+	                else if (lineSecond === "t" && (result = this.regexp.uv_pattern.exec(line)) !== null) {
+	                    this._texCoords.push(parseFloat(result[1]), parseFloat(result[2]));
+	                }
+	                else {
+	                    throw new Error("Unexpected vertex/normal/uv line: '" + line + "'");
+	                }
+	            }
+	            else if (lineFirst === "f") {
+	                this._convertFace(line);
+	            }
+	            else if ((result = this.regexp.object_pattern.exec(line)) !== null) {
+	                this._currentObject = ObjectModel.create();
+	                this._currentObject.name = result[1];
+	                this.objects.addChild(this._currentObject);
+	            }
+	            else if (this.regexp.material_use_pattern.test(line)) {
+	                this.convertUsemtl(line);
+	            }
+	            else if (this.regexp.material_library_pattern.test(line)) {
+	                this.mtlFilePath = line.substring(7).trim();
+	            }
+	            else if ((result = this.regexp.smoothing_pattern.exec(line)) !== null) {
+	            }
+	            else {
+	                console.log("Unexpected line: '" + line + "'");
+	            }
+	        }
+	    };
+	    ObjLoader.prototype.convertUsemtl = function (line) {
+	        var materialName = line.substring(7).trim();
+	        var objName = this._getObjectNameWithMultMaterialOfSingleObj(materialName);
+	        this._currentObject = ObjectModel.create();
+	        this._currentObject.name = objName;
+	        this.objects.addChild(this._currentObject);
+	        this._currentObject.materialName = materialName;
+	    };
+	    ObjLoader.prototype._getObjectNameWithMultMaterialOfSingleObj = function (materialName) {
+	        if (this._currentObject) {
+	            return this._currentObject.name + "_" + materialName;
+	        }
+	        return materialName;
+	    };
+	    ObjLoader.prototype._convertFace = function (lines) {
+	        var lineResult = this.regexp.face_pattern.exec(lines);
+	        var face = lineResult[1].trim().split(" "), line = lineResult[0], triangles = [], result = null, k = null, verticeIndices = [], normalIndices = [], texCoordIndices = [];
+	        if (!this._currentObject) {
+	            this._currentObject = ObjectModel.create();
+	            this.objects.addChild(this._currentObject);
+	        }
+	        if (face.length < 3)
+	            return;
+	        verticeIndices = this._currentObject.verticeIndices;
+	        normalIndices = this._currentObject.normalIndices;
+	        texCoordIndices = this._currentObject.texCoordIndices;
+	        this._getTriangles(face, triangles);
+	        if ((result = this.regexp.face_vertex_uv_normal.exec(line)) !== null) {
+	            for (var _i = 0, triangles_1 = triangles; _i < triangles_1.length; _i++) {
+	                k = triangles_1[_i];
+	                var point = k.split("/");
+	                verticeIndices.push(parseInt(point[0]) - 1);
+	                texCoordIndices.push(parseInt(point[1]) - 1);
+	                normalIndices.push(parseInt(point[2]) - 1);
+	            }
+	        }
+	        else if ((result = this.regexp.face_vertex_uv.exec(line)) !== null) {
+	            for (var _a = 0, triangles_2 = triangles; _a < triangles_2.length; _a++) {
+	                k = triangles_2[_a];
+	                var point = k.split("/");
+	                verticeIndices.push(~~(point[0]) - 1);
+	                texCoordIndices.push(~~(point[1]) - 1);
+	            }
+	        }
+	        else if ((result = this.regexp.face_vertex_normal.exec(line)) !== null) {
+	            for (var _b = 0, triangles_3 = triangles; _b < triangles_3.length; _b++) {
+	                k = triangles_3[_b];
+	                var point = k.split("//");
+	                verticeIndices.push(parseInt(point[0]) - 1);
+	                normalIndices.push(parseInt(point[1]) - 1);
+	            }
+	        }
+	        else if ((result = this.regexp.face_vertex.exec(line)) !== null) {
+	            for (var _c = 0, triangles_4 = triangles; _c < triangles_4.length; _c++) {
+	                k = triangles_4[_c];
+	                verticeIndices.push(~~(k) - 1);
+	            }
+	        }
+	        else {
+	            console.log("this line is error: " + lineResult);
+	        }
+	    };
+	    ObjLoader.prototype._getTriangles = function (face, triangles) {
+	        var getTriangles = function (v) {
+	            if (v + 1 < face.length) {
+	                triangles.push(face[0], face[v], face[v + 1]);
+	                v++;
+	                getTriangles(v);
+	            }
+	        };
+	        getTriangles(1);
+	    };
+	    return ObjLoader;
+	}());
+	var ObjectModel = (function () {
+	    function ObjectModel() {
+	        this.vertices = [];
+	        this.normals = [];
+	        this.texCoords = [];
+	        this.verticeIndices = [];
+	        this.normalIndices = [];
+	        this.texCoordIndices = [];
+	        this.materialName = null;
+	        this.name = null;
+	        this.indicesCount = 0;
+	    }
+	    ObjectModel.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    return ObjectModel;
+	}());
+
+	var MaterialLoader = (function () {
+	    function MaterialLoader() {
+	        this.materials = new Collection$1();
+	    }
+	    MaterialLoader.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    MaterialLoader.prototype.convert = function (result, fileContent) {
+	        var materials = {};
+	        return materials;
+	    };
+	    return MaterialLoader;
+	}());
 
 	var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -6032,243 +7805,51 @@
 
 	var rsvp_1 = rsvp.Promise;
 
-	var root$1;
-	if (JudgeUtils.isNodeJs() && typeof global != "undefined") {
-	    root$1 = global;
-	}
-	else if (typeof window != "undefined") {
-	    root$1 = window;
-	}
-	else if (typeof self != "undefined") {
-	    root$1 = self;
-	}
-	else {
-	    Log$1.error("no avaliable root!");
-	}
-
-	var Log$1 = (function () {
-	    function Log() {
+	var AjaxUtil = (function () {
+	    function AjaxUtil() {
 	    }
-	    Log.log = function () {
-	        var messages = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            messages[_i] = arguments[_i];
-	        }
-	        if (!this._exec("log", messages)) {
-	            root$1.alert(messages.join(","));
-	        }
-	        this._exec("trace", messages);
+	    AjaxUtil.ajax = function (config) {
+	        var url = config.url;
+	        var success = config.success;
+	        var error = config.error;
+	        var data = config.data;
+	        var type = config.data == void 0 ? "GET" : config.data;
+	        var xhr = this._createAjax(error);
+	        xhr.onreadystatechange = function () {
+	            if (xhr.readyState === 4 && xhr.status === 200) {
+	                if (success !== null) {
+	                    success(xhr.responseText);
+	                }
+	            }
+	            else {
+	                if (this.error !== void 0) {
+	                    this.error("出错了");
+	                }
+	            }
+	        };
+	        xhr.open(type, url, true);
+	        xhr.send(null);
 	    };
-	    Log.assert = function (cond) {
-	        var messages = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            messages[_i - 1] = arguments[_i];
+	    AjaxUtil._createAjax = function (error) {
+	        var xhr = null;
+	        try {
+	            xhr = new ActiveXObject("microsoft.xmlhttp");
 	        }
-	        if (cond) {
-	            if (!this._exec("assert", arguments, 1)) {
-	                this.log.apply(this, Array.prototype.slice.call(arguments, 1));
+	        catch (e1) {
+	            try {
+	                xhr = new XMLHttpRequest();
+	            }
+	            catch (e2) {
+	                error(xhr, { message: "您的浏览器不支持ajax，请更换！" });
+	                return null;
 	            }
 	        }
+	        return xhr;
 	    };
-	    Log.error = function (cond) {
-	        var message = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            message[_i - 1] = arguments[_i];
-	        }
-	        if (cond) {
-	            throw new Error(Array.prototype.slice.call(arguments, 1).join("\n"));
-	        }
-	    };
-	    Log.warn = function () {
-	        var message = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            message[_i] = arguments[_i];
-	        }
-	        var result = this._exec("warn", arguments);
-	        if (!result) {
-	            this.log.apply(this, arguments);
-	        }
-	        else {
-	            this._exec("trace", ["warn trace"]);
-	        }
-	    };
-	    Log._exec = function (consoleMethod, args, sliceBegin) {
-	        if (sliceBegin === void 0) { sliceBegin = 0; }
-	        if (root$1.console && root$1.console[consoleMethod]) {
-	            root$1.console[consoleMethod].apply(root$1.console, Array.prototype.slice.call(args, sliceBegin));
-	            return true;
-	        }
-	        return false;
-	    };
-	    return Log;
+	    return AjaxUtil;
 	}());
-	Log$1.info = {
-	    INVALID_PARAM: "invalid parameter",
-	    helperFunc: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var result = "";
-	        args.forEach(function (val) {
-	            result += String(val) + " ";
-	        });
-	        return result.slice(0, -1);
-	    },
-	    assertion: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        if (args.length === 2) {
-	            return this.helperFunc(args[0], args[1]);
-	        }
-	        else if (args.length === 3) {
-	            return this.helperFunc(args[1], args[0], args[2]);
-	        }
-	        else {
-	            throw new Error("args.length must <= 3");
-	        }
-	    },
-	    FUNC_INVALID: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("invalid");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_BE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must be");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_NOT_BE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must not be");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SHOULD: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("should");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SHOULD_NOT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("should not");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SUPPORT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("support");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_NOT_SUPPORT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("not support");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_DEFINE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must define");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_NOT_DEFINE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must not define");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_UNKNOW: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("unknow");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_EXPECT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("expect");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_UNEXPECT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("unexpect");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_EXIST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("exist");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_NOT_EXIST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("not exist");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_ONLY: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("only");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_CAN_NOT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("can't");
-	        return this.assertion.apply(this, args);
-	    }
-	};
 
-	var Entity$1 = (function () {
+	var Entity$2 = (function () {
 	    function Entity(uidPre) {
 	        this._uid = null;
 	        this._uid = uidPre + String(Entity.UID++);
@@ -6285,196 +7866,30 @@
 	    });
 	    return Entity;
 	}());
-	Entity$1.UID = 1;
+	Entity$2.UID = 1;
 
-	var ExtendUtils$1 = (function () {
-	    function ExtendUtils() {
+	var JudgeUtils$3 = (function (_super) {
+	    __extends(JudgeUtils$$1, _super);
+	    function JudgeUtils$$1() {
+	        return _super !== null && _super.apply(this, arguments) || this;
 	    }
-	    ExtendUtils.extendDeep = function (parent, child, filter) {
-	        if (filter === void 0) { filter = function (val, i) { return true; }; }
-	        var i = null, len = 0, toStr = Object.prototype.toString, sArr = "[object Array]", sOb = "[object Object]", type = "", _child = null;
-	        if (toStr.call(parent) === sArr) {
-	            _child = child || [];
-	            for (i = 0, len = parent.length; i < len; i++) {
-	                var member = parent[i];
-	                if (!filter(member, i)) {
-	                    continue;
-	                }
-	                if (member.clone) {
-	                    _child[i] = member.clone();
-	                    continue;
-	                }
-	                type = toStr.call(member);
-	                if (type === sArr || type === sOb) {
-	                    _child[i] = type === sArr ? [] : {};
-	                    ExtendUtils.extendDeep(member, _child[i]);
-	                }
-	                else {
-	                    _child[i] = member;
-	                }
-	            }
-	        }
-	        else if (toStr.call(parent) === sOb) {
-	            _child = child || {};
-	            for (i in parent) {
-	                var member = parent[i];
-	                if (!filter(member, i)) {
-	                    continue;
-	                }
-	                if (member.clone) {
-	                    _child[i] = member.clone();
-	                    continue;
-	                }
-	                type = toStr.call(member);
-	                if (type === sArr || type === sOb) {
-	                    _child[i] = type === sArr ? [] : {};
-	                    ExtendUtils.extendDeep(member, _child[i]);
-	                }
-	                else {
-	                    _child[i] = member;
-	                }
-	            }
-	        }
-	        else {
-	            _child = parent;
-	        }
-	        return _child;
+	    JudgeUtils$$1.isPromise = function (obj) {
+	        return !!obj
+	            && !_super.isFunction.call(this, obj.subscribe)
+	            && _super.isFunction.call(this, obj.then);
 	    };
-	    ExtendUtils.extend = function (destination, source) {
-	        var property = "";
-	        for (property in source) {
-	            destination[property] = source[property];
-	        }
-	        return destination;
+	    JudgeUtils$$1.isEqual = function (ob1, ob2) {
+	        return ob1.uid === ob2.uid;
 	    };
-	    ExtendUtils.copyPublicAttri = function (source) {
-	        var property = null, destination = {};
-	        this.extendDeep(source, destination, function (item, property) {
-	            return property.slice(0, 1) !== "_"
-	                && !JudgeUtils.isFunction(item);
-	        });
-	        return destination;
+	    JudgeUtils$$1.isIObserver = function (i) {
+	        return i.next && i.error && i.completed;
 	    };
-	    return ExtendUtils;
-	}());
+	    return JudgeUtils$$1;
+	}(JudgeUtils$1));
 
-	var Collection$1 = (function (_super) {
-	    __extends(Collection, _super);
-	    function Collection(children) {
-	        if (children === void 0) { children = []; }
-	        var _this = _super.call(this) || this;
-	        _this.children = children;
-	        return _this;
-	    }
-	    Collection.create = function (children) {
-	        if (children === void 0) { children = []; }
-	        var obj = new this(children);
-	        return obj;
-	    };
-	    Collection.prototype.clone = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var target = null, isDeep = null;
-	        if (args.length === 0) {
-	            isDeep = false;
-	            target = Collection.create();
-	        }
-	        else if (args.length === 1) {
-	            if (JudgeUtils.isBoolean(args[0])) {
-	                target = Collection.create();
-	                isDeep = args[0];
-	            }
-	            else {
-	                target = args[0];
-	                isDeep = false;
-	            }
-	        }
-	        else {
-	            target = args[0];
-	            isDeep = args[1];
-	        }
-	        if (isDeep === true) {
-	            target.setChildren(ExtendUtils$1.extendDeep(this.children));
-	        }
-	        else {
-	            target.setChildren(ExtendUtils$1.extend([], this.children));
-	        }
-	        return target;
-	    };
-	    Collection.prototype.filter = function (func) {
-	        var children = this.children, result = [], value = null;
-	        for (var i = 0, len = children.length; i < len; i++) {
-	            value = children[i];
-	            if (func.call(children, value, i)) {
-	                result.push(value);
-	            }
-	        }
-	        return Collection.create(result);
-	    };
-	    Collection.prototype.findOne = function (func) {
-	        var scope = this.children, result = null;
-	        this.forEach(function (value, index) {
-	            if (!func.call(scope, value, index)) {
-	                return;
-	            }
-	            result = value;
-	            return $BREAK;
-	        });
-	        return result;
-	    };
-	    Collection.prototype.reverse = function () {
-	        return Collection.create(this.copyChildren().reverse());
-	    };
-	    Collection.prototype.removeChild = function (arg) {
-	        return Collection.create(this.removeChildHelper(arg));
-	    };
-	    Collection.prototype.sort = function (func, isSortSelf) {
-	        if (isSortSelf === void 0) { isSortSelf = false; }
-	        if (isSortSelf) {
-	            this.children.sort(func);
-	            return this;
-	        }
-	        return Collection.create(this.copyChildren().sort(func));
-	    };
-	    Collection.prototype.map = function (func) {
-	        var resultArr = [];
-	        this.forEach(function (e, index) {
-	            var result = func(e, index);
-	            if (result !== $REMOVE) {
-	                resultArr.push(result);
-	            }
-	        });
-	        return Collection.create(resultArr);
-	    };
-	    Collection.prototype.removeRepeatItems = function () {
-	        var noRepeatList = Collection.create();
-	        this.forEach(function (item) {
-	            if (noRepeatList.hasChild(item)) {
-	                return;
-	            }
-	            noRepeatList.addChild(item);
-	        });
-	        return noRepeatList;
-	    };
-	    Collection.prototype.hasRepeatItems = function () {
-	        var noRepeatList = Collection.create(), hasRepeat = false;
-	        this.forEach(function (item) {
-	            if (noRepeatList.hasChild(item)) {
-	                hasRepeat = true;
-	                return $BREAK;
-	            }
-	            noRepeatList.addChild(item);
-	        });
-	        return hasRepeat;
-	    };
-	    return Collection;
-	}(List));
-
-	var SubjectObserver = (function () {
+	var SubjectObserver$1 = (function () {
 	    function SubjectObserver() {
-	        this.observers = Collection$1.create();
+	        this.observers = Collection.create();
 	        this._disposable = null;
 	    }
 	    SubjectObserver.prototype.isEmpty = function () {
@@ -6501,7 +7916,7 @@
 	    };
 	    SubjectObserver.prototype.removeChild = function (observer) {
 	        this.observers.removeChild(function (ob) {
-	            return JudgeUtils$2.isEqual(ob, observer);
+	            return JudgeUtils$3.isEqual(ob, observer);
 	        });
 	    };
 	    SubjectObserver.prototype.dispose = function () {
@@ -6519,7 +7934,7 @@
 	    return SubjectObserver;
 	}());
 
-	var Observer = (function (_super) {
+	var Observer$1 = (function (_super) {
 	    __extends(Observer, _super);
 	    function Observer() {
 	        var args = [];
@@ -6593,20 +8008,20 @@
 	        this._disposable = disposable;
 	    };
 	    return Observer;
-	}(Entity$1));
+	}(Entity$2));
 
-	var Main$1 = (function () {
+	var Main$2 = (function () {
 	    function Main() {
 	    }
 	    return Main;
 	}());
-	Main$1.isTest = false;
+	Main$2.isTest = false;
 
-	function assert(cond, message) {
+	function assert$1(cond, message) {
 	    if (message === void 0) { message = "contract error"; }
-	    Log$1.error(!cond, message);
+	    Log.error(!cond, message);
 	}
-	function requireCheck(InFunc) {
+	function requireCheck$1(InFunc) {
 	    return function (target, name, descriptor) {
 	        var value = descriptor.value;
 	        descriptor.value = function () {
@@ -6614,7 +8029,7 @@
 	            for (var _i = 0; _i < arguments.length; _i++) {
 	                args[_i] = arguments[_i];
 	            }
-	            if (Main$1.isTest) {
+	            if (Main$2.isTest) {
 	                InFunc.apply(this, args);
 	            }
 	            return value.apply(this, args);
@@ -6623,7 +8038,7 @@
 	    };
 	}
 
-	var AutoDetachObserver = (function (_super) {
+	var AutoDetachObserver$1 = (function (_super) {
 	    __extends(AutoDetachObserver, _super);
 	    function AutoDetachObserver() {
 	        return _super !== null && _super.apply(this, arguments) || this;
@@ -6675,16 +8090,16 @@
 	        }
 	    };
 	    return AutoDetachObserver;
-	}(Observer));
+	}(Observer$1));
 	__decorate([
-	    requireCheck(function () {
+	    requireCheck$1(function () {
 	        if (this.isDisposed) {
-	            Log$1.warn("only can dispose once");
+	            Log.warn("only can dispose once");
 	        }
 	    })
-	], AutoDetachObserver.prototype, "dispose", null);
+	], AutoDetachObserver$1.prototype, "dispose", null);
 
-	var InnerSubscription = (function () {
+	var InnerSubscription$1 = (function () {
 	    function InnerSubscription(subject, observer) {
 	        this._subject = null;
 	        this._observer = null;
@@ -6702,10 +8117,10 @@
 	    return InnerSubscription;
 	}());
 
-	var Subject = (function () {
+	var Subject$1 = (function () {
 	    function Subject() {
 	        this._source = null;
-	        this._observer = new SubjectObserver();
+	        this._observer = new SubjectObserver$1();
 	    }
 	    Subject.create = function () {
 	        var obj = new this();
@@ -6722,11 +8137,11 @@
 	        configurable: true
 	    });
 	    Subject.prototype.subscribe = function (arg1, onError, onCompleted) {
-	        var observer = arg1 instanceof Observer
+	        var observer = arg1 instanceof Observer$1
 	            ? arg1
-	            : AutoDetachObserver.create(arg1, onError, onCompleted);
+	            : AutoDetachObserver$1.create(arg1, onError, onCompleted);
 	        this._observer.addChild(observer);
-	        return InnerSubscription.create(this, observer);
+	        return InnerSubscription$1.create(this, observer);
 	    };
 	    Subject.prototype.next = function (value) {
 	        this._observer.next(value);
@@ -6752,7 +8167,7 @@
 	    return Subject;
 	}());
 
-	var SingleDisposable = (function (_super) {
+	var SingleDisposable$1 = (function (_super) {
 	    __extends(SingleDisposable, _super);
 	    function SingleDisposable(disposeHandler) {
 	        var _this = _super.call(this, "SingleDisposable") || this;
@@ -6777,9 +8192,9 @@
 	        this._disposeHandler();
 	    };
 	    return SingleDisposable;
-	}(Entity$1));
+	}(Entity$2));
 
-	var ClassMapUtils = (function () {
+	var ClassMapUtils$1 = (function () {
 	    function ClassMapUtils() {
 	    }
 	    ClassMapUtils.addClassMap = function (className, _class) {
@@ -6790,9 +8205,9 @@
 	    };
 	    return ClassMapUtils;
 	}());
-	ClassMapUtils._classMap = {};
+	ClassMapUtils$1._classMap = {};
 
-	var FunctionUtils = (function () {
+	var FunctionUtils$1 = (function () {
 	    function FunctionUtils() {
 	    }
 	    FunctionUtils.bind = function (object, func) {
@@ -6803,7 +8218,7 @@
 	    return FunctionUtils;
 	}());
 
-	var Stream = (function (_super) {
+	var Stream$1 = (function (_super) {
 	    __extends(Stream, _super);
 	    function Stream(subscribeFunc) {
 	        var _this = _super.call(this, "Stream") || this;
@@ -6813,13 +8228,13 @@
 	        return _this;
 	    }
 	    Stream.prototype.buildStream = function (observer) {
-	        return SingleDisposable.create((this.subscribeFunc(observer) || function () { }));
+	        return SingleDisposable$1.create((this.subscribeFunc(observer) || function () { }));
 	    };
 	    Stream.prototype.do = function (onNext, onError, onCompleted) {
-	        return ClassMapUtils.getClass("DoStream").create(this, onNext, onError, onCompleted);
+	        return ClassMapUtils$1.getClass("DoStream").create(this, onNext, onError, onCompleted);
 	    };
 	    Stream.prototype.map = function (selector) {
-	        return ClassMapUtils.getClass("MapStream").create(this, selector);
+	        return ClassMapUtils$1.getClass("MapStream").create(this, selector);
 	    };
 	    Stream.prototype.flatMap = function (selector) {
 	        return this.map(selector).mergeAll();
@@ -6828,24 +8243,24 @@
 	        return this.map(selector).concatAll();
 	    };
 	    Stream.prototype.mergeAll = function () {
-	        return ClassMapUtils.getClass("MergeAllStream").create(this);
+	        return ClassMapUtils$1.getClass("MergeAllStream").create(this);
 	    };
 	    Stream.prototype.concatAll = function () {
 	        return this.merge(1);
 	    };
 	    Stream.prototype.skipUntil = function (otherStream) {
-	        return ClassMapUtils.getClass("SkipUntilStream").create(this, otherStream);
+	        return ClassMapUtils$1.getClass("SkipUntilStream").create(this, otherStream);
 	    };
 	    Stream.prototype.takeUntil = function (otherStream) {
-	        return ClassMapUtils.getClass("TakeUntilStream").create(this, otherStream);
+	        return ClassMapUtils$1.getClass("TakeUntilStream").create(this, otherStream);
 	    };
 	    Stream.prototype.take = function (count) {
 	        if (count === void 0) { count = 1; }
 	        var self = this;
 	        if (count === 0) {
-	            return ClassMapUtils.getClass("Operator").empty();
+	            return ClassMapUtils$1.getClass("Operator").empty();
 	        }
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	        return ClassMapUtils$1.getClass("Operator").createStream(function (observer) {
 	            self.subscribe(function (value) {
 	                if (count > 0) {
 	                    observer.next(value);
@@ -6865,9 +8280,9 @@
 	        if (count === void 0) { count = 1; }
 	        var self = this;
 	        if (count === 0) {
-	            return ClassMapUtils.getClass("Operator").empty();
+	            return ClassMapUtils$1.getClass("Operator").empty();
 	        }
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	        return ClassMapUtils$1.getClass("Operator").createStream(function (observer) {
 	            var queue = [];
 	            self.subscribe(function (value) {
 	                queue.push(value);
@@ -6887,8 +8302,8 @@
 	    Stream.prototype.takeWhile = function (predicate, thisArg) {
 	        if (thisArg === void 0) { thisArg = this; }
 	        var self = this, bindPredicate = null;
-	        bindPredicate = FunctionUtils.bind(thisArg, predicate);
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	        bindPredicate = FunctionUtils$1.bind(thisArg, predicate);
+	        return ClassMapUtils$1.getClass("Operator").createStream(function (observer) {
 	            var i = 0, isStart = false;
 	            self.subscribe(function (value) {
 	                if (bindPredicate(value, i++, self)) {
@@ -6916,7 +8331,7 @@
 	    Stream.prototype.lastOrDefault = function (defaultValue) {
 	        if (defaultValue === void 0) { defaultValue = null; }
 	        var self = this;
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
+	        return ClassMapUtils$1.getClass("Operator").createStream(function (observer) {
 	            var queue = [];
 	            self.subscribe(function (value) {
 	                queue.push(value);
@@ -6940,56 +8355,56 @@
 	    };
 	    Stream.prototype.filter = function (predicate, thisArg) {
 	        if (thisArg === void 0) { thisArg = this; }
-	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
+	        if (this instanceof ClassMapUtils$1.getClass("FilterStream")) {
 	            var self = this;
 	            return self.internalFilter(predicate, thisArg);
 	        }
-	        return ClassMapUtils.getClass("FilterStream").create(this, predicate, thisArg);
+	        return ClassMapUtils$1.getClass("FilterStream").create(this, predicate, thisArg);
 	    };
 	    Stream.prototype.filterWithState = function (predicate, thisArg) {
 	        if (thisArg === void 0) { thisArg = this; }
-	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
+	        if (this instanceof ClassMapUtils$1.getClass("FilterStream")) {
 	            var self = this;
 	            return self.internalFilter(predicate, thisArg);
 	        }
-	        return ClassMapUtils.getClass("FilterWithStateStream").create(this, predicate, thisArg);
+	        return ClassMapUtils$1.getClass("FilterWithStateStream").create(this, predicate, thisArg);
 	    };
 	    Stream.prototype.concat = function () {
 	        var args = null;
-	        if (JudgeUtils$2.isArray(arguments[0])) {
+	        if (JudgeUtils$3.isArray(arguments[0])) {
 	            args = arguments[0];
 	        }
 	        else {
 	            args = Array.prototype.slice.call(arguments, 0);
 	        }
 	        args.unshift(this);
-	        return ClassMapUtils.getClass("ConcatStream").create(args);
+	        return ClassMapUtils$1.getClass("ConcatStream").create(args);
 	    };
 	    Stream.prototype.merge = function () {
 	        var args = [];
 	        for (var _i = 0; _i < arguments.length; _i++) {
 	            args[_i] = arguments[_i];
 	        }
-	        if (JudgeUtils$2.isNumber(args[0])) {
+	        if (JudgeUtils$3.isNumber(args[0])) {
 	            var maxConcurrent = args[0];
-	            return ClassMapUtils.getClass("MergeStream").create(this, maxConcurrent);
+	            return ClassMapUtils$1.getClass("MergeStream").create(this, maxConcurrent);
 	        }
-	        if (JudgeUtils$2.isArray(args[0])) {
+	        if (JudgeUtils$3.isArray(args[0])) {
 	            args = arguments[0];
 	        }
 	        else {
 	        }
 	        var stream = null;
 	        args.unshift(this);
-	        stream = ClassMapUtils.getClass("Operator").fromArray(args).mergeAll();
+	        stream = ClassMapUtils$1.getClass("Operator").fromArray(args).mergeAll();
 	        return stream;
 	    };
 	    Stream.prototype.repeat = function (count) {
 	        if (count === void 0) { count = -1; }
-	        return ClassMapUtils.getClass("RepeatStream").create(this, count);
+	        return ClassMapUtils$1.getClass("RepeatStream").create(this, count);
 	    };
 	    Stream.prototype.ignoreElements = function () {
-	        return ClassMapUtils.getClass("IgnoreElementsStream").create(this);
+	        return ClassMapUtils$1.getClass("IgnoreElementsStream").create(this);
 	    };
 	    Stream.prototype.handleSubject = function (subject) {
 	        if (this._isSubject(subject)) {
@@ -6999,41 +8414,41 @@
 	        return false;
 	    };
 	    Stream.prototype._isSubject = function (subject) {
-	        return subject instanceof Subject;
+	        return subject instanceof Subject$1;
 	    };
 	    Stream.prototype._setSubject = function (subject) {
 	        subject.source = this;
 	    };
 	    return Stream;
-	}(Entity$1));
+	}(Entity$2));
 	__decorate([
-	    requireCheck(function (count) {
+	    requireCheck$1(function (count) {
 	        if (count === void 0) { count = 1; }
-	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
+	        assert$1(count >= 0, Log.info.FUNC_SHOULD("count", ">= 0"));
 	    })
-	], Stream.prototype, "take", null);
+	], Stream$1.prototype, "take", null);
 	__decorate([
-	    requireCheck(function (count) {
+	    requireCheck$1(function (count) {
 	        if (count === void 0) { count = 1; }
-	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
+	        assert$1(count >= 0, Log.info.FUNC_SHOULD("count", ">= 0"));
 	    })
-	], Stream.prototype, "takeLast", null);
+	], Stream$1.prototype, "takeLast", null);
 
-	var root$2;
-	if (JudgeUtils$2.isNodeJs() && typeof global != "undefined") {
-	    root$2 = global;
+	var root$3;
+	if (JudgeUtils$3.isNodeJs() && typeof global != "undefined") {
+	    root$3 = global;
 	}
 	else if (typeof window != "undefined") {
-	    root$2 = window;
+	    root$3 = window;
 	}
 	else if (typeof self != "undefined") {
-	    root$2 = self;
+	    root$3 = self;
 	}
 	else {
-	    Log$1.error("no avaliable root!");
+	    Log.error("no avaliable root!");
 	}
 
-	var Scheduler = (function () {
+	var Scheduler$1 = (function () {
 	    function Scheduler() {
 	        this._requestLoopId = null;
 	    }
@@ -7059,7 +8474,7 @@
 	        action(initial);
 	    };
 	    Scheduler.prototype.publishInterval = function (observer, initial, interval, action) {
-	        return root$2.setInterval(function () {
+	        return root$3.setInterval(function () {
 	            initial = action(initial);
 	        }, interval);
 	    };
@@ -7069,12 +8484,12 @@
 	            if (isEnd) {
 	                return;
 	            }
-	            self._requestLoopId = root$2.requestNextAnimationFrame(loop);
+	            self._requestLoopId = root$3.requestNextAnimationFrame(loop);
 	        };
-	        this._requestLoopId = root$2.requestNextAnimationFrame(loop);
+	        this._requestLoopId = root$3.requestNextAnimationFrame(loop);
 	    };
 	    Scheduler.prototype.publishTimeout = function (observer, time, action) {
-	        return root$2.setTimeout(function () {
+	        return root$3.setTimeout(function () {
 	            action(time);
 	            observer.completed();
 	        }, time);
@@ -7082,11 +8497,11 @@
 	    return Scheduler;
 	}());
 
-	var AnonymousStream = (function (_super) {
+	var AnonymousStream$1 = (function (_super) {
 	    __extends(AnonymousStream, _super);
 	    function AnonymousStream(subscribeFunc) {
 	        var _this = _super.call(this, subscribeFunc) || this;
-	        _this.scheduler = Scheduler.create();
+	        _this.scheduler = Scheduler$1.create();
 	        return _this;
 	    }
 	    AnonymousStream.create = function (subscribeFunc) {
@@ -7094,7 +8509,7 @@
 	        return obj;
 	    };
 	    AnonymousStream.prototype.buildStream = function (observer) {
-	        return SingleDisposable.create((this.subscribeFunc(observer) || function () { }));
+	        return SingleDisposable$1.create((this.subscribeFunc(observer) || function () { }));
 	    };
 	    AnonymousStream.prototype.subscribe = function () {
 	        var args = [];
@@ -7102,25 +8517,25 @@
 	            args[_i] = arguments[_i];
 	        }
 	        var observer = null;
-	        if (args[0] instanceof Subject) {
+	        if (args[0] instanceof Subject$1) {
 	            var subject = args[0];
 	            this.handleSubject(subject);
 	            return;
 	        }
-	        else if (JudgeUtils$2.isIObserver(args[0])) {
-	            observer = AutoDetachObserver.create(args[0]);
+	        else if (JudgeUtils$3.isIObserver(args[0])) {
+	            observer = AutoDetachObserver$1.create(args[0]);
 	        }
 	        else {
 	            var onNext = args[0], onError = args[1] || null, onCompleted = args[2] || null;
-	            observer = AutoDetachObserver.create(onNext, onError, onCompleted);
+	            observer = AutoDetachObserver$1.create(onNext, onError, onCompleted);
 	        }
 	        observer.setDisposable(this.buildStream(observer));
 	        return observer;
 	    };
 	    return AnonymousStream;
-	}(Stream));
+	}(Stream$1));
 
-	var BaseStream = (function (_super) {
+	var BaseStream$1 = (function (_super) {
 	    __extends(BaseStream, _super);
 	    function BaseStream() {
 	        return _super !== null && _super.apply(this, arguments) || this;
@@ -7130,9 +8545,9 @@
 	        if (this.handleSubject(arg1)) {
 	            return;
 	        }
-	        observer = arg1 instanceof Observer
-	            ? AutoDetachObserver.create(arg1)
-	            : AutoDetachObserver.create(arg1, onError, onCompleted);
+	        observer = arg1 instanceof Observer$1
+	            ? AutoDetachObserver$1.create(arg1)
+	            : AutoDetachObserver$1.create(arg1, onError, onCompleted);
 	        observer.setDisposable(this.buildStream(observer));
 	        return observer;
 	    };
@@ -7141,9 +8556,9 @@
 	        return this.subscribeCore(observer);
 	    };
 	    return BaseStream;
-	}(Stream));
+	}(Stream$1));
 
-	var FromArrayStream = (function (_super) {
+	var FromArrayStream$1 = (function (_super) {
 	    __extends(FromArrayStream, _super);
 	    function FromArrayStream(array, scheduler) {
 	        var _this = _super.call(this, null) || this;
@@ -7168,12 +8583,12 @@
 	            }
 	        }
 	        this.scheduler.publishRecursive(observer, 0, loopRecursive);
-	        return SingleDisposable.create();
+	        return SingleDisposable$1.create();
 	    };
 	    return FromArrayStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	var FromPromiseStream = (function (_super) {
+	var FromPromiseStream$1 = (function (_super) {
 	    __extends(FromPromiseStream, _super);
 	    function FromPromiseStream(promise, scheduler) {
 	        var _this = _super.call(this, null) || this;
@@ -7193,12 +8608,12 @@
 	        }, function (err) {
 	            observer.error(err);
 	        }, observer);
-	        return SingleDisposable.create();
+	        return SingleDisposable$1.create();
 	    };
 	    return FromPromiseStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	var FromEventPatternStream = (function (_super) {
+	var FromEventPatternStream$1 = (function (_super) {
 	    __extends(FromEventPatternStream, _super);
 	    function FromEventPatternStream(addHandler, removeHandler) {
 	        var _this = _super.call(this, null) || this;
@@ -7218,14 +8633,14 @@
 	            observer.next(event);
 	        }
 	        this._addHandler(innerHandler);
-	        return SingleDisposable.create(function () {
+	        return SingleDisposable$1.create(function () {
 	            self._removeHandler(innerHandler);
 	        });
 	    };
 	    return FromEventPatternStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	var IntervalStream = (function (_super) {
+	var IntervalStream$1 = (function (_super) {
 	    __extends(IntervalStream, _super);
 	    function IntervalStream(interval, scheduler) {
 	        var _this = _super.call(this, null) || this;
@@ -7248,14 +8663,14 @@
 	            observer.next(count);
 	            return count + 1;
 	        });
-	        return SingleDisposable.create(function () {
-	            root$2.clearInterval(id);
+	        return SingleDisposable$1.create(function () {
+	            root$3.clearInterval(id);
 	        });
 	    };
 	    return IntervalStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	var IntervalRequestStream = (function (_super) {
+	var IntervalRequestStream$1 = (function (_super) {
 	    __extends(IntervalRequestStream, _super);
 	    function IntervalRequestStream(scheduler) {
 	        var _this = _super.call(this, null) || this;
@@ -7273,15 +8688,15 @@
 	            observer.next(time);
 	            return self._isEnd;
 	        });
-	        return SingleDisposable.create(function () {
-	            root$2.cancelNextRequestAnimationFrame(self.scheduler.requestLoopId);
+	        return SingleDisposable$1.create(function () {
+	            root$3.cancelNextRequestAnimationFrame(self.scheduler.requestLoopId);
 	            self._isEnd = true;
 	        });
 	    };
 	    return IntervalRequestStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	var TimeoutStream = (function (_super) {
+	var TimeoutStream$1 = (function (_super) {
 	    __extends(TimeoutStream, _super);
 	    function TimeoutStream(time, scheduler) {
 	        var _this = _super.call(this, null) || this;
@@ -7299,23 +8714,23 @@
 	        id = this.scheduler.publishTimeout(observer, this._time, function (time) {
 	            observer.next(time);
 	        });
-	        return SingleDisposable.create(function () {
-	            root$2.clearTimeout(id);
+	        return SingleDisposable$1.create(function () {
+	            root$3.clearTimeout(id);
 	        });
 	    };
 	    return TimeoutStream;
-	}(BaseStream));
+	}(BaseStream$1));
 	__decorate([
-	    requireCheck(function (time, scheduler) {
-	        assert(time > 0, Log$1.info.FUNC_SHOULD("time", "> 0"));
+	    requireCheck$1(function (time, scheduler) {
+	        assert$1(time > 0, Log.info.FUNC_SHOULD("time", "> 0"));
 	    })
-	], TimeoutStream, "create", null);
+	], TimeoutStream$1, "create", null);
 
-	var GroupDisposable = (function (_super) {
+	var GroupDisposable$1 = (function (_super) {
 	    __extends(GroupDisposable, _super);
 	    function GroupDisposable(disposable) {
 	        var _this = _super.call(this, "GroupDisposable") || this;
-	        _this._group = Collection$1.create();
+	        _this._group = Collection.create();
 	        _this._isDisposed = false;
 	        if (disposable) {
 	            _this._group.addChild(disposable);
@@ -7344,9 +8759,9 @@
 	        });
 	    };
 	    return GroupDisposable;
-	}(Entity$1));
+	}(Entity$2));
 
-	var DeferStream = (function (_super) {
+	var DeferStream$1 = (function (_super) {
 	    __extends(DeferStream, _super);
 	    function DeferStream(buildStreamFunc) {
 	        var _this = _super.call(this, null) || this;
@@ -7359,20 +8774,20 @@
 	        return obj;
 	    };
 	    DeferStream.prototype.subscribeCore = function (observer) {
-	        var group = GroupDisposable.create();
+	        var group = GroupDisposable$1.create();
 	        group.add(this._buildStreamFunc().buildStream(observer));
 	        return group;
 	    };
 	    return DeferStream;
-	}(BaseStream));
+	}(BaseStream$1));
 
-	function registerClass(className) {
+	function registerClass$1(className) {
 	    return function (target) {
-	        ClassMapUtils.addClassMap(className, target);
+	        ClassMapUtils$1.addClassMap(className, target);
 	    };
 	}
 
-	var Operator = (function () {
+	var Operator$1 = (function () {
 	    function Operator() {
 	    }
 	    Operator.empty = function () {
@@ -7381,523 +8796,96 @@
 	        });
 	    };
 	    Operator.createStream = function (subscribeFunc) {
-	        return AnonymousStream.create(subscribeFunc);
+	        return AnonymousStream$1.create(subscribeFunc);
 	    };
 	    Operator.fromArray = function (array, scheduler) {
-	        if (scheduler === void 0) { scheduler = Scheduler.create(); }
-	        return FromArrayStream.create(array, scheduler);
+	        if (scheduler === void 0) { scheduler = Scheduler$1.create(); }
+	        return FromArrayStream$1.create(array, scheduler);
 	    };
 	    return Operator;
 	}());
-	Operator = __decorate([
-	    registerClass("Operator")
-	], Operator);
+	Operator$1 = __decorate([
+	    registerClass$1("Operator")
+	], Operator$1);
+	var createStream$1 = Operator$1.createStream;
 
 
 
-	var fromPromise = function (promise, scheduler) {
-	    if (scheduler === void 0) { scheduler = Scheduler.create(); }
-	    return FromPromiseStream.create(promise, scheduler);
+
+
+
+
+
+
+
+	var just$1 = function (returnValue) {
+	    return createStream$1(function (observer) {
+	        observer.next(returnValue);
+	        observer.completed();
+	    });
 	};
 
-	var MapObserver = (function (_super) {
-	    __extends(MapObserver, _super);
-	    function MapObserver(currentObserver, selector) {
-	        var _this = _super.call(this, null, null, null) || this;
-	        _this._currentObserver = null;
-	        _this._selector = null;
-	        _this._currentObserver = currentObserver;
-	        _this._selector = selector;
-	        return _this;
+	var Loader = (function () {
+	    function Loader() {
+	        this._objLoader = ObjLoader.create();
+	        this._materialLoader = MaterialLoader.create();
 	    }
-	    MapObserver.create = function (currentObserver, selector) {
-	        return new this(currentObserver, selector);
-	    };
-	    MapObserver.prototype.onNext = function (value) {
-	        var result = null;
-	        try {
-	            result = this._selector(value);
-	        }
-	        catch (e) {
-	            this._currentObserver.error(e);
-	        }
-	        finally {
-	            this._currentObserver.next(result);
-	        }
-	    };
-	    MapObserver.prototype.onError = function (error) {
-	        this._currentObserver.error(error);
-	    };
-	    MapObserver.prototype.onCompleted = function () {
-	        this._currentObserver.completed();
-	    };
-	    return MapObserver;
-	}(Observer));
-
-	var MapStream = (function (_super) {
-	    __extends(MapStream, _super);
-	    function MapStream(source, selector) {
-	        var _this = _super.call(this, null) || this;
-	        _this._source = null;
-	        _this._selector = null;
-	        _this._source = source;
-	        _this.scheduler = _this._source.scheduler;
-	        _this._selector = selector;
-	        return _this;
-	    }
-	    MapStream.create = function (source, selector) {
-	        var obj = new this(source, selector);
+	    Loader.of = function () {
+	        var obj = new this();
 	        return obj;
 	    };
-	    MapStream.prototype.subscribeCore = function (observer) {
-	        return this._source.buildStream(MapObserver.create(observer, this._selector));
-	    };
-	    return MapStream;
-	}(BaseStream));
-	MapStream = __decorate([
-	    registerClass("MapStream")
-	], MapStream);
-
-	var AjaxUtil = (function () {
-	    function AjaxUtil() {
-	    }
-	    AjaxUtil.ajax = function (config) {
-	        var url = config.url;
-	        var success = config.success;
-	        var error = config.error;
-	        var data = config.data;
-	        var type = config.data == void 0 ? "GET" : config.data;
-	        var xhr = this._createAjax(error);
-	        xhr.onreadystatechange = function () {
-	            if (xhr.readyState === 4 && xhr.status === 200) {
-	                if (success !== null) {
-	                    success(xhr.responseText);
-	                }
+	    Loader.prototype.convert = function (filePath) {
+	        var _this = this;
+	        var result = {};
+	        var objStream = this._getStream(filePath);
+	        var fileName = this._getName(filePath);
+	        return objStream.flatMap(function (fileContent) {
+	            _this._objLoader.convert(result, fileContent, fileName);
+	            if (_this._objLoader.mtlFilePath) {
+	                var materialStream = _this._getStream("./build/" + _this._objLoader.mtlFilePath);
+	                return materialStream.map(function (fileContent) {
+	                    result.materials = _this._materialLoader.convert(result, fileContent);
+	                    return result;
+	                });
 	            }
-	            else {
-	                if (this.error !== void 0) {
-	                    this.error("出错了");
-	                }
-	            }
-	        };
-	        xhr.open(type, url, true);
-	        xhr.send(null);
+	            return just$1(result);
+	        });
 	    };
-	    AjaxUtil._createAjax = function (error) {
-	        var xhr = null;
-	        try {
-	            xhr = new ActiveXObject("microsoft.xmlhttp");
-	        }
-	        catch (e1) {
-	            try {
-	                xhr = new XMLHttpRequest();
-	            }
-	            catch (e2) {
-	                error(xhr, { message: "您的浏览器不支持ajax，请更换！" });
-	                return null;
-	            }
-	        }
-	        return xhr;
-	    };
-	    return AjaxUtil;
-	}());
-
-	var ObjLoader = (function () {
-	    function ObjLoader(path) {
-	        this._path = null;
-	        this.regexp = {
-	            vertex_pattern: /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
-	            normal_pattern: /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
-	            uv_pattern: /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
-	            face_vertex: /^f\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)(?:\s+(-?\d+))?/,
-	            face_vertex_uv: /^f\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+))?/,
-	            face_vertex_uv_normal: /^f\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)\s+(-?\d+)\/(-?\d+)\/(-?\d+)(?:\s+(-?\d+)\/(-?\d+)\/(-?\d+))?/,
-	            face_vertex_normal: /^f\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)\s+(-?\d+)\/\/(-?\d+)(?:\s+(-?\d+)\/\/(-?\d+))?/,
-	            object_pattern: /^[og]\s*(.+)?/,
-	            smoothing_pattern: /^s\s+(\d+|on|off)/,
-	            material_library_pattern: /^mtllib /,
-	            material_use_pattern: /^usemtl /
-	        };
-	        this._path = path;
-	    }
-	    ObjLoader.create = function (path) {
-	        var obj = new this(path);
-	        return obj;
-	    };
-	    ObjLoader.prototype.load = function (path) {
-	        var path = path == void 0 ? this._path : path;
+	    Loader.prototype._getStream = function (filePath) {
 	        return fromPromise(new rsvp_1(function (resolve, reject) {
 	            AjaxUtil.ajax({
-	                url: path,
+	                url: filePath,
 	                success: function (val) { return resolve(val); },
 	                error: function (val) { return reject(val); }
 	            });
 	        }));
 	    };
-	    ObjLoader.prototype.parse = function () {
-	        var _this = this;
-	        this.load().subscribe(function (val) {
-	            if (val.indexOf('\r\n') !== -1) {
-	                val = val.replace(/\r\n/g, '\n');
-	            }
-	            if (val.indexOf('\\\n') !== -1) {
-	                val = val.replace(/\\\n/g, "");
-	            }
-	            var res = val.split("\n");
-	            var state = _this._createParserState();
-	            var result = [];
-	            for (var _i = 0, res_1 = res; _i < res_1.length; _i++) {
-	                var line = res_1[_i];
-	                line = line.trim();
-	                var lineFirst = line.charAt(0);
-	                if (lineFirst === "#")
-	                    continue;
-	                if (lineFirst === 'v') {
-	                    var lineSecond = line.charAt(1);
-	                    if (lineSecond === ' ' && (result = _this.regexp.vertex_pattern.exec(line)) !== null) {
-	                        state.vertices.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
-	                    }
-	                    else if (lineSecond === "n" && (result = _this.regexp.normal_pattern.exec(line)) !== null) {
-	                        state.normals.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
-	                    }
-	                    else if (lineSecond === "t" && (result = _this.regexp.uv_pattern.exec(line)) !== null) {
-	                        state.uvs.push(parseFloat(result[1]), parseFloat(result[2]));
-	                    }
-	                    else {
-	                        throw new Error("Unexpected vertex/normal/uv line: '" + line + "'");
-	                    }
-	                }
-	                else if (lineFirst === "f") {
-	                    if ((result = _this.regexp.face_vertex_uv_normal.exec(line)) !== null) {
-	                        state.addFace(result[1], result[4], result[7], result[10], result[2], result[5], result[8], result[11], result[3], result[6], result[9], result[12]);
-	                    }
-	                    else if ((result = _this.regexp.face_vertex_uv.exec(line)) !== null) {
-	                        state.addFace(result[1], result[3], result[5], result[7], result[2], result[4], result[6], result[8]);
-	                    }
-	                    else if ((result = _this.regexp.face_vertex_normal.exec(line)) !== null) {
-	                        state.addFace(result[1], result[3], result[5], result[7], undefined, undefined, undefined, undefined, result[2], result[4], result[6], result[8]);
-	                    }
-	                    else if ((result = _this.regexp.face_vertex.exec(line)) !== null) {
-	                        state.addFace(result[1], result[2], result[3], result[4]);
-	                    }
-	                    else {
-	                        throw new Error("Unexpected face line: '" + line + "'");
-	                    }
-	                }
-	                else if ((result = _this.regexp.object_pattern.exec(line)) !== null) {
-	                    var name = result[1];
-	                    state.startObject(name);
-	                }
-	                else if (_this.regexp.material_use_pattern.test(line)) {
-	                    state.object.startMaterial(line.substring(7).trim(), state.materialLibraries);
-	                }
-	                else if ((result = _this.regexp.smoothing_pattern.exec(line)) !== null) {
-	                    var value = result[1].trim().toLowerCase();
-	                    state.object.smooth = (value === '1' || value === 'on');
-	                    var material = state.object.currentMaterial();
-	                    if (material) {
-	                        material.smooth = state.object.smooth;
-	                    }
-	                }
-	                else {
-	                }
-	            }
-	            state.finalize();
-	            console.log(state);
-	        });
+	    Loader.prototype._getName = function (filePath) {
+	        var reg = /[^\/]\w+/g;
+	        var result = filePath.match(reg);
+	        return result[result.length - 2];
 	    };
-	    ObjLoader.prototype._createParserState = function () {
-	        var state = {
-	            objects: [],
-	            object: {},
-	            vertices: [],
-	            normals: [],
-	            uvs: [],
-	            materialLibraries: [],
-	            startObject: function (name, declaration) {
-	                if (this.object && this.object.declaration === false) {
-	                    this.object.name = name;
-	                    this.object.declaration = (declaration !== false);
-	                    return;
-	                }
-	                var previousMaterial = (this.object && this.object.currentMaterial === 'function' ? this.object.currentMatrial() : undefined);
-	                if (this.object && typeof this.object._finalize === 'function') {
-	                    this.object._finalize(true);
-	                }
-	                this.object = {
-	                    name: name || '',
-	                    declaration: (declaration !== false),
-	                    geometry: {
-	                        vertices: [],
-	                        normals: [],
-	                        texCoord: []
-	                    },
-	                    materials: [],
-	                    startMaterial: function (name, libraries) {
-	                        var previous = this._finalize(false);
-	                        if (previous && (previous.inherited || previous.groupCount <= 0)) {
-	                            this.materials.splice(previous.index, 1);
-	                        }
-	                        var materil = {
-	                            index: this.materials.length,
-	                            name: name || '',
-	                            mtllib: (Array.isArray(libraries) && libraries.length > 0 ? libraries[libraries.length - 1] : ''),
-	                            smooth: (previous !== void 0 ? previous.smooth : this.smooth),
-	                            groupStart: (previous !== void 0 ? previous.groupEnd : 0),
-	                            groupEnd: -1,
-	                            groupCount: -1,
-	                            inherited: false,
-	                            clone: function (index) {
-	                                var cloned = {
-	                                    index: (typeof index === 'number' ? index : this.index),
-	                                    name: this.name,
-	                                    mtllib: this.mtllib,
-	                                    smooth: this.smooth,
-	                                    groupStart: 0,
-	                                    groupEnd: -1,
-	                                    groupCount: -1,
-	                                    inherited: false,
-	                                    clone: null
-	                                };
-	                                cloned.clone = this.clone.bind(cloned);
-	                                return cloned;
-	                            }
-	                        };
-	                        this.materials.push(materil);
-	                        return materil;
-	                    },
-	                    currentMatrial: function () {
-	                        if (this.materials.length > 0) {
-	                            return this.materials[this.materials.length - 1];
-	                        }
-	                        return void 0;
-	                    },
-	                    _finalize: function (end) {
-	                        var lastMultiMaterial = this.currentMatrial();
-	                        console.log(lastMultiMaterial);
-	                        if (lastMultiMaterial && lastMultiMaterial.groupEnd === -1) {
-	                            lastMultiMaterial.groupEnd = this.geometry.vertices.length / 3;
-	                            lastMultiMaterial.groupCount = lastMultiMaterial.groupEnd - lastMultiMaterial.groupStart;
-	                            lastMultiMaterial.inherited = false;
-	                        }
-	                        if (end && this.materials.length > 1) {
-	                            for (var mi = this.materials.length - 1; mi >= 0; mi--) {
-	                                if (this.materials[mi].groupCount <= 0) {
-	                                    this.materials.splice(mi, 1);
-	                                }
-	                            }
-	                        }
-	                        if (end && this.materials.length === 0) {
-	                            this.materials.push({
-	                                name: '',
-	                                smooth: this.smooth
-	                            });
-	                        }
-	                        return lastMultiMaterial;
-	                    }
-	                };
-	                if (previousMaterial && previousMaterial && typeof previousMaterial.clone === "function") {
-	                    var declared = previousMaterial.clone(0);
-	                    declared.inherited = true;
-	                    this.object.materials.push(declared);
-	                }
-	                this.objects.push(this.object);
-	            },
-	            finalize: function () {
-	                if (this.object && typeof this.object._finalize == "function") {
-	                    this.object._finalize(true);
-	                }
-	            },
-	            parseVertexIndex: function (value, len) {
-	                var index = parseInt(value, 10);
-	                return (index >= 0 ? index - 1 : index + len / 3) * 3;
-	            },
-	            parseNormalIndex: function (value, len) {
-	                var index = parseInt(value, 10);
-	                return (index >= 0 ? index - 1 : index + len / 3) * 3;
-	            },
-	            parseUVIndex: function (value, len) {
-	                var index = parseInt(value, 10);
-	                return (index >= 0 ? index - 1 : index + len / 2) * 2;
-	            },
-	            addVertex: function (a, b, c) {
-	                var src = this.vertices;
-	                var dst = this.object.geometry.vertices;
-	                dst.push(src[a + 0]);
-	                dst.push(src[a + 1]);
-	                dst.push(src[a + 2]);
-	                dst.push(src[b + 0]);
-	                dst.push(src[b + 1]);
-	                dst.push(src[b + 2]);
-	                dst.push(src[c + 0]);
-	                dst.push(src[c + 1]);
-	                dst.push(src[c + 2]);
-	            },
-	            addVertexLine: function (a) {
-	                var src = this.vertices;
-	                var dst = this.object.geometry.vertices;
-	                dst.push(src[a + 0]);
-	                dst.push(src[a + 1]);
-	                dst.push(src[a + 2]);
-	            },
-	            addNormal: function (a, b, c) {
-	                var src = this.normals;
-	                var dst = this.object.geometry.normals;
-	                dst.push(src[a + 0]);
-	                dst.push(src[a + 1]);
-	                dst.push(src[a + 2]);
-	                dst.push(src[b + 0]);
-	                dst.push(src[b + 1]);
-	                dst.push(src[b + 2]);
-	                dst.push(src[c + 0]);
-	                dst.push(src[c + 1]);
-	                dst.push(src[c + 2]);
-	            },
-	            addUV: function (a, b, c) {
-	                var src = this.uvs;
-	                var dst = this.object.geometry.uvs;
-	                dst.push(src[a + 0]);
-	                dst.push(src[a + 1]);
-	                dst.push(src[b + 0]);
-	                dst.push(src[b + 1]);
-	                dst.push(src[c + 0]);
-	                dst.push(src[c + 1]);
-	            },
-	            addUVLine: function (a) {
-	                var src = this.uvs;
-	                var dst = this.object.geometry.uvs;
-	                dst.push(src[a + 0]);
-	                dst.push(src[a + 1]);
-	            },
-	            addFace: function (a, b, c, d, ua, ub, uc, ud, na, nb, nc, nd) {
-	                var vLen = this.vertices.length;
-	                var ia = this.parseVertexIndex(a, vLen);
-	                var ib = this.parseVertexIndex(b, vLen);
-	                var ic = this.parseVertexIndex(c, vLen);
-	                var id;
-	                if (d === undefined) {
-	                    this.addVertex(ia, ib, ic);
-	                }
-	                else {
-	                    id = this.parseVertexIndex(d, vLen);
-	                    this.addVertex(ia, ib, id);
-	                    this.addVertex(ib, ic, id);
-	                }
-	                if (ua !== undefined) {
-	                    var uvLen = this.uvs.length;
-	                    ia = this.parseUVIndex(ua, uvLen);
-	                    ib = this.parseUVIndex(ub, uvLen);
-	                    ic = this.parseUVIndex(uc, uvLen);
-	                    if (d === undefined) {
-	                        this.addUV(ia, ib, ic);
-	                    }
-	                    else {
-	                        id = this.parseUVIndex(ud, uvLen);
-	                        this.addUV(ia, ib, id);
-	                        this.addUV(ib, ic, id);
-	                    }
-	                }
-	                if (na !== undefined) {
-	                    var nLen = this.normals.length;
-	                    ia = this.parseNormalIndex(na, nLen);
-	                    ib = na === nb ? ia : this.parseNormalIndex(nb, nLen);
-	                    ic = na === nc ? ia : this.parseNormalIndex(nc, nLen);
-	                    if (d === undefined) {
-	                        this.addNormal(ia, ib, ic);
-	                    }
-	                    else {
-	                        id = this.parseNormalIndex(nd, nLen);
-	                        this.addNormal(ia, ib, id);
-	                        this.addNormal(ib, ic, id);
-	                    }
-	                }
-	            },
-	            addLineGeometry: function (vertices, uvs) {
-	                this.object.geometry.type = 'Line';
-	                var vLen = this.vertices.length;
-	                var uvLen = this.uvs.length;
-	                for (var vi = 0, l = vertices.length; vi < l; vi++) {
-	                    this.addVertexLine(this.parseVertexIndex(vertices[vi], vLen));
-	                }
-	                for (var uvi = 0, l = uvs.length; uvi < l; uvi++) {
-	                    this.addUVLine(this.parseUVIndex(uvs[uvi], uvLen));
-	                }
-	            }
-	        };
-	        state.startObject("", false);
-	        return state;
-	    };
-	    return ObjLoader;
+	    return Loader;
 	}());
-
-	var BoxGeometry = (function (_super) {
-	    __extends(BoxGeometry, _super);
-	    function BoxGeometry() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    BoxGeometry.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    BoxGeometry.prototype.computeData = function () {
-	        var vertices = [], texCoords = [], normals = [], indices = [];
-	        normals = [
-	            0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-	            1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-	            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	            -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0,
-	            0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-	            0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0
-	        ];
-	        indices = [
-	            0, 1, 2, 0, 2, 3,
-	            4, 5, 6, 4, 6, 7,
-	            8, 9, 10, 8, 10, 11,
-	            12, 13, 14, 12, 14, 15,
-	            16, 17, 18, 16, 18, 19,
-	            20, 21, 22, 20, 22, 23
-	        ];
-	        texCoords = [
-	            1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0,
-	            1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0,
-	            1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-	            0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
-	            0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0
-	        ];
-	        vertices = [
-	            1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0,
-	            1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, 1.0, -1.0,
-	            1.0, 1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, 1.0,
-	            -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0,
-	            -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-	            1.0, -1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0
-	        ];
-	        return {
-	            vertice: vertices,
-	            texCoord: texCoords,
-	            indice: indices,
-	            normal: normals
-	        };
-	    };
-	    return BoxGeometry;
-	}(Geometry));
 
 	var Test = (function () {
 	    function Test() {
 	    }
-	    Test.prototype.testCanvas = function () {
-	        ObjLoader.create("./build/cube.obj").parse();
+	    Test.prototype.init = function () {
+	        Loader.of().convert("./build/cube.obj").subscribe(function (val) {
+	            console.log(val);
+	        });
+	    };
+	    Test.prototype.testCanvas = function (models) {
 	        Main.setCanvas("webgl").init();
 	        var gameobj = this.createTriangle();
 	        gameobj.transform.rotate(45, 1, 1, 0);
 	        gameobj.transform.translate(-1.4, 2, 0.2);
-	        var object = this.createPlane();
+	        var object = this.createPlane(models[0]);
 	        object.transform.translate(-0.4, -0.2, 0);
-	        object.transform.rotate(30, 0, 0, 1);
+	        object.transform.rotate(30, 0, 1, 1);
 	        var director = exports.Director.getInstance();
 	        director.renderer.setClearColor(0, 0, 0, 1);
-	        director.scene.addChild(gameobj);
 	        director.scene.addChild(object);
 	        director.scene.addChild(this.createCamera());
 	        director.start();
@@ -7913,11 +8901,11 @@
 	        gameObject.addComponent(MeshRenderer.create());
 	        return gameObject;
 	    };
-	    Test.prototype.createPlane = function () {
+	    Test.prototype.createPlane = function (model) {
 	        var gameObject = GameObject.create();
 	        var material = BasicMaterial.create();
 	        material.color = Color.create("#ff0000");
-	        var geometry = PlaneGeometry.create();
+	        var geometry = model;
 	        geometry.material = material;
 	        gameObject.addComponent(geometry);
 	        gameObject.addComponent(MeshRenderer.create());
@@ -7937,7 +8925,59 @@
 	    return Test;
 	}());
 	var a = new Test();
-	a.testCanvas();
+	a.init();
+
+	var ModelGeometry = (function (_super) {
+	    __extends(ModelGeometry, _super);
+	    function ModelGeometry() {
+	        var _this = _super !== null && _super.apply(this, arguments) || this;
+	        _this.vertices = null;
+	        _this.normal = null;
+	        _this.texCoords = null;
+	        _this.colors = null;
+	        return _this;
+	    }
+	    ModelGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    ModelGeometry.prototype.computeData = function () {
+	        return {
+	            vertice: this.vertices,
+	            texCoord: this.texCoords,
+	            color: this.colors,
+	        };
+	    };
+	    return ModelGeometry;
+	}(Geometry));
+
+	var PlaneGeometry = (function (_super) {
+	    __extends(PlaneGeometry, _super);
+	    function PlaneGeometry() {
+	        return _super !== null && _super.apply(this, arguments) || this;
+	    }
+	    PlaneGeometry.create = function () {
+	        var obj = new this();
+	        return obj;
+	    };
+	    PlaneGeometry.prototype.computeData = function () {
+	        var vertices = [], texCoords = [], normals = [], color = [], indices = [];
+	        indices = [0, 1, 2, 0, 2, 3];
+	        texCoords = [1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0];
+	        vertices = [
+	            1.0, 1.0, 0.0,
+	            -1.0, 1.0, 0.0,
+	            -1.0, -1.0, 0.0,
+	            1.0, -1.0, 0.0
+	        ];
+	        return {
+	            vertice: vertices,
+	            texCoord: texCoords,
+	            indice: indices
+	        };
+	    };
+	    return PlaneGeometry;
+	}(Geometry));
 
 	var TriangleGeometry = (function (_super) {
 	    __extends(TriangleGeometry, _super);
@@ -8001,6 +9041,7 @@
 	exports.BufferContainer = BufferContainer;
 	exports.GeometryData = GeometryData;
 	exports.Geometry = Geometry;
+	exports.ModelGeometry = ModelGeometry;
 	exports.PlaneGeometry = PlaneGeometry;
 	exports.TriangleGeometry = TriangleGeometry;
 	exports.BasicMaterial = BasicMaterial;

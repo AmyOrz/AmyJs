@@ -1,12 +1,34 @@
-/// <reference types="wonder-frp" />
+/// <reference types="wonder-commonlib" />
 import "wonder-frp/dist/commonjs/stream/MapStream";
-import { FromPromiseStream } from "wonder-frp/dist/commonjs/stream/FromPromiseStream";
+import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 export declare class ObjLoader {
-    static create(path: string): ObjLoader;
-    private _path;
+    static create(): ObjLoader;
     private regexp;
-    constructor(path: string);
-    load(path?: string): FromPromiseStream;
-    parse(): void;
-    private _createParserState();
+    objects: Collection<ObjectModel>;
+    mtlFilePath: string;
+    materialName: string;
+    name: string;
+    private _vertices;
+    private _normals;
+    private _texCoords;
+    private _currentObject;
+    convert(result: any, fileContent: any, fileName: any): any;
+    private _buildPrimitiveArr();
+    private _convertObject(fileContent);
+    private convertUsemtl(line);
+    private _getObjectNameWithMultMaterialOfSingleObj(materialName);
+    private _convertFace(lines);
+    private _getTriangles(face, triangles);
+}
+export declare class ObjectModel {
+    static create(): ObjectModel;
+    vertices: number[];
+    normals: number[];
+    texCoords: number[];
+    verticeIndices: number[];
+    normalIndices: number[];
+    texCoordIndices: number[];
+    materialName: string;
+    name: string;
+    indicesCount: number;
 }
