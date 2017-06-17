@@ -5,6 +5,7 @@ export declare class Loader {
     private _objLoader;
     private _materialLoader;
     convert(filePath: string): any;
+    t: any;
     private _getStream(filePath);
     private _getName(filePath);
 }

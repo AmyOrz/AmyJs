@@ -11,6 +11,10 @@ VariableLib.a_position = {
     type: EVariableType_1.EVariableType.FLOAT_3,
     buffer: EBufferDataType_1.EBufferDataType.VERTICE
 };
+VariableLib.a_color = {
+    type: EVariableType_1.EVariableType.FLOAT_3,
+    buffer: EBufferDataType_1.EBufferDataType.COLOR
+};
 VariableLib.u_color = {
     type: EVariableType_1.EVariableType.FLOAT_3,
     buffer: "color"

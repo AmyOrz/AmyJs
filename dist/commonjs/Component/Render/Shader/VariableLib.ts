@@ -6,6 +6,11 @@ export class VariableLib {
         buffer: EBufferDataType.VERTICE
     }
 
+    public static a_color = {
+        type: EVariableType.FLOAT_3,
+        buffer: EBufferDataType.COLOR
+    }
+
     public static u_color = {
         type: EVariableType.FLOAT_3,
         buffer: "color"

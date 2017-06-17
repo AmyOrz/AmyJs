@@ -16,7 +16,7 @@ var ModelGeometry = (function (_super) {
     function ModelGeometry() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.vertices = null;
-        _this.normal = null;
+        _this.normals = null;
         _this.texCoords = null;
         _this.colors = null;
         return _this;
@@ -28,6 +28,7 @@ var ModelGeometry = (function (_super) {
     ModelGeometry.prototype.computeData = function () {
         return {
             vertice: this.vertices,
+            normal: this.normals,
             texCoord: this.texCoords,
             color: this.colors,
         };

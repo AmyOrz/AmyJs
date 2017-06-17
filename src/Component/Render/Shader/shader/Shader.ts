@@ -15,6 +15,7 @@ export abstract class Shader extends Component {
     }
 
     public program: Program = Program.create();
+
     protected _shaderLib: ShaderLib = this.createShaderLib();
 
     public init() {

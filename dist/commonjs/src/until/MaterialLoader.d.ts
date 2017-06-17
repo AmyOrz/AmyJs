@@ -4,7 +4,12 @@ export declare class MaterialLoader {
     static create(): MaterialLoader;
     materials: Collection<MaterialModel>;
     private _currentMaterial;
-    convert(result: any, fileContent: string): {};
+    convert(result: any, fileContent: string): any;
+    private _addData(valueData, key, data);
+    private _convertMaterial(fileContent);
+    private _setColor(colorType, colorStrArr);
+    private _parseKey(line, pos);
+    private _parseValue(line, pos);
 }
 export declare class MaterialModel {
     static create(): MaterialModel;

@@ -10,14 +10,16 @@ import { BasicMaterial } from "./Component/Material/BasicMaterial";
 import { Color } from "./Math/Color";
 import { BoxGeometry } from "./Component/Geometry/BoxGeometry";
 import {Loader} from "./until/Loader";
+import {ModelMaterial} from "./Component/Material/ModelMaterial";
 
 export class Test {
 
     public init() {
 
-        Loader.of().convert("./build/cube.obj").subscribe((val)=>{
-            console.log(val)
-        });
+        Loader.of().convert("./build/male02.obj").subscribe(model=>{
+            console.log(model)
+            this.testCanvas(model)
+        })
     }
 
     public testCanvas(models) {
@@ -32,11 +34,10 @@ export class Test {
         gameobj.transform.translate(-1.4, 2, 0.2);
 
 
-        var object = this.createPlane(models[0]);
+        var object = this.createPlane(models);
 
         object.transform.translate(-0.4, -0.2, 0);
-        object.transform.rotate(30, 0, 1, 1);
-
+        object.transform.rotate(341, 1, 0, 1);
 
         var director = Director.getInstance();
         director.renderer.setClearColor(0, 0, 0, 1);
@@ -64,14 +65,13 @@ export class Test {
     }
     private createPlane(model) {
         var gameObject = GameObject.create();
-
-        var material = BasicMaterial.create();
-        material.color = Color.create("#ff0000");
+        //
+        var material = ModelMaterial.create();
 
         var geometry = model;
         geometry.material = material;
 
-        gameObject.addComponent(geometry);
+        gameObject.addComponent(model);
         gameObject.addComponent(MeshRenderer.create());
 
         return gameObject;
@@ -85,9 +85,10 @@ export class Test {
         cameraComponent.fovy = 30;
         cameraComponent.aspect = view.width / view.height;
         cameraComponent.near = 1;
-        cameraComponent.far = 100;
+        cameraComponent.far = 1000;
 
-        cameraComponent.translate(0, 0, -9);
+        // cameraComponent.translate(0, 0, -7);
+        cameraComponent.translate(56, 30, -283);
 
         var cameraControll = CameraController.create(cameraComponent);
 

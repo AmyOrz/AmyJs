@@ -5,6 +5,10 @@ export declare class VariableLib {
         type: EVariableType;
         buffer: EBufferDataType;
     };
+    static a_color: {
+        type: EVariableType;
+        buffer: EBufferDataType;
+    };
     static u_color: {
         type: EVariableType;
         buffer: string;

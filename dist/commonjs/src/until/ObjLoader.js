@@ -33,19 +33,26 @@ var ObjLoader = (function () {
     };
     ObjLoader.prototype.convert = function (result, fileContent, fileName) {
         this._convertObject(fileContent);
-        var meshes = {};
-        var meshId = fileName + "_mesh";
-        result.meshes = meshes;
-        meshes[meshId] = {
-            name: meshId,
-            primitives: this._buildPrimitiveArr()
-        };
+        var currentObj;
+        var objs = [];
+        this._buildPrimitiveArr().forEach(function (item) {
+            if (item.material == void 0) {
+                currentObj = {
+                    attribute: item.attributes,
+                    material: []
+                };
+                objs.push(currentObj);
+            }
+            else {
+                currentObj.material.push(item);
+            }
+        });
+        result.objs = objs;
         return result;
     };
     ObjLoader.prototype._buildPrimitiveArr = function () {
         var me = this, arr = [];
         this.objects.forEach(function (objectModel) {
-            console.log(objectModel);
             arr.push({
                 name: objectModel.name,
                 attributes: {

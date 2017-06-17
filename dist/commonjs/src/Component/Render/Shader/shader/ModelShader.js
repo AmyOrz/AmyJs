@@ -11,28 +11,27 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var Shader_1 = require("./Shader");
-var BasicShaderLib_1 = require("../lib/BasicShaderLib");
+var ModelShaderLib_1 = require("../lib/ModelShaderLib");
 var VariableLib_1 = require("../VariableLib");
-var BasicShader = (function (_super) {
-    __extends(BasicShader, _super);
-    function BasicShader() {
+var ModelShader = (function (_super) {
+    __extends(ModelShader, _super);
+    function ModelShader() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BasicShader.create = function () {
+    ModelShader.create = function () {
         var obj = new this();
         return obj;
     };
-    BasicShader.prototype.initProgram = function () {
+    ModelShader.prototype.initProgram = function () {
         this.program.initProgramWithShader(this);
     };
-    BasicShader.prototype.createShaderLib = function () {
-        return BasicShaderLib_1.BasicShaderLib.create();
+    ModelShader.prototype.createShaderLib = function () {
+        return ModelShaderLib_1.ModelShaderLib.create();
     };
-    BasicShader.prototype.update = function (cmd, material) {
+    ModelShader.prototype.update = function (cmd, material) {
         var _this = this;
         this.program.use();
         this._shaderLib.getAttributes().forEach(function (item) {
-            console.log(item);
             var buffer = cmd.buffers.getChild(VariableLib_1.VariableLib[item].buffer);
             _this.sendAttributeBuffer(item, buffer);
         });
@@ -41,7 +40,7 @@ var BasicShader = (function (_super) {
             _this.sendUniformData(item, cmd[VariableLib_1.VariableLib[item].buffer]);
         });
     };
-    return BasicShader;
+    return ModelShader;
 }(Shader_1.Shader));
-exports.BasicShader = BasicShader;
-//# sourceMappingURL=BasicShader.js.map
+exports.ModelShader = ModelShader;
+//# sourceMappingURL=ModelShader.js.map

@@ -1,5 +1,4 @@
 import "wonder-frp/dist/es2015/stream/MapStream";
-import { ModelGeometry } from "../Component/Geometry/ModelGeometry";
 import {Collection} from "wonder-commonlib/dist/es2015/Collection";
 export class ObjLoader {
     public static create() {
@@ -48,14 +47,21 @@ export class ObjLoader {
 
         this._convertObject(fileContent);
 
-        var meshes = {};
-        var meshId = `${fileName}_mesh`
-        result.meshes = meshes;
-
-        meshes[meshId] = {
-            name:meshId,
-            primitives:this._buildPrimitiveArr()
-        }
+        var currentObj:any;
+        var objs = [];
+        this._buildPrimitiveArr().forEach((item:any)=>{
+            if(item.material == void 0){
+                currentObj = {
+                    attribute:item.attributes,
+                    material:[]
+                };
+                objs.push(currentObj);
+            }
+            else{
+                currentObj.material.push(item)
+            }
+        });
+        result.objs = objs;
         return result;
     }
 
@@ -64,7 +70,6 @@ export class ObjLoader {
             arr = [];
 
         this.objects.forEach((objectModel:ObjectModel)=>{
-            console.log(objectModel)
             arr.push({
                 name:objectModel.name,
                 attributes:{

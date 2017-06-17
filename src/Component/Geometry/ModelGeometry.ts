@@ -8,13 +8,14 @@ export class ModelGeometry extends Geometry {
 
     // public indices:number[] = null;
     public vertices: number[] = null;
-    public normal: number[] = null;
+    public normals: number[] = null;
     public texCoords: number[] = null;
     public colors: number[] = null;
 
     public computeData() {
         return <any>{
             vertice: this.vertices,
+            normal: this.normals,
             texCoord: this.texCoords,
             // indice: this.indices,
             color: this.colors,

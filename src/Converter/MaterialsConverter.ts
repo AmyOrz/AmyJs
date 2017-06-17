@@ -121,7 +121,7 @@ export class MaterialsConverter {
         };
     }
 
-    private _convertToMaterials(lines:Array<string>){
+    private _nconvertToMaterials(lines:Array<string>){
         const DELIMITER_PATTERN = /\s+/;
         var self = this;
 

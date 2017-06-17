@@ -70,10 +70,11 @@ function main() {
   // ビュー投影行列を計算
   var viewProjMatrix = new Matrix4();
   viewProjMatrix.setPerspective(30.0, canvas.width/canvas.height, 1.0, 5000.0);
-  viewProjMatrix.lookAt(0.0, 500.0, 200.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  viewProjMatrix.lookAt(-200.0, 500.0, 340.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  // viewProjMatrix.lookAt(0.0, 500.0, 200.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
   // Start reading the OBJ file
-  readOBJFile('cube.obj', gl, model, 60, true);
+  readOBJFile('male02.obj', gl, model, 1, true);
 
   var currentAngle = 0.0; // Current rotation angle [degree]
   var tick = function() {   // Start drawing
@@ -283,7 +284,6 @@ OBJDoc.prototype.parse = function(fileString, scale, reverse) {
       continue; // Go to the next line
     }
   }
-  console.log(this.vertices)
 
   return true;
 }
@@ -330,7 +330,6 @@ OBJDoc.prototype.parseFace = function(sp, materialName, vertices, reverse) {
     if(subWords.length >= 1){
       var vi = parseInt(subWords[0]) - 1;
       face.vIndices.push(vi);
-      face.allIndices.push(vi);
     }
     if(subWords.length >= 3){
       var ni = parseInt(subWords[2]) - 1;
@@ -458,7 +457,7 @@ OBJDoc.prototype.getDrawingInfo = function() {
   for(var i = 0; i < this.objects.length; i++){
     numIndices += this.objects[i].numIndices;
   }
-  console.log(this.objects)
+  console.log(numIndices)
   var numVertices = numIndices;
   var vertices = new Float32Array(numVertices * 3);
   var normals = new Float32Array(numVertices * 3);
@@ -586,7 +585,6 @@ var Face = function(materialName) {
   if(materialName == null)  this.materialName = "";
   this.vIndices = new Array(0);
   this.nIndices = new Array(0);
-  this.allIndices = [];
 }
 
 //------------------------------------------------------------------------------
