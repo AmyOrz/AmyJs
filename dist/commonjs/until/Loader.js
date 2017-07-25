@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ObjLoader_1 = require("./ObjLoader");
 var MaterialLoader_1 = require("./MaterialLoader");
 var rsvp_js_1 = require("rsvp/dist/rsvp.js");
-var AjaxUtil_1 = require("./AjaxUtil");
+var Util_1 = require("./Util");
 var ModelGeometry_1 = require("../Component/Geometry/ModelGeometry");
 var rxjs = require("rxjs");
 var Loader = (function () {
@@ -125,7 +125,7 @@ var Loader = (function () {
     };
     Loader.prototype._getStream = function (filePath) {
         return rxjs.Observable.fromPromise(new rsvp_js_1.Promise(function (resolve, reject) {
-            AjaxUtil_1.AjaxUtil.ajax({
+            Util_1.Util.ajax({
                 url: filePath,
                 success: function (val) { return resolve(val); },
                 error: function (val) { return reject(val); }

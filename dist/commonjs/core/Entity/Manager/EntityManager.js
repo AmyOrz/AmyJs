@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Collection_1 = require("wonder-commonlib/dist/commonjs/Collection");
 var Entity_1 = require("../Entity");
-var JudgeUtils_1 = require("wonder-frp/dist/commonjs/JudgeUtils");
+var Util_1 = require("../../../until/Util");
 var EntityManager = (function (_super) {
     __extends(EntityManager, _super);
     function EntityManager(_entityDispatcher) {
@@ -48,7 +48,7 @@ var EntityManager = (function (_super) {
             args[_i] = arguments[_i];
         }
         var addChild = args[1] == void 0 ? this.addChild : args[1];
-        if (JudgeUtils_1.JudgeUtils.isArray(args[0])) {
+        if (Util_1.Util.isArray(args[0])) {
             var children = args[0];
             for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
                 var child = children_1[_a];

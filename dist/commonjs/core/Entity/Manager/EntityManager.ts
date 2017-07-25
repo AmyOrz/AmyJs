@@ -1,7 +1,7 @@
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Entity } from "../Entity";
-import { JudgeUtils } from "wonder-frp/dist/commonjs/JudgeUtils";
 import { EntityObject } from "../EntityObject";
+import {Util} from "../../../until/Util";
 
 export class EntityManager extends Entity {
     public static create(entityDispatcher: EntityObject) {
@@ -40,7 +40,7 @@ export class EntityManager extends Entity {
 
     public addChildren(...args) {
         var addChild = args[1] == void 0 ? this.addChild : args[1];
-        if (JudgeUtils.isArray(args[0])) {
+        if (Util.isArray(args[0])) {
             let children: Array<EntityObject> = args[0];
             for (let child of children) {
                 addChild(child);

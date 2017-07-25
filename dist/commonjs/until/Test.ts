@@ -49,15 +49,15 @@ export class Test {
         gameobj.transform.translate(-2.4, 2, 0.2);
 
 
-        var object = this.createPlane(models);
-
-        object.transform.translate(-0.4, -80.1, 0);
-        object.transform.rotate(0, 0, 1, 0);
+        // var object = this.createPlane(models);
+        //
+        // object.transform.translate(-0.4, -80.1, 0);
+        // object.transform.rotate(0, 0, 1, 0);
 
         var director = Director.getInstance();
         director.renderer.setClearColor(0, 0, 0, 1);
-        // director.scene.addChild(gameobj);
-        director.scene.addChild(object);
+        director.scene.addChild(gameobj);
+        // director.scene.addChild(object);
         director.scene.addChild(this.createCamera());
 
         director.start();

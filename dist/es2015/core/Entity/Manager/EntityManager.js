@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Entity } from "../Entity";
-import { JudgeUtils } from "wonder-frp/dist/es2015/JudgeUtils";
+import { Util } from "../../../until/Util";
 var EntityManager = (function (_super) {
     __extends(EntityManager, _super);
     function EntityManager(_entityDispatcher) {
@@ -46,7 +46,7 @@ var EntityManager = (function (_super) {
             args[_i] = arguments[_i];
         }
         var addChild = args[1] == void 0 ? this.addChild : args[1];
-        if (JudgeUtils.isArray(args[0])) {
+        if (Util.isArray(args[0])) {
             var children = args[0];
             for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
                 var child = children_1[_a];

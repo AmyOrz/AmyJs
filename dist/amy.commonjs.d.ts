@@ -60,12 +60,12 @@ declare module 'amy.js/dist/commonjs' {
     export { Vector } from "amy.js/dist/commonjs/Math/Vector";
     export { Vector3 } from "amy.js/dist/commonjs/Math/Vector3";
     export { Vector4 } from "amy.js/dist/commonjs/Math/Vector4";
-    export { AjaxUtil } from "amy.js/dist/commonjs/until/AjaxUtil";
     export { Loader } from "amy.js/dist/commonjs/until/Loader";
     export { MaterialLoader, MaterialModel } from "amy.js/dist/commonjs/until/MaterialLoader";
     export { ObjLoader, ObjectModel } from "amy.js/dist/commonjs/until/ObjLoader";
     export { singleton } from "amy.js/dist/commonjs/until/singleton";
     export { Test } from "amy.js/dist/commonjs/until/Test";
+    export { Util } from "amy.js/dist/commonjs/until/Util";
 }
 
 declare module 'amy.js/dist/commonjs/Component/Camera/Camera' {
@@ -873,12 +873,6 @@ declare module 'amy.js/dist/commonjs/Math/Vector4' {
     }
 }
 
-declare module 'amy.js/dist/commonjs/until/AjaxUtil' {
-    export class AjaxUtil {
-        static ajax(config: any): void;
-    }
-}
-
 declare module 'amy.js/dist/commonjs/until/Loader' {
     export class Loader {
         static of(): Loader;
@@ -911,7 +905,6 @@ declare module 'amy.js/dist/commonjs/until/MaterialLoader' {
 }
 
 declare module 'amy.js/dist/commonjs/until/ObjLoader' {
-    import "wonder-frp/dist/es2015/stream/MapStream";
     import { Collection } from "wonder-commonlib/dist/es2015/Collection";
     export class ObjLoader {
         static create(): ObjLoader;
@@ -948,6 +941,13 @@ declare module 'amy.js/dist/commonjs/until/Test' {
         loadByFile(files: any): void;
         loadByPath(fileObj?: fileObject): void;
         testCanvas(models: any): void;
+    }
+}
+
+declare module 'amy.js/dist/commonjs/until/Util' {
+    export class Util {
+        static isArray(target: any): boolean;
+        static ajax(config: any): void;
     }
 }
 

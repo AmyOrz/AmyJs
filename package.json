@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "rsvp": "^3.5.0",
-    "rxjs": "^5.4.1",
-    "wonder-frp": "^0.1.16"
+    "rxjs": "^5.4.1"
   }
 }

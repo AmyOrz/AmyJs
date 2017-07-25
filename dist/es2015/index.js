@@ -54,10 +54,10 @@ export { Matrix4 } from "./Math/Matrix4";
 export { Vector } from "./Math/Vector";
 export { Vector3 } from "./Math/Vector3";
 export { Vector4 } from "./Math/Vector4";
-export { AjaxUtil } from "./until/AjaxUtil";
 export { Loader } from "./until/Loader";
 export { MaterialLoader, MaterialModel } from "./until/MaterialLoader";
 export { ObjLoader, ObjectModel } from "./until/ObjLoader";
 export { singleton } from "./until/singleton";
 export { Test } from "./until/Test";
+export { Util } from "./until/Util";
 //# sourceMappingURL=index.js.map

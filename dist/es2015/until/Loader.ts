@@ -1,7 +1,7 @@
 import { ObjLoader } from "./ObjLoader";
 import { MaterialLoader } from "./MaterialLoader";
 import { Promise } from "rsvp/dist/rsvp.js";
-import { AjaxUtil } from "./AjaxUtil";
+import { Util } from "./Util";
 import { ModelGeometry } from "../Component/Geometry/ModelGeometry";
 import * as rxjs from "rxjs";
 export class Loader {
@@ -151,7 +151,7 @@ export class Loader {
     private _getStream(filePath) {
         //noinspection TypeScriptUnresolvedFunction
         return rxjs.Observable.fromPromise(new Promise((resolve, reject) => {
-            AjaxUtil.ajax({
+            Util.ajax({
                 url: filePath,
                 success: val => resolve(val),
                 error: val => reject(val)

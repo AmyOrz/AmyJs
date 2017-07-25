@@ -38,12 +38,9 @@ var Test = (function () {
         var gameobj = this.createTriangle();
         gameobj.transform.rotate(45, 1, 1, 0);
         gameobj.transform.translate(-2.4, 2, 0.2);
-        var object = this.createPlane(models);
-        object.transform.translate(-0.4, -80.1, 0);
-        object.transform.rotate(0, 0, 1, 0);
         var director = Director_1.Director.getInstance();
         director.renderer.setClearColor(0, 0, 0, 1);
-        director.scene.addChild(object);
+        director.scene.addChild(gameobj);
         director.scene.addChild(this.createCamera());
         director.start();
     };

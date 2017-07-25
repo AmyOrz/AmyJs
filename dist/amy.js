@@ -3291,24 +3291,52 @@
 	    return WebglRenderer;
 	}(Renderer));
 
-	var JudgeUtils$2 = (function (_super) {
-	    __extends(JudgeUtils, _super);
-	    function JudgeUtils() {
-	        return _super !== null && _super.apply(this, arguments) || this;
+	var Util = (function () {
+	    function Util() {
 	    }
-	    JudgeUtils.isPromise = function (obj) {
-	        return !!obj
-	            && !_super.isFunction.call(this, obj.subscribe)
-	            && _super.isFunction.call(this, obj.then);
+	    Util.isArray = function (target) {
+	        return {}.toString.call(target).slice(8, -1).toLowerCase() == "array";
 	    };
-	    JudgeUtils.isEqual = function (ob1, ob2) {
-	        return ob1.uid === ob2.uid;
+	    Util.ajax = function (config) {
+	        var url = config.url;
+	        var success = config.success;
+	        var error = config.error;
+	        var data = config.data;
+	        var type = config.data == void 0 ? "GET" : config.data;
+	        var xhr = this._createAjax(error);
+	        xhr.onreadystatechange = function () {
+	            if (xhr.readyState === 4 && xhr.status === 200) {
+	                if (success !== null) {
+	                    success(xhr.responseText);
+	                }
+	            }
+	            else {
+	                if (this.error !== void 0) {
+	                    this.error("出错了");
+	                }
+	            }
+	        };
+	        xhr.open(type, url, true);
+	        xhr.send(null);
 	    };
-	    JudgeUtils.isIObserver = function (i) {
-	        return i.next && i.error && i.completed;
+	    Util._createAjax = function (error) {
+	        var xhr = null;
+	        try {
+	            xhr = new ActiveXObject("microsoft.xmlhttp");
+	        }
+	        catch (e1) {
+	            try {
+	                xhr = new XMLHttpRequest();
+	            }
+	            catch (e2) {
+	                error(xhr, { message: "您的浏览器不支持ajax，请更换！" });
+	                return null;
+	            }
+	        }
+	        return xhr;
 	    };
-	    return JudgeUtils;
-	}(JudgeUtils$1));
+	    return Util;
+	}());
 
 	var EntityManager = (function (_super) {
 	    __extends(EntityManager, _super);
@@ -3345,7 +3373,7 @@
 	            args[_i] = arguments[_i];
 	        }
 	        var addChild = args[1] == void 0 ? this.addChild : args[1];
-	        if (JudgeUtils$2.isArray(args[0])) {
+	        if (Util.isArray(args[0])) {
 	            var children = args[0];
 	            for (var _a = 0, children_1 = children; _a < children_1.length; _a++) {
 	                var child = children_1[_a];
@@ -3706,305 +3734,6 @@
 	}());
 	Main._parentId = null;
 
-	var AjaxUtil = (function () {
-	    function AjaxUtil() {
-	    }
-	    AjaxUtil.ajax = function (config) {
-	        var url = config.url;
-	        var success = config.success;
-	        var error = config.error;
-	        var data = config.data;
-	        var type = config.data == void 0 ? "GET" : config.data;
-	        var xhr = this._createAjax(error);
-	        xhr.onreadystatechange = function () {
-	            if (xhr.readyState === 4 && xhr.status === 200) {
-	                if (success !== null) {
-	                    success(xhr.responseText);
-	                }
-	            }
-	            else {
-	                if (this.error !== void 0) {
-	                    this.error("出错了");
-	                }
-	            }
-	        };
-	        xhr.open(type, url, true);
-	        xhr.send(null);
-	    };
-	    AjaxUtil._createAjax = function (error) {
-	        var xhr = null;
-	        try {
-	            xhr = new ActiveXObject("microsoft.xmlhttp");
-	        }
-	        catch (e1) {
-	            try {
-	                xhr = new XMLHttpRequest();
-	            }
-	            catch (e2) {
-	                error(xhr, { message: "您的浏览器不支持ajax，请更换！" });
-	                return null;
-	            }
-	        }
-	        return xhr;
-	    };
-	    return AjaxUtil;
-	}());
-
-	var root$1;
-	if (JudgeUtils$1.isNodeJs() && typeof global != "undefined") {
-	    root$1 = global;
-	}
-	else if (typeof window != "undefined") {
-	    root$1 = window;
-	}
-	else if (typeof self != "undefined") {
-	    root$1 = self;
-	}
-	else {
-	    Log$1.error("no avaliable root!");
-	}
-
-	var Log$1 = (function () {
-	    function Log() {
-	    }
-	    Log.log = function () {
-	        var messages = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            messages[_i] = arguments[_i];
-	        }
-	        if (!this._exec("log", messages)) {
-	            root$1.alert(messages.join(","));
-	        }
-	        this._exec("trace", messages);
-	    };
-	    Log.assert = function (cond) {
-	        var messages = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            messages[_i - 1] = arguments[_i];
-	        }
-	        if (cond) {
-	            if (!this._exec("assert", arguments, 1)) {
-	                this.log.apply(this, Array.prototype.slice.call(arguments, 1));
-	            }
-	        }
-	    };
-	    Log.error = function (cond) {
-	        var message = [];
-	        for (var _i = 1; _i < arguments.length; _i++) {
-	            message[_i - 1] = arguments[_i];
-	        }
-	        if (cond) {
-	            throw new Error(Array.prototype.slice.call(arguments, 1).join("\n"));
-	        }
-	    };
-	    Log.warn = function () {
-	        var message = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            message[_i] = arguments[_i];
-	        }
-	        var result = this._exec("warn", arguments);
-	        if (!result) {
-	            this.log.apply(this, arguments);
-	        }
-	        else {
-	            this._exec("trace", ["warn trace"]);
-	        }
-	    };
-	    Log._exec = function (consoleMethod, args, sliceBegin) {
-	        if (sliceBegin === void 0) { sliceBegin = 0; }
-	        if (root$1.console && root$1.console[consoleMethod]) {
-	            root$1.console[consoleMethod].apply(root$1.console, Array.prototype.slice.call(args, sliceBegin));
-	            return true;
-	        }
-	        return false;
-	    };
-	    return Log;
-	}());
-	Log$1.info = {
-	    INVALID_PARAM: "invalid parameter",
-	    helperFunc: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var result = "";
-	        args.forEach(function (val) {
-	            result += String(val) + " ";
-	        });
-	        return result.slice(0, -1);
-	    },
-	    assertion: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        if (args.length === 2) {
-	            return this.helperFunc(args[0], args[1]);
-	        }
-	        else if (args.length === 3) {
-	            return this.helperFunc(args[1], args[0], args[2]);
-	        }
-	        else {
-	            throw new Error("args.length must <= 3");
-	        }
-	    },
-	    FUNC_INVALID: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("invalid");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_BE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must be");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_NOT_BE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must not be");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SHOULD: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("should");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SHOULD_NOT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("should not");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_SUPPORT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("support");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_NOT_SUPPORT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("not support");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_DEFINE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must define");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_MUST_NOT_DEFINE: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("must not define");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_UNKNOW: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("unknow");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_EXPECT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("expect");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_UNEXPECT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("unexpect");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_EXIST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("exist");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_NOT_EXIST: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("not exist");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_ONLY: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("only");
-	        return this.assertion.apply(this, args);
-	    },
-	    FUNC_CAN_NOT: function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        args.unshift("can't");
-	        return this.assertion.apply(this, args);
-	    }
-	};
-
-	var Entity$1 = (function () {
-	    function Entity(uidPre) {
-	        this._uid = null;
-	        this._uid = uidPre + String(Entity.UID++);
-	    }
-	    Object.defineProperty(Entity.prototype, "uid", {
-	        get: function () {
-	            return this._uid;
-	        },
-	        set: function (uid) {
-	            this._uid = uid;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    return Entity;
-	}());
-	Entity$1.UID = 1;
-
 	var ExtendUtils$1 = (function () {
 	    function ExtendUtils() {
 	    }
@@ -4189,640 +3918,6 @@
 	    };
 	    return Collection;
 	}(List$1));
-
-	var SubjectObserver = (function () {
-	    function SubjectObserver() {
-	        this.observers = Collection$1.create();
-	        this._disposable = null;
-	    }
-	    SubjectObserver.prototype.isEmpty = function () {
-	        return this.observers.getCount() === 0;
-	    };
-	    SubjectObserver.prototype.next = function (value) {
-	        this.observers.forEach(function (ob) {
-	            ob.next(value);
-	        });
-	    };
-	    SubjectObserver.prototype.error = function (error) {
-	        this.observers.forEach(function (ob) {
-	            ob.error(error);
-	        });
-	    };
-	    SubjectObserver.prototype.completed = function () {
-	        this.observers.forEach(function (ob) {
-	            ob.completed();
-	        });
-	    };
-	    SubjectObserver.prototype.addChild = function (observer) {
-	        this.observers.addChild(observer);
-	        observer.setDisposable(this._disposable);
-	    };
-	    SubjectObserver.prototype.removeChild = function (observer) {
-	        this.observers.removeChild(function (ob) {
-	            return JudgeUtils$2.isEqual(ob, observer);
-	        });
-	    };
-	    SubjectObserver.prototype.dispose = function () {
-	        this.observers.forEach(function (ob) {
-	            ob.dispose();
-	        });
-	        this.observers.removeAllChildren();
-	    };
-	    SubjectObserver.prototype.setDisposable = function (disposable) {
-	        this.observers.forEach(function (observer) {
-	            observer.setDisposable(disposable);
-	        });
-	        this._disposable = disposable;
-	    };
-	    return SubjectObserver;
-	}());
-
-	var Observer = (function (_super) {
-	    __extends(Observer, _super);
-	    function Observer() {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        var _this = _super.call(this, "Observer") || this;
-	        _this._isDisposed = null;
-	        _this.onUserNext = null;
-	        _this.onUserError = null;
-	        _this.onUserCompleted = null;
-	        _this._isStop = false;
-	        _this._disposable = null;
-	        if (args.length === 1) {
-	            var observer_1 = args[0];
-	            _this.onUserNext = function (v) {
-	                observer_1.next(v);
-	            };
-	            _this.onUserError = function (e) {
-	                observer_1.error(e);
-	            };
-	            _this.onUserCompleted = function () {
-	                observer_1.completed();
-	            };
-	        }
-	        else {
-	            var onNext = args[0], onError = args[1], onCompleted = args[2];
-	            _this.onUserNext = onNext || function (v) { };
-	            _this.onUserError = onError || function (e) {
-	                throw e;
-	            };
-	            _this.onUserCompleted = onCompleted || function () { };
-	        }
-	        return _this;
-	    }
-	    Object.defineProperty(Observer.prototype, "isDisposed", {
-	        get: function () {
-	            return this._isDisposed;
-	        },
-	        set: function (isDisposed) {
-	            this._isDisposed = isDisposed;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Observer.prototype.next = function (value) {
-	        if (!this._isStop) {
-	            return this.onNext(value);
-	        }
-	    };
-	    Observer.prototype.error = function (error) {
-	        if (!this._isStop) {
-	            this._isStop = true;
-	            this.onError(error);
-	        }
-	    };
-	    Observer.prototype.completed = function () {
-	        if (!this._isStop) {
-	            this._isStop = true;
-	            this.onCompleted();
-	        }
-	    };
-	    Observer.prototype.dispose = function () {
-	        this._isStop = true;
-	        this._isDisposed = true;
-	        if (this._disposable) {
-	            this._disposable.dispose();
-	        }
-	    };
-	    Observer.prototype.setDisposable = function (disposable) {
-	        this._disposable = disposable;
-	    };
-	    return Observer;
-	}(Entity$1));
-
-	var Main$1 = (function () {
-	    function Main() {
-	    }
-	    return Main;
-	}());
-	Main$1.isTest = false;
-
-	function assert(cond, message) {
-	    if (message === void 0) { message = "contract error"; }
-	    Log$1.error(!cond, message);
-	}
-	function requireCheck(InFunc) {
-	    return function (target, name, descriptor) {
-	        var value = descriptor.value;
-	        descriptor.value = function () {
-	            var args = [];
-	            for (var _i = 0; _i < arguments.length; _i++) {
-	                args[_i] = arguments[_i];
-	            }
-	            if (Main$1.isTest) {
-	                InFunc.apply(this, args);
-	            }
-	            return value.apply(this, args);
-	        };
-	        return descriptor;
-	    };
-	}
-
-	var AutoDetachObserver = (function (_super) {
-	    __extends(AutoDetachObserver, _super);
-	    function AutoDetachObserver() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    AutoDetachObserver.create = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        if (args.length === 1) {
-	            return new this(args[0]);
-	        }
-	        else {
-	            return new this(args[0], args[1], args[2]);
-	        }
-	    };
-	    AutoDetachObserver.prototype.dispose = function () {
-	        if (this.isDisposed) {
-	            return;
-	        }
-	        _super.prototype.dispose.call(this);
-	    };
-	    AutoDetachObserver.prototype.onNext = function (value) {
-	        try {
-	            this.onUserNext(value);
-	        }
-	        catch (e) {
-	            this.onError(e);
-	        }
-	    };
-	    AutoDetachObserver.prototype.onError = function (error) {
-	        try {
-	            this.onUserError(error);
-	        }
-	        catch (e) {
-	            throw e;
-	        }
-	        finally {
-	            this.dispose();
-	        }
-	    };
-	    AutoDetachObserver.prototype.onCompleted = function () {
-	        try {
-	            this.onUserCompleted();
-	            this.dispose();
-	        }
-	        catch (e) {
-	            throw e;
-	        }
-	    };
-	    return AutoDetachObserver;
-	}(Observer));
-	__decorate([
-	    requireCheck(function () {
-	        if (this.isDisposed) {
-	            Log$1.warn("only can dispose once");
-	        }
-	    })
-	], AutoDetachObserver.prototype, "dispose", null);
-
-	var InnerSubscription = (function () {
-	    function InnerSubscription(subject, observer) {
-	        this._subject = null;
-	        this._observer = null;
-	        this._subject = subject;
-	        this._observer = observer;
-	    }
-	    InnerSubscription.create = function (subject, observer) {
-	        var obj = new this(subject, observer);
-	        return obj;
-	    };
-	    InnerSubscription.prototype.dispose = function () {
-	        this._subject.remove(this._observer);
-	        this._observer.dispose();
-	    };
-	    return InnerSubscription;
-	}());
-
-	var Subject = (function () {
-	    function Subject() {
-	        this._source = null;
-	        this._observer = new SubjectObserver();
-	    }
-	    Subject.create = function () {
-	        var obj = new this();
-	        return obj;
-	    };
-	    Object.defineProperty(Subject.prototype, "source", {
-	        get: function () {
-	            return this._source;
-	        },
-	        set: function (source) {
-	            this._source = source;
-	        },
-	        enumerable: true,
-	        configurable: true
-	    });
-	    Subject.prototype.subscribe = function (arg1, onError, onCompleted) {
-	        var observer = arg1 instanceof Observer
-	            ? arg1
-	            : AutoDetachObserver.create(arg1, onError, onCompleted);
-	        this._observer.addChild(observer);
-	        return InnerSubscription.create(this, observer);
-	    };
-	    Subject.prototype.next = function (value) {
-	        this._observer.next(value);
-	    };
-	    Subject.prototype.error = function (error) {
-	        this._observer.error(error);
-	    };
-	    Subject.prototype.completed = function () {
-	        this._observer.completed();
-	    };
-	    Subject.prototype.start = function () {
-	        if (!this._source) {
-	            return;
-	        }
-	        this._observer.setDisposable(this._source.buildStream(this));
-	    };
-	    Subject.prototype.remove = function (observer) {
-	        this._observer.removeChild(observer);
-	    };
-	    Subject.prototype.dispose = function () {
-	        this._observer.dispose();
-	    };
-	    return Subject;
-	}());
-
-	var SingleDisposable = (function (_super) {
-	    __extends(SingleDisposable, _super);
-	    function SingleDisposable(disposeHandler) {
-	        var _this = _super.call(this, "SingleDisposable") || this;
-	        _this._disposeHandler = null;
-	        _this._isDisposed = false;
-	        _this._disposeHandler = disposeHandler;
-	        return _this;
-	    }
-	    SingleDisposable.create = function (disposeHandler) {
-	        if (disposeHandler === void 0) { disposeHandler = function () { }; }
-	        var obj = new this(disposeHandler);
-	        return obj;
-	    };
-	    SingleDisposable.prototype.setDisposeHandler = function (handler) {
-	        this._disposeHandler = handler;
-	    };
-	    SingleDisposable.prototype.dispose = function () {
-	        if (this._isDisposed) {
-	            return;
-	        }
-	        this._isDisposed = true;
-	        this._disposeHandler();
-	    };
-	    return SingleDisposable;
-	}(Entity$1));
-
-	var ClassMapUtils = (function () {
-	    function ClassMapUtils() {
-	    }
-	    ClassMapUtils.addClassMap = function (className, _class) {
-	        this._classMap[className] = _class;
-	    };
-	    ClassMapUtils.getClass = function (className) {
-	        return this._classMap[className];
-	    };
-	    return ClassMapUtils;
-	}());
-	ClassMapUtils._classMap = {};
-
-	var FunctionUtils = (function () {
-	    function FunctionUtils() {
-	    }
-	    FunctionUtils.bind = function (object, func) {
-	        return function () {
-	            return func.apply(object, arguments);
-	        };
-	    };
-	    return FunctionUtils;
-	}());
-
-	var Stream = (function (_super) {
-	    __extends(Stream, _super);
-	    function Stream(subscribeFunc) {
-	        var _this = _super.call(this, "Stream") || this;
-	        _this.scheduler = null;
-	        _this.subscribeFunc = null;
-	        _this.subscribeFunc = subscribeFunc || function () { };
-	        return _this;
-	    }
-	    Stream.prototype.buildStream = function (observer) {
-	        return SingleDisposable.create((this.subscribeFunc(observer) || function () { }));
-	    };
-	    Stream.prototype.do = function (onNext, onError, onCompleted) {
-	        return ClassMapUtils.getClass("DoStream").create(this, onNext, onError, onCompleted);
-	    };
-	    Stream.prototype.map = function (selector) {
-	        return ClassMapUtils.getClass("MapStream").create(this, selector);
-	    };
-	    Stream.prototype.flatMap = function (selector) {
-	        return this.map(selector).mergeAll();
-	    };
-	    Stream.prototype.concatMap = function (selector) {
-	        return this.map(selector).concatAll();
-	    };
-	    Stream.prototype.mergeAll = function () {
-	        return ClassMapUtils.getClass("MergeAllStream").create(this);
-	    };
-	    Stream.prototype.concatAll = function () {
-	        return this.merge(1);
-	    };
-	    Stream.prototype.skipUntil = function (otherStream) {
-	        return ClassMapUtils.getClass("SkipUntilStream").create(this, otherStream);
-	    };
-	    Stream.prototype.takeUntil = function (otherStream) {
-	        return ClassMapUtils.getClass("TakeUntilStream").create(this, otherStream);
-	    };
-	    Stream.prototype.take = function (count) {
-	        if (count === void 0) { count = 1; }
-	        var self = this;
-	        if (count === 0) {
-	            return ClassMapUtils.getClass("Operator").empty();
-	        }
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
-	            self.subscribe(function (value) {
-	                if (count > 0) {
-	                    observer.next(value);
-	                }
-	                count--;
-	                if (count <= 0) {
-	                    observer.completed();
-	                }
-	            }, function (e) {
-	                observer.error(e);
-	            }, function () {
-	                observer.completed();
-	            });
-	        });
-	    };
-	    Stream.prototype.takeLast = function (count) {
-	        if (count === void 0) { count = 1; }
-	        var self = this;
-	        if (count === 0) {
-	            return ClassMapUtils.getClass("Operator").empty();
-	        }
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
-	            var queue = [];
-	            self.subscribe(function (value) {
-	                queue.push(value);
-	                if (queue.length > count) {
-	                    queue.shift();
-	                }
-	            }, function (e) {
-	                observer.error(e);
-	            }, function () {
-	                while (queue.length > 0) {
-	                    observer.next(queue.shift());
-	                }
-	                observer.completed();
-	            });
-	        });
-	    };
-	    Stream.prototype.takeWhile = function (predicate, thisArg) {
-	        if (thisArg === void 0) { thisArg = this; }
-	        var self = this, bindPredicate = null;
-	        bindPredicate = FunctionUtils.bind(thisArg, predicate);
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
-	            var i = 0, isStart = false;
-	            self.subscribe(function (value) {
-	                if (bindPredicate(value, i++, self)) {
-	                    try {
-	                        observer.next(value);
-	                        isStart = true;
-	                    }
-	                    catch (e) {
-	                        observer.error(e);
-	                        return;
-	                    }
-	                }
-	                else {
-	                    if (isStart) {
-	                        observer.completed();
-	                    }
-	                }
-	            }, function (e) {
-	                observer.error(e);
-	            }, function () {
-	                observer.completed();
-	            });
-	        });
-	    };
-	    Stream.prototype.lastOrDefault = function (defaultValue) {
-	        if (defaultValue === void 0) { defaultValue = null; }
-	        var self = this;
-	        return ClassMapUtils.getClass("Operator").createStream(function (observer) {
-	            var queue = [];
-	            self.subscribe(function (value) {
-	                queue.push(value);
-	                if (queue.length > 1) {
-	                    queue.shift();
-	                }
-	            }, function (e) {
-	                observer.error(e);
-	            }, function () {
-	                if (queue.length === 0) {
-	                    observer.next(defaultValue);
-	                }
-	                else {
-	                    while (queue.length > 0) {
-	                        observer.next(queue.shift());
-	                    }
-	                }
-	                observer.completed();
-	            });
-	        });
-	    };
-	    Stream.prototype.filter = function (predicate, thisArg) {
-	        if (thisArg === void 0) { thisArg = this; }
-	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
-	            var self = this;
-	            return self.internalFilter(predicate, thisArg);
-	        }
-	        return ClassMapUtils.getClass("FilterStream").create(this, predicate, thisArg);
-	    };
-	    Stream.prototype.filterWithState = function (predicate, thisArg) {
-	        if (thisArg === void 0) { thisArg = this; }
-	        if (this instanceof ClassMapUtils.getClass("FilterStream")) {
-	            var self = this;
-	            return self.internalFilter(predicate, thisArg);
-	        }
-	        return ClassMapUtils.getClass("FilterWithStateStream").create(this, predicate, thisArg);
-	    };
-	    Stream.prototype.concat = function () {
-	        var args = null;
-	        if (JudgeUtils$2.isArray(arguments[0])) {
-	            args = arguments[0];
-	        }
-	        else {
-	            args = Array.prototype.slice.call(arguments, 0);
-	        }
-	        args.unshift(this);
-	        return ClassMapUtils.getClass("ConcatStream").create(args);
-	    };
-	    Stream.prototype.merge = function () {
-	        var args = [];
-	        for (var _i = 0; _i < arguments.length; _i++) {
-	            args[_i] = arguments[_i];
-	        }
-	        if (JudgeUtils$2.isNumber(args[0])) {
-	            var maxConcurrent = args[0];
-	            return ClassMapUtils.getClass("MergeStream").create(this, maxConcurrent);
-	        }
-	        if (JudgeUtils$2.isArray(args[0])) {
-	            args = arguments[0];
-	        }
-	        else {
-	        }
-	        var stream = null;
-	        args.unshift(this);
-	        stream = ClassMapUtils.getClass("Operator").fromArray(args).mergeAll();
-	        return stream;
-	    };
-	    Stream.prototype.repeat = function (count) {
-	        if (count === void 0) { count = -1; }
-	        return ClassMapUtils.getClass("RepeatStream").create(this, count);
-	    };
-	    Stream.prototype.ignoreElements = function () {
-	        return ClassMapUtils.getClass("IgnoreElementsStream").create(this);
-	    };
-	    Stream.prototype.handleSubject = function (subject) {
-	        if (this._isSubject(subject)) {
-	            this._setSubject(subject);
-	            return true;
-	        }
-	        return false;
-	    };
-	    Stream.prototype._isSubject = function (subject) {
-	        return subject instanceof Subject;
-	    };
-	    Stream.prototype._setSubject = function (subject) {
-	        subject.source = this;
-	    };
-	    return Stream;
-	}(Entity$1));
-	__decorate([
-	    requireCheck(function (count) {
-	        if (count === void 0) { count = 1; }
-	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
-	    })
-	], Stream.prototype, "take", null);
-	__decorate([
-	    requireCheck(function (count) {
-	        if (count === void 0) { count = 1; }
-	        assert(count >= 0, Log$1.info.FUNC_SHOULD("count", ">= 0"));
-	    })
-	], Stream.prototype, "takeLast", null);
-
-	var BaseStream = (function (_super) {
-	    __extends(BaseStream, _super);
-	    function BaseStream() {
-	        return _super !== null && _super.apply(this, arguments) || this;
-	    }
-	    BaseStream.prototype.subscribe = function (arg1, onError, onCompleted) {
-	        var observer = null;
-	        if (this.handleSubject(arg1)) {
-	            return;
-	        }
-	        observer = arg1 instanceof Observer
-	            ? AutoDetachObserver.create(arg1)
-	            : AutoDetachObserver.create(arg1, onError, onCompleted);
-	        observer.setDisposable(this.buildStream(observer));
-	        return observer;
-	    };
-	    BaseStream.prototype.buildStream = function (observer) {
-	        _super.prototype.buildStream.call(this, observer);
-	        return this.subscribeCore(observer);
-	    };
-	    return BaseStream;
-	}(Stream));
-
-	var MapObserver = (function (_super) {
-	    __extends(MapObserver, _super);
-	    function MapObserver(currentObserver, selector) {
-	        var _this = _super.call(this, null, null, null) || this;
-	        _this._currentObserver = null;
-	        _this._selector = null;
-	        _this._currentObserver = currentObserver;
-	        _this._selector = selector;
-	        return _this;
-	    }
-	    MapObserver.create = function (currentObserver, selector) {
-	        return new this(currentObserver, selector);
-	    };
-	    MapObserver.prototype.onNext = function (value) {
-	        var result = null;
-	        try {
-	            result = this._selector(value);
-	        }
-	        catch (e) {
-	            this._currentObserver.error(e);
-	        }
-	        finally {
-	            this._currentObserver.next(result);
-	        }
-	    };
-	    MapObserver.prototype.onError = function (error) {
-	        this._currentObserver.error(error);
-	    };
-	    MapObserver.prototype.onCompleted = function () {
-	        this._currentObserver.completed();
-	    };
-	    return MapObserver;
-	}(Observer));
-
-	function registerClass(className) {
-	    return function (target) {
-	        ClassMapUtils.addClassMap(className, target);
-	    };
-	}
-
-	var MapStream = (function (_super) {
-	    __extends(MapStream, _super);
-	    function MapStream(source, selector) {
-	        var _this = _super.call(this, null) || this;
-	        _this._source = null;
-	        _this._selector = null;
-	        _this._source = source;
-	        _this.scheduler = _this._source.scheduler;
-	        _this._selector = selector;
-	        return _this;
-	    }
-	    MapStream.create = function (source, selector) {
-	        var obj = new this(source, selector);
-	        return obj;
-	    };
-	    MapStream.prototype.subscribeCore = function (observer) {
-	        return this._source.buildStream(MapObserver.create(observer, this._selector));
-	    };
-	    return MapStream;
-	}(BaseStream));
-	MapStream = __decorate([
-	    registerClass("MapStream")
-	], MapStream);
 
 	var ObjLoader = (function () {
 	    function ObjLoader() {
@@ -5065,7 +4160,7 @@
 	})();
 
 
-	var root$2 = {
+	var root$1 = {
 		root: root_1$1
 	};
 
@@ -5361,13 +4456,13 @@
 	};
 
 
-	var Observer$1 = {
+	var Observer = {
 		empty: empty
 	};
 
 	var rxSubscriber = createCommonjsModule(function (module, exports) {
 	"use strict";
-	var root_1 = root$2;
+	var root_1 = root$1;
 	var Symbol = root_1.root.Symbol;
 	exports.rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
 	    Symbol.for('rxSubscriber') : '@@rxSubscriber';
@@ -5385,7 +4480,7 @@
 	};
 	var isFunction_1 = isFunction_1$1;
 	var Subscription_1$2 = Subscription_1$3;
-	var Observer_1$1 = Observer$1;
+	var Observer_1$1 = Observer;
 	var rxSubscriber_1$3 = rxSubscriber;
 	/**
 	 * Implements the {@link Observer} interface and extends the
@@ -5648,7 +4743,7 @@
 
 	var Subscriber_1$2 = Subscriber_1$3;
 	var rxSubscriber_1$2 = rxSubscriber;
-	var Observer_1 = Observer$1;
+	var Observer_1 = Observer;
 	function toSubscriber(nextOrObserver, error, complete) {
 	    if (nextOrObserver) {
 	        if (nextOrObserver instanceof Subscriber_1$2.Subscriber) {
@@ -5672,7 +4767,7 @@
 
 	var observable = createCommonjsModule(function (module, exports) {
 	"use strict";
-	var root_1 = root$2;
+	var root_1 = root$1;
 	function getSymbolObservable(context) {
 	    var $$observable;
 	    var Symbol = context.Symbol;
@@ -5699,7 +4794,7 @@
 
 	});
 
-	var root_1 = root$2;
+	var root_1 = root$1;
 	var toSubscriber_1 = toSubscriber_1$1;
 	var observable_1$1 = observable;
 	/**
@@ -6060,7 +5155,7 @@
 	/**
 	 * @class Subject<T>
 	 */
-	var Subject$2 = (function (_super) {
+	var Subject$1 = (function (_super) {
 	    __extends$1(Subject, _super);
 	    function Subject() {
 	        _super.call(this);
@@ -6159,7 +5254,7 @@
 	    };
 	    return Subject;
 	}(Observable_1$1.Observable));
-	var Subject_2 = Subject$2;
+	var Subject_2 = Subject$1;
 	/**
 	 * @class AnonymousSubject<T>
 	 */
@@ -6198,7 +5293,7 @@
 	        }
 	    };
 	    return AnonymousSubject;
-	}(Subject$2));
+	}(Subject$1));
 	var AnonymousSubject_1 = AnonymousSubject$1;
 
 
@@ -7164,7 +6259,7 @@
 
 	var iterator = createCommonjsModule(function (module, exports) {
 	"use strict";
-	var root_1 = root$2;
+	var root_1 = root$1;
 	function symbolIteratorPonyfill(root) {
 	    var Symbol = root.Symbol;
 	    if (typeof Symbol === 'function') {
@@ -7243,7 +6338,7 @@
 		InnerSubscriber: InnerSubscriber_2
 	};
 
-	var root_1$2 = root$2;
+	var root_1$2 = root$1;
 	var isArrayLike_1 = isArrayLike;
 	var isPromise_1 = isPromise_1$1;
 	var isObject_1$3 = isObject_1$1;
@@ -8195,7 +7290,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var root_1$3 = root$2;
+	var root_1$3 = root$1;
 	var Observable_1$22 = Observable_1$2;
 	/**
 	 * We need this JSDoc comment for affecting ESDoc.
@@ -8320,7 +7415,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var root_1$4 = root$2;
+	var root_1$4 = root$1;
 	var Observable_1$23 = Observable_1$2;
 	var iterator_1$4 = iterator;
 	/**
@@ -9531,7 +8626,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var root_1$5 = root$2;
+	var root_1$5 = root$1;
 	var Action_1 = Action_1$1;
 	/**
 	 * We need this JSDoc comment for affecting ESDoc.
@@ -11378,7 +10473,7 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var root_1$6 = root$2;
+	var root_1$6 = root$1;
 	var tryCatch_1$6 = tryCatch_1$1;
 	var errorObject_1$6 = errorObject;
 	var Observable_1$56 = Observable_1$2;
@@ -12063,7 +11158,7 @@
 		ReplaySubject: ReplaySubject_2
 	};
 
-	var root_1$8 = root$2;
+	var root_1$8 = root$1;
 	function assignImpl(target) {
 	    var sources = [];
 	    for (var _i = 1; _i < arguments.length; _i++) {
@@ -12104,7 +11199,7 @@
 	var Subscriber_1$11 = Subscriber_1$3;
 	var Observable_1$58 = Observable_1$2;
 	var Subscription_1$10 = Subscription_1$3;
-	var root_1$7 = root$2;
+	var root_1$7 = root$1;
 	var ReplaySubject_1$1 = ReplaySubject_1$2;
 	var tryCatch_1$7 = tryCatch_1$1;
 	var errorObject_1$7 = errorObject;
@@ -14716,7 +13811,7 @@
 	var delayWhen_1 = delayWhen_1$1;
 	Observable_1$77.Observable.prototype.delayWhen = delayWhen_1.delayWhen;
 
-	var root_1$9 = root$2;
+	var root_1$9 = root$1;
 	function minimalSetImpl() {
 	    // THIS IS NOT a full impl of Set, this is just the minimum
 	    // bits of functionality we need for this library.
@@ -16299,7 +15394,7 @@
 		MapPolyfill: MapPolyfill_2
 	};
 
-	var root_1$10 = root$2;
+	var root_1$10 = root$1;
 	var MapPolyfill_1 = MapPolyfill_1$1;
 	var Map = root_1$10.root.Map || (function () { return MapPolyfill_1.MapPolyfill; })();
 
@@ -19803,7 +18898,7 @@
 	var startWith_1 = startWith_1$1;
 	Observable_1$139.Observable.prototype.startWith = startWith_1.startWith;
 
-	var root_1$11 = root$2;
+	var root_1$11 = root$1;
 	var ImmediateDefinition = (function () {
 	    function ImmediateDefinition(root) {
 	        this.root = root;
@@ -21710,7 +20805,7 @@
 	var toArray_1 = toArray_1$1;
 	Observable_1$155.Observable.prototype.toArray = toArray_1.toArray;
 
-	var root_1$12 = root$2;
+	var root_1$12 = root$1;
 	/* tslint:enable:max-line-length */
 	/**
 	 * Converts an Observable sequence to a ES2015 compliant promise.
@@ -23198,7 +22293,7 @@
 	    return TestScheduler;
 	}(VirtualTimeScheduler_1$1.VirtualTimeScheduler));
 
-	var root_1$13 = root$2;
+	var root_1$13 = root$1;
 	var RequestAnimationFrameDefinition = (function () {
 	    function RequestAnimationFrameDefinition(root) {
 	        if (root.requestAnimationFrame) {
@@ -26169,7 +25264,7 @@
 	    };
 	    Loader.prototype._getStream = function (filePath) {
 	        return Observable.fromPromise(new rsvp_1(function (resolve, reject) {
-	            AjaxUtil.ajax({
+	            Util.ajax({
 	                url: filePath,
 	                success: function (val) { return resolve(val); },
 	                error: function (val) { return reject(val); }
@@ -26210,12 +25305,9 @@
 	        var gameobj = this.createTriangle();
 	        gameobj.transform.rotate(45, 1, 1, 0);
 	        gameobj.transform.translate(-2.4, 2, 0.2);
-	        var object = this.createPlane(models);
-	        object.transform.translate(-0.4, -80.1, 0);
-	        object.transform.rotate(0, 0, 1, 0);
 	        var director = exports.Director.getInstance();
 	        director.renderer.setClearColor(0, 0, 0, 1);
-	        director.scene.addChild(object);
+	        director.scene.addChild(gameobj);
 	        director.scene.addChild(this.createCamera());
 	        director.start();
 	    };
@@ -26301,7 +25393,6 @@
 	exports.Vector = Vector;
 	exports.Vector3 = Vector3;
 	exports.Vector4 = Vector4;
-	exports.AjaxUtil = AjaxUtil;
 	exports.Loader = Loader;
 	exports.MaterialLoader = MaterialLoader;
 	exports.MaterialModel = MaterialModel;
@@ -26309,6 +25400,7 @@
 	exports.ObjectModel = ObjectModel;
 	exports.singleton = singleton;
 	exports.Test = Test;
+	exports.Util = Util;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 

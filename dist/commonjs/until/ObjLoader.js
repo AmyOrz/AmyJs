@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("wonder-frp/dist/commonjs/stream/MapStream");
 var Collection_1 = require("wonder-commonlib/dist/commonjs/Collection");
 var ObjLoader = (function () {
     function ObjLoader() {

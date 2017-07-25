@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var AjaxUtil = (function () {
-    function AjaxUtil() {
+var Util = (function () {
+    function Util() {
     }
-    AjaxUtil.ajax = function (config) {
+    Util.isArray = function (target) {
+        return {}.toString.call(target).slice(8, -1).toLowerCase() == "array";
+    };
+    Util.ajax = function (config) {
         var url = config.url;
         var success = config.success;
         var error = config.error;
@@ -25,7 +28,7 @@ var AjaxUtil = (function () {
         xhr.open(type, url, true);
         xhr.send(null);
     };
-    AjaxUtil._createAjax = function (error) {
+    Util._createAjax = function (error) {
         var xhr = null;
         try {
             xhr = new ActiveXObject("microsoft.xmlhttp");
@@ -41,7 +44,7 @@ var AjaxUtil = (function () {
         }
         return xhr;
     };
-    return AjaxUtil;
+    return Util;
 }());
-exports.AjaxUtil = AjaxUtil;
-//# sourceMappingURL=AjaxUtil.js.map
+exports.Util = Util;
+//# sourceMappingURL=Util.js.map

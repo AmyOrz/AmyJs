@@ -1,5 +1,4 @@
 /// <reference types="wonder-commonlib" />
-import "wonder-frp/dist/es2015/stream/MapStream";
 import { Collection } from "wonder-commonlib/dist/es2015/Collection";
 export declare class ObjLoader {
     static create(): ObjLoader;

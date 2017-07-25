@@ -1,4 +1,3 @@
-import "wonder-frp/dist/es2015/stream/MapStream";
 import { Collection } from "wonder-commonlib/dist/es2015/Collection";
 var ObjLoader = (function () {
     function ObjLoader() {

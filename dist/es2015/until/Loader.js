@@ -1,7 +1,7 @@
 import { ObjLoader } from "./ObjLoader";
 import { MaterialLoader } from "./MaterialLoader";
 import { Promise } from "rsvp/dist/rsvp.js";
-import { AjaxUtil } from "./AjaxUtil";
+import { Util } from "./Util";
 import { ModelGeometry } from "../Component/Geometry/ModelGeometry";
 import * as rxjs from "rxjs";
 var Loader = (function () {
@@ -123,7 +123,7 @@ var Loader = (function () {
     };
     Loader.prototype._getStream = function (filePath) {
         return rxjs.Observable.fromPromise(new Promise(function (resolve, reject) {
-            AjaxUtil.ajax({
+            Util.ajax({
                 url: filePath,
                 success: function (val) { return resolve(val); },
                 error: function (val) { return reject(val); }

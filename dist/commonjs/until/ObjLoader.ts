@@ -1,4 +1,3 @@
-import "wonder-frp/dist/commonjs/stream/MapStream";
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 export class ObjLoader {
     public static create() {
