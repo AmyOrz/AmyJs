@@ -5,7 +5,7 @@ export declare type fileObject = {
 export declare class Test {
     loadByFile(files: any): void;
     loadByPath(fileObj?: fileObject): void;
-    testCanvas(models: any): void;
+    testCanvas(models?: any): void;
     private createTriangle();
     private createPlane(model);
     private createCamera();

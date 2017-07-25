@@ -10,6 +10,7 @@ import { Color } from "../Math/Color";
 import { BoxGeometry } from "../Component/Geometry/BoxGeometry";
 import { Loader } from "./Loader";
 import { ModelMaterial } from "../Component/Material/ModelMaterial";
+import {TriangleGeometry} from "../Component/Geometry/TriangleGeometry";
 
 export type fileObject = {
     obj: string,
@@ -37,7 +38,7 @@ export class Test {
         })
     }
 
-    public testCanvas(models) {
+    public testCanvas(models?: any) {
 
 
         Main.setCanvas("webgl").init();
@@ -69,7 +70,8 @@ export class Test {
         material.color = Color.create("#0000ff");
         material.opacity = 0.5;
 
-        var triangle = BoxGeometry.create();
+
+        var triangle = TriangleGeometry.create();
         triangle.material = material;
 
         gameObject.addComponent(triangle);
@@ -102,8 +104,8 @@ export class Test {
         cameraComponent.near = 1;
         cameraComponent.far = 1000;
 
-        // cameraComponent.translate(0, 0, -7);
-        cameraComponent.translate(56, 150, -400);
+        cameraComponent.translate(0, 0, -7);
+        // cameraComponent.translate(56, 150, -400);
 
         var cameraControll = CameraController.create(cameraComponent);
 
@@ -112,6 +114,6 @@ export class Test {
         return camera;
     }
 }
-// var a = new Test();
-// a.init();
+var a = new Test();
+a.testCanvas();
 

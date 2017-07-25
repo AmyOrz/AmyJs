@@ -9,9 +9,9 @@ var PerspectiveCamera_1 = require("../Component/Camera/PerspectiveCamera");
 var CameraController_1 = require("../Component/Camera/Controll/CameraController");
 var BasicMaterial_1 = require("../Component/Material/BasicMaterial");
 var Color_1 = require("../Math/Color");
-var BoxGeometry_1 = require("../Component/Geometry/BoxGeometry");
 var Loader_1 = require("./Loader");
 var ModelMaterial_1 = require("../Component/Material/ModelMaterial");
+var TriangleGeometry_1 = require("../Component/Geometry/TriangleGeometry");
 var Test = (function () {
     function Test() {
     }
@@ -49,7 +49,7 @@ var Test = (function () {
         var material = BasicMaterial_1.BasicMaterial.create();
         material.color = Color_1.Color.create("#0000ff");
         material.opacity = 0.5;
-        var triangle = BoxGeometry_1.BoxGeometry.create();
+        var triangle = TriangleGeometry_1.TriangleGeometry.create();
         triangle.material = material;
         gameObject.addComponent(triangle);
         gameObject.addComponent(MeshRenderer_1.MeshRenderer.create());
@@ -70,7 +70,7 @@ var Test = (function () {
         cameraComponent.aspect = view.width / view.height;
         cameraComponent.near = 1;
         cameraComponent.far = 1000;
-        cameraComponent.translate(56, 150, -400);
+        cameraComponent.translate(0, 0, -7);
         var cameraControll = CameraController_1.CameraController.create(cameraComponent);
         camera.addComponent(cameraControll);
         return camera;
@@ -78,4 +78,6 @@ var Test = (function () {
     return Test;
 }());
 exports.Test = Test;
+var a = new Test();
+a.testCanvas();
 //# sourceMappingURL=Test.js.map

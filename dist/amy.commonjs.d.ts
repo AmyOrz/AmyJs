@@ -940,7 +940,7 @@ declare module 'amy.js/dist/commonjs/until/Test' {
     export class Test {
         loadByFile(files: any): void;
         loadByPath(fileObj?: fileObject): void;
-        testCanvas(models: any): void;
+        testCanvas(models?: any): void;
     }
 }
 

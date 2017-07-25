@@ -22,7 +22,6 @@ export class BasicShader extends Shader {
         this.program.use();
         //循环遍历所以attribute uniform 进行传值
         this._shaderLib.getAttributes().forEach((item) => {
-            console.log(item)
             var buffer = cmd.buffers.getChild(VariableLib[item].buffer);
 
             this.sendAttributeBuffer(item, buffer);

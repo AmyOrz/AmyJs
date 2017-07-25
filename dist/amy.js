@@ -2757,7 +2757,6 @@
 	        var _this = this;
 	        this.program.use();
 	        this._shaderLib.getAttributes().forEach(function (item) {
-	            console.log(item);
 	            var buffer = cmd.buffers.getChild(VariableLib[item].buffer);
 	            _this.sendAttributeBuffer(item, buffer);
 	        });
@@ -25316,7 +25315,7 @@
 	        var material = BasicMaterial.create();
 	        material.color = Color.create("#0000ff");
 	        material.opacity = 0.5;
-	        var triangle = BoxGeometry.create();
+	        var triangle = TriangleGeometry.create();
 	        triangle.material = material;
 	        gameObject.addComponent(triangle);
 	        gameObject.addComponent(MeshRenderer.create());
@@ -25337,13 +25336,15 @@
 	        cameraComponent.aspect = view.width / view.height;
 	        cameraComponent.near = 1;
 	        cameraComponent.far = 1000;
-	        cameraComponent.translate(56, 150, -400);
+	        cameraComponent.translate(0, 0, -7);
 	        var cameraControll = CameraController.create(cameraComponent);
 	        camera.addComponent(cameraControll);
 	        return camera;
 	    };
 	    return Test;
 	}());
+	var a = new Test();
+	a.testCanvas();
 
 	exports.Camera = Camera;
 	exports.CameraController = CameraController;

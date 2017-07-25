@@ -940,7 +940,7 @@ declare module 'amy.js/dist/es2015/until/Test' {
     export class Test {
         loadByFile(files: any): void;
         loadByPath(fileObj?: fileObject): void;
-        testCanvas(models: any): void;
+        testCanvas(models?: any): void;
     }
 }
 
