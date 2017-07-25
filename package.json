@@ -21,6 +21,7 @@
     "rollup-plugin-commonjs": "^7.0.0",
     "rollup-plugin-node-resolve": "^2.0.0",
     "typescript": "^2.3.0-dev.20170224",
+    "wonder-commonlib": "^0.1.9",
     "wonder-package": "^0.1.25",
     "wonder-rollup-plugin-typescript": "^0.1.1",
     "wonder-tool-generate_es2015_index": "^0.1.2"

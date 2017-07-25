@@ -1,7 +1,7 @@
 export class Util {
 
-    public static isArray(target:any):boolean{
-        return {}.toString.call(target).slice(8,-1).toLowerCase() == "array";
+    public static isArray(target: any): boolean {
+        return {}.toString.call(target).slice(8, -1).toLowerCase() == "array";
     }
 
     public static ajax(config) {

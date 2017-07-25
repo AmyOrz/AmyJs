@@ -1,7 +1,7 @@
 import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 import { Entity } from "../Entity";
 import { EntityObject } from "../EntityObject";
-import {Util} from "../../../until/Util";
+import { Util } from "../../../until/Util";
 
 export class EntityManager extends Entity {
     public static create(entityDispatcher: EntityObject) {
