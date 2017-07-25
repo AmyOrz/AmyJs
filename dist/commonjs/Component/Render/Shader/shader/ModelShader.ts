@@ -1,10 +1,10 @@
-import {Shader} from "./Shader";
-import {ModelShaderLib} from "../lib/ModelShaderLib";
-import {RenderCommand} from "../../../../core/renderer/command/RenderCommand";
-import {Material} from "../../../Material/Material";
-import {VariableLib} from "../VariableLib";
-export class ModelShader extends Shader{
-    public static create(){
+import { Shader } from "./Shader";
+import { ModelShaderLib } from "../lib/ModelShaderLib";
+import { RenderCommand } from "../../../../core/renderer/command/RenderCommand";
+import { Material } from "../../../Material/Material";
+import { VariableLib } from "../VariableLib";
+export class ModelShader extends Shader {
+    public static create() {
         var obj = new this();
 
         return obj;
@@ -14,7 +14,7 @@ export class ModelShader extends Shader{
         this.program.initProgramWithShader(this);
     }
 
-    createShaderLib(){
+    createShaderLib() {
         return ModelShaderLib.create();
     }
 

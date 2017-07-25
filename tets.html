@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src = "./dist/amy.js"></script>
 </head>
 <body>
-    <div id = "ct">
-    </div>
+    <div id = "ct"></div>
+
+    <input type="file" id="file" onchange="handleFiles(this.files)" multiple/>
 </body>
-<script src = "./dist/amy.js"></script>
+<script>
+    function handleFiles(files){
+        var a = new amy.Test();
+        a.loadByFile(files);
+    }
+</script>
 </html>

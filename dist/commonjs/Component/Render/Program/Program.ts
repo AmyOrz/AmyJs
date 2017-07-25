@@ -1,5 +1,5 @@
 import { Shader } from "../Shader/shader/Shader";
-import { Hash } from "../../../../node_modules/wonder-commonlib/dist/commonjs/Hash";
+import { Hash } from "wonder-commonlib/dist/commonjs/Hash";
 import { EVariableType } from "./EVariableType";
 import { GLSLDataSender } from "./GLSLDataSender";
 import { ArrayBuffer } from "../Buffer/ArrayBuffer";

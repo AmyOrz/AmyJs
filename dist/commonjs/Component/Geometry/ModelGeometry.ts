@@ -6,7 +6,7 @@ export class ModelGeometry extends Geometry {
         return obj;
     }
 
-    // public indices:number[] = null;
+    public indices: number[] = null;
     public vertices: number[] = null;
     public normals: number[] = null;
     public texCoords: number[] = null;
@@ -17,7 +17,7 @@ export class ModelGeometry extends Geometry {
             vertice: this.vertices,
             normal: this.normals,
             texCoord: this.texCoords,
-            // indice: this.indices,
+            indice: this.indices,
             color: this.colors,
         };
     }

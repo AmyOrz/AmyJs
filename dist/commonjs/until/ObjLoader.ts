@@ -1,5 +1,5 @@
 import "wonder-frp/dist/commonjs/stream/MapStream";
-import {Collection} from "wonder-commonlib/dist/commonjs/Collection";
+import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
 export class ObjLoader {
     public static create() {
         var obj = new this();
@@ -14,7 +14,7 @@ export class ObjLoader {
         normal_pattern: /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
         // vt float float
         uv_pattern: /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/,
-        face_pattern:/f\s(.+)/,
+        face_pattern: /f\s(.+)/,
         // f vertex vertex vertex
         face_vertex: /^f\s+(-?\d+)\s+(-?\d+)\s+(-?\d+)(?:\s+(-?\d+))?/,
         // f vertex/uv vertex/uv vertex/uv
@@ -33,31 +33,31 @@ export class ObjLoader {
         material_use_pattern: /^usemtl /
     };
 
-    public objects:Collection<ObjectModel> = new Collection<ObjectModel>();
-    public mtlFilePath:string = null;
-    public materialName:string = null;
-    public name:string = null;
+    public objects: Collection<ObjectModel> = new Collection<ObjectModel>();
+    public mtlFilePath: string = null;
+    public materialName: string = null;
+    public name: string = null;
 
-    private _vertices:Array<number> = [];
-    private _normals:Array<number> = [];
-    private _texCoords:Array<number> = [];
-    private _currentObject:ObjectModel = null;
+    private _vertices: Array<number> = [];
+    private _normals: Array<number> = [];
+    private _texCoords: Array<number> = [];
+    private _currentObject: ObjectModel = null;
 
-    public convert(result,fileContent,fileName){
+    public convert(result, fileContent, fileName) {
 
         this._convertObject(fileContent);
 
-        var currentObj:any;
+        var currentObj: any;
         var objs = [];
-        this._buildPrimitiveArr().forEach((item:any)=>{
-            if(item.material == void 0){
+        this._buildPrimitiveArr().forEach((item: any) => {
+            if (item.material == void 0) {
                 currentObj = {
-                    attribute:item.attributes,
-                    material:[]
+                    attribute: item.attributes,
+                    material: []
                 };
                 objs.push(currentObj);
             }
-            else{
+            else {
                 currentObj.material.push(item)
             }
         });
@@ -65,23 +65,23 @@ export class ObjLoader {
         return result;
     }
 
-    private _buildPrimitiveArr(){
+    private _buildPrimitiveArr() {
         var me = this,
             arr = [];
 
-        this.objects.forEach((objectModel:ObjectModel)=>{
+        this.objects.forEach((objectModel: ObjectModel) => {
             arr.push({
-                name:objectModel.name,
-                attributes:{
-                    POSITION:me._vertices,
-                    TEXCOORD:me._texCoords,
-                    NORMAL:me._normals
+                name: objectModel.name,
+                attributes: {
+                    POSITION: me._vertices,
+                    TEXCOORD: me._texCoords,
+                    NORMAL: me._normals
                 },
                 verticeIndices: objectModel.verticeIndices,
                 normalIndices: objectModel.normalIndices,
                 texCoordIndices: objectModel.texCoordIndices,
-                material:objectModel.materialName,
-                mode:4
+                material: objectModel.materialName,
+                mode: 4
             })
         });
         return arr;
@@ -159,12 +159,12 @@ export class ObjLoader {
                 // smooth shading
 
             } else {
-                console.log( "Unexpected line: '" + line  + "'" );
+                console.log("Unexpected line: '" + line + "'");
             }
         }
     }
 
-    private convertUsemtl(line:string){
+    private convertUsemtl(line: string) {
         var materialName = line.substring(7).trim();
 
         var objName = this._getObjectNameWithMultMaterialOfSingleObj(materialName);
@@ -176,14 +176,14 @@ export class ObjLoader {
         this._currentObject.materialName = materialName;
     }
 
-    private _getObjectNameWithMultMaterialOfSingleObj(materialName:string){
-        if(this._currentObject){
+    private _getObjectNameWithMultMaterialOfSingleObj(materialName: string) {
+        if (this._currentObject) {
             return `${this._currentObject.name}_${materialName}`;
         }
         return materialName;
     }
 
-    private _convertFace(lines){
+    private _convertFace(lines) {
         var lineResult = this.regexp.face_pattern.exec(lines);
         var face = lineResult[1].trim().split(" "),
             line = lineResult[0],
@@ -194,19 +194,19 @@ export class ObjLoader {
             normalIndices = [],
             texCoordIndices = [];
 
-        if(!this._currentObject){
+        if (!this._currentObject) {
             this._currentObject = ObjectModel.create();
 
             this.objects.addChild(this._currentObject);
         }
 
-        if(face.length < 3)return;
+        if (face.length < 3) return;
 
         verticeIndices = this._currentObject.verticeIndices;
         normalIndices = this._currentObject.normalIndices;
         texCoordIndices = this._currentObject.texCoordIndices;
 
-        this._getTriangles(face,triangles);
+        this._getTriangles(face, triangles);
 
         if ((result = this.regexp.face_vertex_uv_normal.exec(line)) !== null) {
 
@@ -254,16 +254,16 @@ export class ObjLoader {
             // 0            1    2    3   4
             // ["f 1 2 3", "1", "2", "3", undefined]
 
-            for(k of triangles){
-                verticeIndices.push(~~(k)-1);
+            for (k of triangles) {
+                verticeIndices.push(~~(k) - 1);
             }
-        }else{
+        } else {
             console.log("this line is error: " + lineResult)
         }
     }
 
-    private _getTriangles(face:Array<string>, triangles:Array<string>) {
-        var getTriangles = (v:number) => {
+    private _getTriangles(face: Array<string>, triangles: Array<string>) {
+        var getTriangles = (v: number) => {
             if (v + 1 < face.length) {
                 triangles.push(face[0], face[v], face[v + 1]);
                 v++;
@@ -276,20 +276,20 @@ export class ObjLoader {
     }
 }
 
-export class ObjectModel{
-    public static create(){
+export class ObjectModel {
+    public static create() {
         var obj = new this();
 
         return obj;
     }
 
-    public vertices:number[] = [];
-    public normals:number[] = [];
-    public texCoords:number[] = [];
-    public verticeIndices:number[] = [];
-    public normalIndices:number[] = [];
-    public texCoordIndices:number[] = [];
-    public materialName:string = null;
-    public name:string = null;
-    public indicesCount:number = 0;
+    public vertices: number[] = [];
+    public normals: number[] = [];
+    public texCoords: number[] = [];
+    public verticeIndices: number[] = [];
+    public normalIndices: number[] = [];
+    public texCoordIndices: number[] = [];
+    public materialName: string = null;
+    public name: string = null;
+    public indicesCount: number = 0;
 }

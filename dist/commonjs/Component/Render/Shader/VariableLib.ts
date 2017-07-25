@@ -11,6 +11,11 @@ export class VariableLib {
         buffer: EBufferDataType.COLOR
     }
 
+    public static a_normal = {
+        type: EVariableType.FLOAT_3,
+        buffer: EBufferDataType.NORMAL
+    }
+
     public static u_color = {
         type: EVariableType.FLOAT_3,
         buffer: "color"

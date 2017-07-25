@@ -33,7 +33,9 @@ export default {
             namedExports: {
                 // "./node_modules/bowser/src/bowser.js": ["version", "chrome","msie", "firefox", "mobile"],
                 // "./node_modules/wonder-expect.js/index.js": ["expect"],
-                "./node_modules/rsvp/dist/rsvp.js": ["Promise"]
+                "./node_modules/rsvp/dist/rsvp.js": ["Promise"],
+                "./node_modules/rxjs/Rx.js": ["Promise"],
+
             },
             extensions: [".js", ".ts"]
         })
@@ -45,11 +47,11 @@ export default {
             format: "umd",
             moduleName: "amy",
             dest: "./dist/amy.js"
+        },
+        {
+            sourceMap: true,
+            format: "es",
+            dest: "./dist/amy.module.js"
         }
-        /*        {
-         sourceMap: true,
-         format: "es",
-         dest: "./dist/wd.module.js"
-         }*/
     ]
 };

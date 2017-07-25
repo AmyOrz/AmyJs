@@ -1,8 +1,7 @@
 {
-  "name": "wonder-sample-es2015",
+  "name": "amyjs",
   "version": "0.0.1",
-  "authors": "Yuanchao Yang <395976266@qq.com>",
-  "homepage": "https://github.com/yyc-git/Wonder-Sample-ES2015.js",
+  "authors": "arvinorz <340606700@qq.com>",
   "license": "MIT",
   "scripts": {
     "test": "karma start karma.conf.js --single-run --browsers Firefox"
@@ -28,6 +27,7 @@
   },
   "dependencies": {
     "rsvp": "^3.5.0",
+    "rxjs": "^5.4.1",
     "wonder-frp": "^0.1.16"
   }
 }

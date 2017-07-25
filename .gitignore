@@ -2,6 +2,8 @@
 logs
 *.log
 .idea/*
+test/
+src/
 
 npm-debug.log*
 yarn-debug.log*

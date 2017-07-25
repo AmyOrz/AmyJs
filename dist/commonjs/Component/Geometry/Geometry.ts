@@ -34,7 +34,6 @@ export abstract class Geometry extends Component {
     protected abstract computeData(): GeometryDataType;
 
     protected createGeometryData(computeData: GeometryDataType): GeometryData {
-        console.log(computeData)
         var {
             vertice,
             color,

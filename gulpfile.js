@@ -13,11 +13,15 @@ var format = wonderPackage.format;
 
 var config = require("./build/gulp_task/common/config");
 
+
 var tsFilePaths = config.tsFilePaths;
 var tsFileDir = config.tsFileDir;
 var distPath = config.distPath;
 var tsconfigFile = config.tsconfigFile;
 var indexFileDir = config.indexFileDir;
+
+
+
 
 require("./build/gulp_task/clean/clean");
 
@@ -39,6 +43,7 @@ gulp.task("generateIndex", function(done) {
     done();
 });
 
+
 gulp.task("compileTsES2015", function(done) {
     compileTs.compileTsES2015(path.join(process.cwd(), tsconfigFile), {
         sourceDir: tsFileDir,
@@ -58,8 +63,9 @@ gulp.task("compileTsCommonjs", function(done) {
 gulp.task("generateDTS", function(done) {
     var indexDTSPath = path.join(indexFileDir, "index.d.ts");
 
-    bundleDTS.generateES2015DTS(indexDTSPath, "wonder.js/dist/es2015", path.join(distPath, "wd.es2015.d.ts"));
-    bundleDTS.generateCommonjsDTS(indexDTSPath, "wonder.js/dist/commonjs", path.join(distPath, "wd.commonjs.d.ts"));
+
+    bundleDTS.generateES2015DTS(indexDTSPath, "amy.js/dist/es2015", path.join(distPath, "amy.es2015.d.ts"));
+    bundleDTS.generateCommonjsDTS(indexDTSPath, "amy.js/dist/commonjs", path.join(distPath, "amy.commonjs.d.ts"));
 
     done();
 });
@@ -74,12 +80,18 @@ gulp.task("formatTs", function(done) {
 
 
 
-gulp.task("build", gulpSync.sync(["clean","generateIndex",/* "compileTsES2015", */"compileTsCommonjs", "rollup", "formatTs"]));
+gulp.task("build", gulpSync.sync(["clean", "generateIndex", "compileTsES2015", "compileTsCommonjs", "generateDTS", "generateDTS", "rollup", "formatTs"]));
 
 
 
 gulp.task("watch", function(){
     var totalPaths = tsFilePaths;
 
-    gulp.watch(totalPaths, gulpSync.sync(["compileTsCommonjs", "rollup"]));
+    gulp.watch(totalPaths, gulpSync.sync(["compileTsES2015", "rollup"]));
+});
+
+gulp.task("watchForTest", function(){
+    var totalPaths = tsFilePaths;
+
+    gulp.watch(totalPaths, gulpSync.sync(["generateIndex", "compileTsES2015", "rollup"]));
 });
