@@ -38,6 +38,11 @@ export class Device {
             alert("你的浏览器不支持webgl");
 
     }
+
+    public setViewport(width: number, height: number) {
+        this.gl.viewport(0, 0, width, height);
+    }
+
     public setScreen() {
         let width: number = 0,
             height: number = 0,

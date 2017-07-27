@@ -553,6 +553,7 @@ declare module 'amy.js/dist/commonjs/core/device/Device' {
         canvas: HTMLCanvasElement;
         view: IView;
         createGL(canvasId: string, contextConfigData: ContextConfigData, parentId: string): void;
+        setViewport(width: number, height: number): void;
         setScreen(): void;
     }
 }

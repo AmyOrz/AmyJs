@@ -10,7 +10,7 @@ import { Color } from "../Math/Color";
 import { BoxGeometry } from "../Component/Geometry/BoxGeometry";
 import { Loader } from "./Loader";
 import { ModelMaterial } from "../Component/Material/ModelMaterial";
-import {TriangleGeometry} from "../Component/Geometry/TriangleGeometry";
+import { TriangleGeometry } from "../Component/Geometry/TriangleGeometry";
 
 export type fileObject = {
     obj: string,

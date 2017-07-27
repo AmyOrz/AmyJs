@@ -7,5 +7,6 @@ export declare class Device {
     view: IView;
     private _parentEle;
     createGL(canvasId: string, contextConfigData: ContextConfigData, parentId: string): void;
+    setViewport(width: number, height: number): void;
     setScreen(): void;
 }

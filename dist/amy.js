@@ -1788,6 +1788,9 @@
 	        if (!this.gl)
 	            alert("你的浏览器不支持webgl");
 	    };
+	    Device.prototype.setViewport = function (width, height) {
+	        this.gl.viewport(0, 0, width, height);
+	    };
 	    Device.prototype.setScreen = function () {
 	        var width = 0, height = 0, x = 0, y = 0, styleWidth = null, styleHeight = null;
 	        if (this._parentEle) {
