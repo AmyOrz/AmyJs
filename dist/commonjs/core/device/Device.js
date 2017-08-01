@@ -62,6 +62,7 @@ var Device = (function () {
         this.view.height = height;
         this.view.styleWidth = styleWidth;
         this.view.styleHeight = styleHeight;
+        console.log(width, height);
         this.gl.viewport(0, 0, width, height);
         this._parentEle = null;
     };

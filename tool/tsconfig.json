@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"noImplicitAny": false,
+		"sourceMap": false,
+		"declaration": false,
+		"noEmitOnError": false,
+		"removeComments": true,
+		"rootDir":"./",
+		"experimentalDecorators": true
+	},
+	"files": [
+		"../node_modules/wdcb/dist/wdCb.node.d.ts",
+		"../node_modules/wdfrp/dist/wdFrp.node.d.ts",
+
+		"./dts/node.d.ts",
+		"./Converter",
+
+		"../ts/Vector2.ts",
+		"../ts/Vector3.ts",
+		"../ts/Log.ts",
+		"../ts/ExtendUtils.ts",
+		"../ts/FileUtils.ts"
+
+	]
+}

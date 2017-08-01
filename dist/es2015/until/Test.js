@@ -32,10 +32,9 @@ var Test = (function () {
         });
     };
     Test.prototype.testCanvas = function (models) {
-        Main.setCanvas("webgl").init();
+        Main.setCanvas("webgl", "ct").init();
         var gameobj = this.createTriangle();
-        gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(-2.4, 2, 0.2);
+        gameobj.transform.translate(0, 0, 0.2);
         var director = Director.getInstance();
         director.renderer.setClearColor(0, 0, 0, 1);
         director.scene.addChild(gameobj);
@@ -68,7 +67,7 @@ var Test = (function () {
         cameraComponent.aspect = view.width / view.height;
         cameraComponent.near = 1;
         cameraComponent.far = 1000;
-        cameraComponent.translate(0, 0, -7);
+        cameraComponent.translate(0, 0, -4);
         var cameraControll = CameraController.create(cameraComponent);
         camera.addComponent(cameraControll);
         return camera;

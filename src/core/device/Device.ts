@@ -11,7 +11,7 @@ export class Device {
     public canvas: HTMLCanvasElement;
     public view: IView;
 
-    private _parentEle: HTMLElement;
+    private _parentEle: any;
 
     public createGL(canvasId: string, contextConfigData: ContextConfigData, parentId: string) {
         let canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -19,7 +19,9 @@ export class Device {
             canvas.setAttribute("id", canvasId);
         }
         if (parentId) {
-            this._parentEle = document.getElementById(parentId);
+            console.log(document.querySelector("#ct"))
+            this._parentEle = document.querySelector("#"+parentId);
+            console.log(this._parentEle)
             if (this._parentEle == void 0)
                 alert("找不到指定parentId的dom节点");
         }
@@ -71,6 +73,7 @@ export class Device {
         this.view.height = height;
         this.view.styleWidth = styleWidth;
         this.view.styleHeight = styleHeight;
+        console.log(width , height);
         this.gl.viewport(0, 0, width, height);
         this._parentEle = null;
     }

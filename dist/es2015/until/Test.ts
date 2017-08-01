@@ -41,13 +41,12 @@ export class Test {
     public testCanvas(models?: any) {
 
 
-        Main.setCanvas("webgl").init();
+        Main.setCanvas("webgl","ct").init();
 
 
         var gameobj = this.createTriangle();
 
-        gameobj.transform.rotate(45, 1, 1, 0);
-        gameobj.transform.translate(-2.4, 2, 0.2);
+        gameobj.transform.translate(0, 0, 0.2);
 
 
         // var object = this.createPlane(models);
@@ -104,7 +103,7 @@ export class Test {
         cameraComponent.near = 1;
         cameraComponent.far = 1000;
 
-        cameraComponent.translate(0, 0, -7);
+        cameraComponent.translate(0, 0, -4);
         // cameraComponent.translate(56, 150, -400);
 
         var cameraControll = CameraController.create(cameraComponent);

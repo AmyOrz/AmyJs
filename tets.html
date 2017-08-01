@@ -2,14 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Title</title>
-    <script src = "./dist/amy.js"></script>
+    <style>
+        body,html{
+            margin:0px;
+            width:100%;
+            height:100%;
+        }
+        #ct{
+            width:100%;
+            height:100%;
+        }
+    </style>
 </head>
 <body>
     <div id = "ct"></div>
-
-    <input type="file" id="file" onchange="handleFiles(this.files)" multiple/>
 </body>
+<script src = "./dist/amy.js"></script>
 <script>
     function handleFiles(files){
         console.log(files)

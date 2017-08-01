@@ -1,0 +1,201 @@
+{
+    "scene": "Scene",
+    "scenes": {
+        "Scene": {
+            "nodes": [
+                "cube"
+            ]
+        }
+    },
+    "asset": {
+        "version": "0.9.0",
+        "generator": "WonderJsOBJToWDConverter"
+    },
+    "nodes": {
+        "cube": {
+            "children": [],
+            "matrix": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+            ],
+            "mesh": "cube_mesh",
+            "name": "cube"
+        }
+    },
+    "meshes": {
+        "cube_mesh": {
+            "name": "cube_mesh",
+            "primitives": [
+                {
+                    "name": "Cube Fck",
+                    "attributes": {
+                        "POSITION": [
+                            1,
+                            -1,
+                            -1,
+                            1,
+                            -1,
+                            1,
+                            -1,
+                            -1,
+                            1,
+                            -1,
+                            -1,
+                            -1,
+                            1,
+                            1,
+                            -1,
+                            1,
+                            1,
+                            1.000001,
+                            -1,
+                            1,
+                            1,
+                            -1,
+                            1,
+                            -1
+                        ],
+                        "TEXCOORD": [],
+                        "NORMAL": []
+                    },
+                    "verticeIndices": [
+                        0,
+                        1,
+                        2,
+                        0,
+                        2,
+                        3,
+                        4,
+                        7,
+                        6,
+                        4,
+                        6,
+                        5,
+                        1,
+                        5,
+                        6,
+                        1,
+                        6,
+                        2,
+                        2,
+                        6,
+                        7,
+                        2,
+                        7,
+                        3,
+                        4,
+                        0,
+                        3,
+                        4,
+                        3,
+                        7
+                    ],
+                    "normalIndices": [],
+                    "texCoordIndices": [],
+                    "material": "Material",
+                    "mode": 4
+                },
+                {
+                    "name": "Material.001",
+                    "attributes": {
+                        "POSITION": [
+                            1,
+                            -1,
+                            -1,
+                            1,
+                            -1,
+                            1,
+                            -1,
+                            -1,
+                            1,
+                            -1,
+                            -1,
+                            -1,
+                            1,
+                            1,
+                            -1,
+                            1,
+                            1,
+                            1.000001,
+                            -1,
+                            1,
+                            1,
+                            -1,
+                            1,
+                            -1
+                        ],
+                        "TEXCOORD": [],
+                        "NORMAL": []
+                    },
+                    "verticeIndices": [
+                        0,
+                        4,
+                        5,
+                        0,
+                        5,
+                        1
+                    ],
+                    "normalIndices": [],
+                    "texCoordIndices": [],
+                    "material": "Material.001",
+                    "mode": 4
+                }
+            ]
+        }
+    },
+    "textures": {},
+    "samplers": {},
+    "images": {},
+    "materials": {
+        "Material": {
+            "technique": "PHONG",
+            "transparent": false,
+            "transparency": 1,
+            "values": {
+                "diffuse": [
+                    "0.000000",
+                    "0.000000",
+                    "1.000000"
+                ],
+                "specular": [
+                    "0.000000",
+                    "0.000000",
+                    "0.000000"
+                ],
+                "shininess": 96.078431
+            }
+        },
+        "Material.001": {
+            "technique": "PHONG",
+            "transparent": false,
+            "transparency": 1,
+            "values": {
+                "diffuse": [
+                    "1.000000",
+                    "0.000000",
+                    "0.000000"
+                ],
+                "specular": [
+                    "0.000000",
+                    "0.000000",
+                    "0.000000"
+                ],
+                "shininess": 96.078431
+            }
+        }
+    }
+}

@@ -39,8 +39,8 @@ export class Device {
 
     }
 
-    public setViewport(width:number,height:number){
-        this.gl.viewport(0,0,width,height);
+    public setViewport(width: number, height: number) {
+        this.gl.viewport(0, 0, width, height);
     }
 
     public setScreen() {
@@ -71,6 +71,7 @@ export class Device {
         this.view.height = height;
         this.view.styleWidth = styleWidth;
         this.view.styleHeight = styleHeight;
+        console.log(width,height);
         this.gl.viewport(0, 0, width, height);
         this._parentEle = null;
     }
