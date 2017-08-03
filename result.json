@@ -1,0 +1,242 @@
+{
+  "scene": "scene",
+  "scenes": {
+    "Scene": {
+      "nodes": [
+        "box",
+        "cube"
+      ]
+    }
+  },
+  "asset": {
+    "version": "0.1.0",
+    "generator": "WonderEditorConvert"
+  },
+  "nodes": {
+    "box": {
+      "children": [
+        "cube"
+      ],
+      "mesh": "box_mesh",
+      "name": "box",
+      "matrix": [
+        0.6,
+        -0.7,
+        0,
+        0,
+        0.7,
+        0.6,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0.3,
+        0,
+        0,
+        1
+      ]
+    },
+    "cube": {
+      "children": [],
+      "mesh": "cube_mesh",
+      "name": "cube",
+      "matrix": [
+        0.6,
+        -0.7,
+        0,
+        0,
+        0.7,
+        0.6,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0.3,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "meshes": {
+    "box_mesh": {
+      "name": "box_mesh",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": [
+              1,
+              -1,
+              -1,
+              1,
+              -1,
+              1,
+              -1,
+              -1,
+              1,
+              -1,
+              -1,
+              -1,
+              1,
+              1,
+              -1,
+              1,
+              1,
+              1,
+              -1,
+              1,
+              1,
+              -1,
+              1,
+              -1
+            ],
+            "NORMAL": [],
+            "TEXCOORD": []
+          },
+          "verticeIndices": [
+            0,
+            1,
+            2,
+            0,
+            2,
+            3,
+            4,
+            7,
+            6,
+            4,
+            6,
+            5,
+            1,
+            5,
+            6,
+            1,
+            6,
+            2,
+            2,
+            6,
+            7,
+            2,
+            7,
+            3,
+            4,
+            0,
+            3,
+            4,
+            3,
+            7
+          ],
+          "normalIndices": [],
+          "texCoordIndices": [],
+          "material": "Material",
+          "mode": 4
+        }
+      ]
+    },
+    "cube_mesh": {
+      "name": "cube_mesh",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": [
+              1,
+              -1,
+              -1,
+              1,
+              -1,
+              1,
+              -1,
+              -1,
+              1,
+              -1,
+              -1,
+              -1,
+              1,
+              1,
+              -1,
+              1,
+              1,
+              1,
+              -1,
+              1,
+              1,
+              -1,
+              1,
+              -1
+            ],
+            "NORMAL": [],
+            "TEXCOORD": []
+          },
+          "verticeIndices": [
+            0,
+            1,
+            2,
+            0,
+            2,
+            3,
+            4,
+            7,
+            6,
+            4,
+            6,
+            5,
+            1,
+            5,
+            6,
+            1,
+            6,
+            2,
+            2,
+            6,
+            7,
+            2,
+            7,
+            3,
+            4,
+            0,
+            3,
+            4,
+            3,
+            7
+          ],
+          "normalIndices": [],
+          "texCoordIndices": [],
+          "material": "Material_01",
+          "mode": 4
+        }
+      ]
+    }
+  },
+  "texture": {},
+  "samplers": {},
+  "images": {},
+  "materials": {
+    "Material": {
+      "technique": "basic",
+      "transparent": false,
+      "transparency": 1,
+      "values": {
+        "diffuse": [
+          0.1,
+          0.2,
+          0.3
+        ]
+      }
+    },
+    "Material_01": {
+      "technique": "basic",
+      "transparent": false,
+      "transparency": 1,
+      "values": {
+        "diffuse": [
+          0.9,
+          0.1,
+          0.1
+        ]
+      }
+    }
+  }
+}
