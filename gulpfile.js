@@ -64,8 +64,8 @@ gulp.task("generateDTS", function(done) {
     var indexDTSPath = path.join(indexFileDir, "index.d.ts");
 
 
-    bundleDTS.generateES2015DTS(indexDTSPath, "amy.js/dist/es2015", path.join(distPath, "amy.es2015.d.ts"));
-    bundleDTS.generateCommonjsDTS(indexDTSPath, "amy.js/dist/commonjs", path.join(distPath, "amy.commonjs.d.ts"));
+    bundleDTS.generateES2015DTS(indexDTSPath, "amyjs/dist/es2015", path.join(distPath, "amyjs.es2015.d.ts"));
+    bundleDTS.generateCommonjsDTS(indexDTSPath, "amyjs/dist/commonjs", path.join(distPath, "amyjs.commonjs.d.ts"));
 
     done();
 });

@@ -87,14 +87,14 @@ export class Loader {
 
     private _getModelGeometryByResult(res) {
 
-        aar objects = res.objs;
-        aar materials = res.materials == void 0 ? null : res.materials;
+        var objects = res.objs;
+        var materials = res.materials == void 0 ? null : res.materials;
 
-        aar vertices = [];
-        aar colors = [];
-        aar normals = [];
-        aar texCoords = [];
-        aar indices = [];
+        var vertices = [];
+        var colors = [];
+        var normals = [];
+        var texCoords = [];
+        var indices = [];
 
         objects.forEach(obj => {
 

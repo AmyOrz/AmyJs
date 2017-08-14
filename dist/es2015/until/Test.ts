@@ -41,7 +41,7 @@ export class Test {
     public testCanvas(models?: any) {
 
 
-        Main.setCanvas("webgl","ct").init();
+        Main.setCanvas("webgl", "ct").init();
 
 
         var gameobj = this.createTriangle();

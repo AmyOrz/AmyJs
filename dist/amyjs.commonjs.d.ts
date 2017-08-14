@@ -3,75 +3,75 @@
 //   ../../wonder-commonlib/dist/commonjs/Collection
 //   ../../wonder-commonlib/dist/es2015/Collection
 
-declare module 'amy.js/dist/es2015' {
-    export { Camera } from "amy.js/dist/es2015/Component/Camera/Camera";
-    export { CameraController } from "amy.js/dist/es2015/Component/Camera/Controll/CameraController";
-    export { PerspectiveCamera } from "amy.js/dist/es2015/Component/Camera/PerspectiveCamera";
-    export { BoxGeometry } from "amy.js/dist/es2015/Component/Geometry/BoxGeometry";
-    export { BufferContainer } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/BufferContainer";
-    export { EBufferDataType } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/EBufferDataType";
-    export { GeometryData } from "amy.js/dist/es2015/Component/Geometry/Data/GeometryData";
-    export { Geometry } from "amy.js/dist/es2015/Component/Geometry/Geometry";
-    export { ModelGeometry } from "amy.js/dist/es2015/Component/Geometry/ModelGeometry";
-    export { PlaneGeometry } from "amy.js/dist/es2015/Component/Geometry/PlaneGeometry";
-    export { TriangleGeometry } from "amy.js/dist/es2015/Component/Geometry/TriangleGeometry";
-    export { BasicMaterial } from "amy.js/dist/es2015/Component/Material/BasicMaterial";
-    export { Material } from "amy.js/dist/es2015/Component/Material/Material";
-    export { ModelMaterial } from "amy.js/dist/es2015/Component/Material/ModelMaterial";
-    export { ArrayBuffer } from "amy.js/dist/es2015/Component/Render/Buffer/ArrayBuffer";
-    export { Buffer } from "amy.js/dist/es2015/Component/Render/Buffer/Buffer";
-    export { EBufferType } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferType";
-    export { EBufferUseage } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferUseage";
-    export { ElementBuffer } from "amy.js/dist/es2015/Component/Render/Buffer/ElementBuffer";
-    export { MeshRenderer } from "amy.js/dist/es2015/Component/Render/MeshRender/MeshRenderer";
-    export { RendererComponent } from "amy.js/dist/es2015/Component/Render/MeshRender/RendererComponent";
-    export { EVariableType } from "amy.js/dist/es2015/Component/Render/Program/EVariableType";
-    export { GLSLDataSender } from "amy.js/dist/es2015/Component/Render/Program/GLSLDataSender";
-    export { Program } from "amy.js/dist/es2015/Component/Render/Program/Program";
-    export { BasicShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/BasicShaderLib";
-    export { ModelShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ModelShaderLib";
-    export { ShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib";
-    export { BasicShader } from "amy.js/dist/es2015/Component/Render/Shader/shader/BasicShader";
-    export { ModelShader } from "amy.js/dist/es2015/Component/Render/Shader/shader/ModelShader";
-    export { Shader } from "amy.js/dist/es2015/Component/Render/Shader/shader/Shader";
-    export { VariableLib } from "amy.js/dist/es2015/Component/Render/Shader/VariableLib";
-    export { ThreeDTransform } from "amy.js/dist/es2015/Component/Transform/ThreeDTransform";
-    export { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
-    export { Component } from "amy.js/dist/es2015/core/Component";
-    export { Device } from "amy.js/dist/es2015/core/device/Device";
-    export { EScreenSize } from "amy.js/dist/es2015/core/device/EScreenSize";
-    export { View } from "amy.js/dist/es2015/core/device/view/View";
-    export { Director } from "amy.js/dist/es2015/core/Director";
-    export { Entity } from "amy.js/dist/es2015/core/Entity/Entity";
-    export { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    export { GameObject } from "amy.js/dist/es2015/core/Entity/GameObject";
-    export { ComponentManager } from "amy.js/dist/es2015/core/Entity/Manager/ComponentManager";
-    export { EntityManager } from "amy.js/dist/es2015/core/Entity/Manager/EntityManager";
-    export { Main } from "amy.js/dist/es2015/core/Main";
-    export { EDrawMode } from "amy.js/dist/es2015/core/renderer/command/EDrawMode";
-    export { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    export { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
-    export { WebglRenderer } from "amy.js/dist/es2015/core/renderer/render/WebglRenderer";
-    export { WebglState } from "amy.js/dist/es2015/core/renderer/state/WebglState";
-    export { GameObjectScene } from "amy.js/dist/es2015/core/Scene/GameObjectScene";
-    export { Scene } from "amy.js/dist/es2015/core/Scene/Scene";
-    export { Color } from "amy.js/dist/es2015/Math/Color";
-    export { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
-    export { Vector } from "amy.js/dist/es2015/Math/Vector";
-    export { Vector3 } from "amy.js/dist/es2015/Math/Vector3";
-    export { Vector4 } from "amy.js/dist/es2015/Math/Vector4";
-    export { Loader } from "amy.js/dist/es2015/until/Loader";
-    export { MaterialLoader, MaterialModel } from "amy.js/dist/es2015/until/MaterialLoader";
-    export { ObjLoader, ObjectModel } from "amy.js/dist/es2015/until/ObjLoader";
-    export { singleton } from "amy.js/dist/es2015/until/singleton";
-    export { Test } from "amy.js/dist/es2015/until/Test";
-    export { Util } from "amy.js/dist/es2015/until/Util";
+declare module 'amyjs/dist/commonjs' {
+    export { Camera } from "amyjs/dist/commonjs/Component/Camera/Camera";
+    export { CameraController } from "amyjs/dist/commonjs/Component/Camera/Controll/CameraController";
+    export { PerspectiveCamera } from "amyjs/dist/commonjs/Component/Camera/PerspectiveCamera";
+    export { BoxGeometry } from "amyjs/dist/commonjs/Component/Geometry/BoxGeometry";
+    export { BufferContainer } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/BufferContainer";
+    export { EBufferDataType } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/EBufferDataType";
+    export { GeometryData } from "amyjs/dist/commonjs/Component/Geometry/Data/GeometryData";
+    export { Geometry } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
+    export { ModelGeometry } from "amyjs/dist/commonjs/Component/Geometry/ModelGeometry";
+    export { PlaneGeometry } from "amyjs/dist/commonjs/Component/Geometry/PlaneGeometry";
+    export { TriangleGeometry } from "amyjs/dist/commonjs/Component/Geometry/TriangleGeometry";
+    export { BasicMaterial } from "amyjs/dist/commonjs/Component/Material/BasicMaterial";
+    export { Material } from "amyjs/dist/commonjs/Component/Material/Material";
+    export { ModelMaterial } from "amyjs/dist/commonjs/Component/Material/ModelMaterial";
+    export { ArrayBuffer } from "amyjs/dist/commonjs/Component/Render/Buffer/ArrayBuffer";
+    export { Buffer } from "amyjs/dist/commonjs/Component/Render/Buffer/Buffer";
+    export { EBufferType } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferType";
+    export { EBufferUseage } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferUseage";
+    export { ElementBuffer } from "amyjs/dist/commonjs/Component/Render/Buffer/ElementBuffer";
+    export { MeshRenderer } from "amyjs/dist/commonjs/Component/Render/MeshRender/MeshRenderer";
+    export { RendererComponent } from "amyjs/dist/commonjs/Component/Render/MeshRender/RendererComponent";
+    export { EVariableType } from "amyjs/dist/commonjs/Component/Render/Program/EVariableType";
+    export { GLSLDataSender } from "amyjs/dist/commonjs/Component/Render/Program/GLSLDataSender";
+    export { Program } from "amyjs/dist/commonjs/Component/Render/Program/Program";
+    export { BasicShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/BasicShaderLib";
+    export { ModelShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ModelShaderLib";
+    export { ShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ShaderLib";
+    export { BasicShader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/BasicShader";
+    export { ModelShader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/ModelShader";
+    export { Shader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/Shader";
+    export { VariableLib } from "amyjs/dist/commonjs/Component/Render/Shader/VariableLib";
+    export { ThreeDTransform } from "amyjs/dist/commonjs/Component/Transform/ThreeDTransform";
+    export { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
+    export { Component } from "amyjs/dist/commonjs/core/Component";
+    export { Device } from "amyjs/dist/commonjs/core/device/Device";
+    export { EScreenSize } from "amyjs/dist/commonjs/core/device/EScreenSize";
+    export { View } from "amyjs/dist/commonjs/core/device/view/View";
+    export { Director } from "amyjs/dist/commonjs/core/Director";
+    export { Entity } from "amyjs/dist/commonjs/core/Entity/Entity";
+    export { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    export { GameObject } from "amyjs/dist/commonjs/core/Entity/GameObject";
+    export { ComponentManager } from "amyjs/dist/commonjs/core/Entity/Manager/ComponentManager";
+    export { EntityManager } from "amyjs/dist/commonjs/core/Entity/Manager/EntityManager";
+    export { Main } from "amyjs/dist/commonjs/core/Main";
+    export { EDrawMode } from "amyjs/dist/commonjs/core/renderer/command/EDrawMode";
+    export { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    export { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
+    export { WebglRenderer } from "amyjs/dist/commonjs/core/renderer/render/WebglRenderer";
+    export { WebglState } from "amyjs/dist/commonjs/core/renderer/state/WebglState";
+    export { GameObjectScene } from "amyjs/dist/commonjs/core/Scene/GameObjectScene";
+    export { Scene } from "amyjs/dist/commonjs/core/Scene/Scene";
+    export { Color } from "amyjs/dist/commonjs/Math/Color";
+    export { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
+    export { Vector } from "amyjs/dist/commonjs/Math/Vector";
+    export { Vector3 } from "amyjs/dist/commonjs/Math/Vector3";
+    export { Vector4 } from "amyjs/dist/commonjs/Math/Vector4";
+    export { Loader } from "amyjs/dist/commonjs/until/Loader";
+    export { MaterialLoader, MaterialModel } from "amyjs/dist/commonjs/until/MaterialLoader";
+    export { ObjLoader, ObjectModel } from "amyjs/dist/commonjs/until/ObjLoader";
+    export { singleton } from "amyjs/dist/commonjs/until/singleton";
+    export { Test } from "amyjs/dist/commonjs/until/Test";
+    export { Util } from "amyjs/dist/commonjs/until/Util";
 }
 
-declare module 'amy.js/dist/es2015/Component/Camera/Camera' {
-    import { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
-    import { GameObject } from "amy.js/dist/es2015/core/Entity/GameObject";
-    import { Vector } from "amy.js/dist/es2015/Math/Vector";
+declare module 'amyjs/dist/commonjs/Component/Camera/Camera' {
+    import { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
+    import { GameObject } from "amyjs/dist/commonjs/core/Entity/GameObject";
+    import { Vector } from "amyjs/dist/commonjs/Math/Vector";
     export abstract class Camera {
         near: number;
         far: number;
@@ -85,10 +85,10 @@ declare module 'amy.js/dist/es2015/Component/Camera/Camera' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Camera/Controll/CameraController' {
-    import { Camera } from "amy.js/dist/es2015/Component/Camera/Camera";
-    import { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
-    import { Component } from "amy.js/dist/es2015/core/Component";
+declare module 'amyjs/dist/commonjs/Component/Camera/Controll/CameraController' {
+    import { Camera } from "amyjs/dist/commonjs/Component/Camera/Camera";
+    import { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
+    import { Component } from "amyjs/dist/commonjs/core/Component";
     export class CameraController extends Component {
         static create(camera: Camera): CameraController;
         pMatrix: Matrix4;
@@ -98,8 +98,8 @@ declare module 'amy.js/dist/es2015/Component/Camera/Controll/CameraController' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Camera/PerspectiveCamera' {
-    import { Camera } from "amy.js/dist/es2015/Component/Camera/Camera";
+declare module 'amyjs/dist/commonjs/Component/Camera/PerspectiveCamera' {
+    import { Camera } from "amyjs/dist/commonjs/Component/Camera/Camera";
     export class PerspectiveCamera extends Camera {
         static create(): PerspectiveCamera;
         fovy: number;
@@ -108,18 +108,18 @@ declare module 'amy.js/dist/es2015/Component/Camera/PerspectiveCamera' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/BoxGeometry' {
-    import { Geometry, GeometryDataType } from "amy.js/dist/es2015/Component/Geometry/Geometry";
+declare module 'amyjs/dist/commonjs/Component/Geometry/BoxGeometry' {
+    import { Geometry, GeometryDataType } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
     export class BoxGeometry extends Geometry {
         static create(): BoxGeometry;
         computeData(): GeometryDataType;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/BufferContainer/BufferContainer' {
-    import { EBufferDataType } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/EBufferDataType";
-    import { GeometryData } from "amy.js/dist/es2015/Component/Geometry/Data/GeometryData";
-    import { Buffer } from "amy.js/dist/es2015/Component/Render/Buffer/Buffer";
+declare module 'amyjs/dist/commonjs/Component/Geometry/BufferContainer/BufferContainer' {
+    import { EBufferDataType } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/EBufferDataType";
+    import { GeometryData } from "amyjs/dist/commonjs/Component/Geometry/Data/GeometryData";
+    import { Buffer } from "amyjs/dist/commonjs/Component/Render/Buffer/Buffer";
     export class BufferContainer {
         static create(): BufferContainer;
         constructor();
@@ -134,7 +134,7 @@ declare module 'amy.js/dist/es2015/Component/Geometry/BufferContainer/BufferCont
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/BufferContainer/EBufferDataType' {
+declare module 'amyjs/dist/commonjs/Component/Geometry/BufferContainer/EBufferDataType' {
     export enum EBufferDataType {
         VERTICE,
         INDICE,
@@ -144,7 +144,7 @@ declare module 'amy.js/dist/es2015/Component/Geometry/BufferContainer/EBufferDat
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/Data/GeometryData' {
+declare module 'amyjs/dist/commonjs/Component/Geometry/Data/GeometryData' {
     export class GeometryData {
         static create(): GeometryData;
         vertice: number[];
@@ -155,11 +155,11 @@ declare module 'amy.js/dist/es2015/Component/Geometry/Data/GeometryData' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/Geometry' {
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { GeometryData } from "amy.js/dist/es2015/Component/Geometry/Data/GeometryData";
-    import { BufferContainer } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/BufferContainer";
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
+declare module 'amyjs/dist/commonjs/Component/Geometry/Geometry' {
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { GeometryData } from "amyjs/dist/commonjs/Component/Geometry/Data/GeometryData";
+    import { BufferContainer } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/BufferContainer";
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
     export type GeometryDataType = {
         vertice: number[];
         color?: number[];
@@ -177,8 +177,8 @@ declare module 'amy.js/dist/es2015/Component/Geometry/Geometry' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/ModelGeometry' {
-    import { Geometry } from "amy.js/dist/es2015/Component/Geometry/Geometry";
+declare module 'amyjs/dist/commonjs/Component/Geometry/ModelGeometry' {
+    import { Geometry } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
     export class ModelGeometry extends Geometry {
         static create(): ModelGeometry;
         indices: number[];
@@ -190,16 +190,16 @@ declare module 'amy.js/dist/es2015/Component/Geometry/ModelGeometry' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/PlaneGeometry' {
-    import { Geometry, GeometryDataType } from "amy.js/dist/es2015/Component/Geometry/Geometry";
+declare module 'amyjs/dist/commonjs/Component/Geometry/PlaneGeometry' {
+    import { Geometry, GeometryDataType } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
     export class PlaneGeometry extends Geometry {
         static create(): PlaneGeometry;
         computeData(): GeometryDataType;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Geometry/TriangleGeometry' {
-    import { Geometry, GeometryDataType } from "amy.js/dist/es2015/Component/Geometry/Geometry";
+declare module 'amyjs/dist/commonjs/Component/Geometry/TriangleGeometry' {
+    import { Geometry, GeometryDataType } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
     export class TriangleGeometry extends Geometry {
         static create(): TriangleGeometry;
         width: number;
@@ -208,19 +208,19 @@ declare module 'amy.js/dist/es2015/Component/Geometry/TriangleGeometry' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Material/BasicMaterial' {
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
-    import { BasicShader } from "amy.js/dist/es2015/Component/Render/Shader/shader/BasicShader";
+declare module 'amyjs/dist/commonjs/Component/Material/BasicMaterial' {
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
+    import { BasicShader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/BasicShader";
     export class BasicMaterial extends Material {
         static create(): BasicMaterial;
         getShader(): BasicShader;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Material/Material' {
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { Program } from "amy.js/dist/es2015/Component/Render/Program/Program";
-    import { Color } from "amy.js/dist/es2015/Math/Color";
+declare module 'amyjs/dist/commonjs/Component/Material/Material' {
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { Program } from "amyjs/dist/commonjs/Component/Render/Program/Program";
+    import { Color } from "amyjs/dist/commonjs/Math/Color";
     export abstract class Material {
         readonly program: Program;
         color: Color;
@@ -232,19 +232,19 @@ declare module 'amy.js/dist/es2015/Component/Material/Material' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Material/ModelMaterial' {
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
-    import { ModelShader } from "amy.js/dist/es2015/Component/Render/Shader/shader/ModelShader";
+declare module 'amyjs/dist/commonjs/Component/Material/ModelMaterial' {
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
+    import { ModelShader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/ModelShader";
     export class ModelMaterial extends Material {
         static create(): ModelMaterial;
         getShader(): ModelShader;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Buffer/ArrayBuffer' {
-    import { Buffer } from "amy.js/dist/es2015/Component/Render/Buffer/Buffer";
-    import { EBufferType } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferType";
-    import { EBufferUseage } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferUseage";
+declare module 'amyjs/dist/commonjs/Component/Render/Buffer/ArrayBuffer' {
+    import { Buffer } from "amyjs/dist/commonjs/Component/Render/Buffer/Buffer";
+    import { EBufferType } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferType";
+    import { EBufferUseage } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferUseage";
     export class ArrayBuffer extends Buffer {
         static create(data: number[], size: number, type?: EBufferType, usage?: EBufferUseage): ArrayBuffer;
         size: number;
@@ -256,14 +256,14 @@ declare module 'amy.js/dist/es2015/Component/Render/Buffer/ArrayBuffer' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Buffer/Buffer' {
+declare module 'amyjs/dist/commonjs/Component/Render/Buffer/Buffer' {
     export abstract class Buffer {
         buffer: any;
         dispose(): void;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Buffer/EBufferType' {
+declare module 'amyjs/dist/commonjs/Component/Render/Buffer/EBufferType' {
     export enum EBufferType {
         BYTE,
         UNSIGNED_BYTE,
@@ -275,7 +275,7 @@ declare module 'amy.js/dist/es2015/Component/Render/Buffer/EBufferType' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Buffer/EBufferUseage' {
+declare module 'amyjs/dist/commonjs/Component/Render/Buffer/EBufferUseage' {
     export enum EBufferUseage {
         STREAM_DRAW,
         STATIC_DRAW,
@@ -283,10 +283,10 @@ declare module 'amy.js/dist/es2015/Component/Render/Buffer/EBufferUseage' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Buffer/ElementBuffer' {
-    import { Buffer } from "amy.js/dist/es2015/Component/Render/Buffer/Buffer";
-    import { EBufferType } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferType";
-    import { EBufferUseage } from "amy.js/dist/es2015/Component/Render/Buffer/EBufferUseage";
+declare module 'amyjs/dist/commonjs/Component/Render/Buffer/ElementBuffer' {
+    import { Buffer } from "amyjs/dist/commonjs/Component/Render/Buffer/Buffer";
+    import { EBufferType } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferType";
+    import { EBufferUseage } from "amyjs/dist/commonjs/Component/Render/Buffer/EBufferUseage";
     export class ElementBuffer extends Buffer {
         static create(data: number[], type?: EBufferType, useage?: EBufferUseage): ElementBuffer;
         type: EBufferType;
@@ -297,28 +297,28 @@ declare module 'amy.js/dist/es2015/Component/Render/Buffer/ElementBuffer' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/MeshRender/MeshRenderer' {
-    import { RendererComponent } from "amy.js/dist/es2015/Component/Render/MeshRender/RendererComponent";
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { GameObject } from "amy.js/dist/es2015/core/Entity/GameObject";
+declare module 'amyjs/dist/commonjs/Component/Render/MeshRender/MeshRenderer' {
+    import { RendererComponent } from "amyjs/dist/commonjs/Component/Render/MeshRender/RendererComponent";
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { GameObject } from "amyjs/dist/commonjs/core/Entity/GameObject";
     export class MeshRenderer extends RendererComponent {
         static create(): MeshRenderer;
         render(renderer: Renderer, targetObject: EntityObject, camera: GameObject): void;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/MeshRender/RendererComponent' {
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { GameObject } from "amy.js/dist/es2015/core/Entity/GameObject";
+declare module 'amyjs/dist/commonjs/Component/Render/MeshRender/RendererComponent' {
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { GameObject } from "amyjs/dist/commonjs/core/Entity/GameObject";
     export abstract class RendererComponent extends Component {
         abstract render(renderer: Renderer, targetObject: EntityObject, camera: GameObject): any;
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Program/EVariableType' {
+declare module 'amyjs/dist/commonjs/Component/Render/Program/EVariableType' {
     export enum EVariableType {
         FLOAT_1,
         FLOAT_2,
@@ -341,10 +341,10 @@ declare module 'amy.js/dist/es2015/Component/Render/Program/EVariableType' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Program/GLSLDataSender' {
-    import { Program } from "amy.js/dist/es2015/Component/Render/Program/Program";
-    import { ArrayBuffer } from "amy.js/dist/es2015/Component/Render/Buffer/ArrayBuffer";
-    import { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
+declare module 'amyjs/dist/commonjs/Component/Render/Program/GLSLDataSender' {
+    import { Program } from "amyjs/dist/commonjs/Component/Render/Program/Program";
+    import { ArrayBuffer } from "amyjs/dist/commonjs/Component/Render/Buffer/ArrayBuffer";
+    import { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
     export class GLSLDataSender {
         static create(program: Program): GLSLDataSender;
         constructor(_program: Program);
@@ -365,11 +365,11 @@ declare module 'amy.js/dist/es2015/Component/Render/Program/GLSLDataSender' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Program/Program' {
-    import { Shader } from "amy.js/dist/es2015/Component/Render/Shader/shader/Shader";
-    import { EVariableType } from "amy.js/dist/es2015/Component/Render/Program/EVariableType";
-    import { ArrayBuffer } from "amy.js/dist/es2015/Component/Render/Buffer/ArrayBuffer";
-    import { Entity } from "amy.js/dist/es2015/core/Entity/Entity";
+declare module 'amyjs/dist/commonjs/Component/Render/Program/Program' {
+    import { Shader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/Shader";
+    import { EVariableType } from "amyjs/dist/commonjs/Component/Render/Program/EVariableType";
+    import { ArrayBuffer } from "amyjs/dist/commonjs/Component/Render/Buffer/ArrayBuffer";
+    import { Entity } from "amyjs/dist/commonjs/core/Entity/Entity";
     export class Program extends Entity {
         static create(): Program;
         glProgram: any;
@@ -393,8 +393,8 @@ declare module 'amy.js/dist/es2015/Component/Render/Program/Program' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/BasicShaderLib' {
-    import { ShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/lib/BasicShaderLib' {
+    import { ShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ShaderLib";
     export class BasicShaderLib extends ShaderLib {
         static create(): BasicShaderLib;
         VSource: string;
@@ -403,8 +403,8 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/BasicShaderLib' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/ModelShaderLib' {
-    import { ShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/lib/ModelShaderLib' {
+    import { ShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ShaderLib";
     export class ModelShaderLib extends ShaderLib {
         static create(): ModelShaderLib;
         VSource: string;
@@ -413,7 +413,7 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/ModelShaderLib' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib' {
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/lib/ShaderLib' {
     export abstract class ShaderLib {
         VSource: string;
         FSource: string;
@@ -425,11 +425,11 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/BasicShader' {
-    import { Shader } from "amy.js/dist/es2015/Component/Render/Shader/shader/Shader";
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
-    import { BasicShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/BasicShaderLib";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/shader/BasicShader' {
+    import { Shader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/Shader";
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
+    import { BasicShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/BasicShaderLib";
     export class BasicShader extends Shader {
         static create(): BasicShader;
         initProgram(): void;
@@ -438,11 +438,11 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/BasicShader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/ModelShader' {
-    import { Shader } from "amy.js/dist/es2015/Component/Render/Shader/shader/Shader";
-    import { ModelShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ModelShaderLib";
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/shader/ModelShader' {
+    import { Shader } from "amyjs/dist/commonjs/Component/Render/Shader/shader/Shader";
+    import { ModelShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ModelShaderLib";
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
     export class ModelShader extends Shader {
         static create(): ModelShader;
         initProgram(): void;
@@ -451,12 +451,12 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/ModelShader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/Shader' {
-    import { Program } from "amy.js/dist/es2015/Component/Render/Program/Program";
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
-    import { ShaderLib } from "amy.js/dist/es2015/Component/Render/Shader/lib/ShaderLib";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/shader/Shader' {
+    import { Program } from "amyjs/dist/commonjs/Component/Render/Program/Program";
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
+    import { ShaderLib } from "amyjs/dist/commonjs/Component/Render/Shader/lib/ShaderLib";
     export abstract class Shader extends Component {
         readonly VSource: string;
         readonly FSource: string;
@@ -471,9 +471,9 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/shader/Shader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Render/Shader/VariableLib' {
-    import { EVariableType } from "amy.js/dist/es2015/Component/Render/Program/EVariableType";
-    import { EBufferDataType } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/EBufferDataType";
+declare module 'amyjs/dist/commonjs/Component/Render/Shader/VariableLib' {
+    import { EVariableType } from "amyjs/dist/commonjs/Component/Render/Program/EVariableType";
+    import { EBufferDataType } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/EBufferDataType";
     export class VariableLib {
         static a_position: {
             type: EVariableType;
@@ -513,15 +513,15 @@ declare module 'amy.js/dist/es2015/Component/Render/Shader/VariableLib' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Transform/ThreeDTransform' {
-    import { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
+declare module 'amyjs/dist/commonjs/Component/Transform/ThreeDTransform' {
+    import { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
     export class ThreeDTransform extends Transform {
     }
 }
 
-declare module 'amy.js/dist/es2015/Component/Transform/Transform' {
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
+declare module 'amyjs/dist/commonjs/Component/Transform/Transform' {
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
     export class Transform extends Component {
         static create(): Transform;
         mMatrix: Matrix4;
@@ -531,10 +531,10 @@ declare module 'amy.js/dist/es2015/Component/Transform/Transform' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Component' {
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { Entity } from "amy.js/dist/es2015/core/Entity/Entity";
-    import { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
+declare module 'amyjs/dist/commonjs/core/Component' {
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { Entity } from "amyjs/dist/commonjs/core/Entity/Entity";
+    import { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
     export class Component extends Entity {
         readonly transform: Transform;
         entityObject: EntityObject;
@@ -544,9 +544,9 @@ declare module 'amy.js/dist/es2015/core/Component' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/device/Device' {
-    import { IView } from "amy.js/dist/es2015/core/device/view/IView";
-    import { ContextConfigData } from "amy.js/dist/es2015/core/ContextConfig";
+declare module 'amyjs/dist/commonjs/core/device/Device' {
+    import { IView } from "amyjs/dist/commonjs/core/device/view/IView";
+    import { ContextConfigData } from "amyjs/dist/commonjs/core/ContextConfig";
     export class Device {
         static getInstance(): any;
         gl: WebGLRenderingContext;
@@ -558,15 +558,15 @@ declare module 'amy.js/dist/es2015/core/device/Device' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/device/EScreenSize' {
+declare module 'amyjs/dist/commonjs/core/device/EScreenSize' {
     export enum EScreenSize {
         FULL = 0,
     }
 }
 
-declare module 'amy.js/dist/es2015/core/device/view/View' {
-    import { IView } from "amy.js/dist/es2015/core/device/view/IView";
-    import { ContextConfigData } from "amy.js/dist/es2015/core/ContextConfig";
+declare module 'amyjs/dist/commonjs/core/device/view/View' {
+    import { IView } from "amyjs/dist/commonjs/core/device/view/IView";
+    import { ContextConfigData } from "amyjs/dist/commonjs/core/ContextConfig";
     export class View implements IView {
         static create(view: any): View;
         constructor(_dom: any);
@@ -586,9 +586,9 @@ declare module 'amy.js/dist/es2015/core/device/view/View' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Director' {
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
-    import { Scene } from "amy.js/dist/es2015/core/Scene/Scene";
+declare module 'amyjs/dist/commonjs/core/Director' {
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
+    import { Scene } from "amyjs/dist/commonjs/core/Scene/Scene";
     export class Director {
         static getInstance(): any;
         renderer: Renderer;
@@ -600,23 +600,23 @@ declare module 'amy.js/dist/es2015/core/Director' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Entity/Entity' {
+declare module 'amyjs/dist/commonjs/core/Entity/Entity' {
     export abstract class Entity {
         constructor();
         uid: number;
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Entity/EntityObject' {
-    import { Entity } from "amy.js/dist/es2015/core/Entity/Entity";
-    import { EntityManager } from "amy.js/dist/es2015/core/Entity/Manager/EntityManager";
+declare module 'amyjs/dist/commonjs/core/Entity/EntityObject' {
+    import { Entity } from "amyjs/dist/commonjs/core/Entity/Entity";
+    import { EntityManager } from "amyjs/dist/commonjs/core/Entity/Manager/EntityManager";
     import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { ComponentManager } from "amy.js/dist/es2015/core/Entity/Manager/ComponentManager";
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
-    import { Geometry } from "amy.js/dist/es2015/Component/Geometry/Geometry";
-    import { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
-    import { GameObject } from "amy.js/dist/es2015/core/Entity/GameObject";
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { ComponentManager } from "amyjs/dist/commonjs/core/Entity/Manager/ComponentManager";
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
+    import { Geometry } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
+    import { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
+    import { GameObject } from "amyjs/dist/commonjs/core/Entity/GameObject";
     export abstract class EntityObject extends Entity {
         readonly transform: Transform;
         readonly geometry: Geometry;
@@ -652,9 +652,9 @@ declare module 'amy.js/dist/es2015/core/Entity/EntityObject' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Entity/GameObject' {
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
+declare module 'amyjs/dist/commonjs/core/Entity/GameObject' {
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
     export class GameObject extends EntityObject {
         static create(): GameObject;
         initWhenCreate(): void;
@@ -662,12 +662,12 @@ declare module 'amy.js/dist/es2015/core/Entity/GameObject' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Entity/Manager/ComponentManager' {
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { Geometry } from "amy.js/dist/es2015/Component/Geometry/Geometry";
-    import { Component } from "amy.js/dist/es2015/core/Component";
-    import { Transform } from "amy.js/dist/es2015/Component/Transform/Transform";
-    import { MeshRenderer } from "amy.js/dist/es2015/Component/Render/MeshRender/MeshRenderer";
+declare module 'amyjs/dist/commonjs/core/Entity/Manager/ComponentManager' {
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { Geometry } from "amyjs/dist/commonjs/Component/Geometry/Geometry";
+    import { Component } from "amyjs/dist/commonjs/core/Component";
+    import { Transform } from "amyjs/dist/commonjs/Component/Transform/Transform";
+    import { MeshRenderer } from "amyjs/dist/commonjs/Component/Render/MeshRender/MeshRenderer";
     export class ComponentManager {
         static create(entityObject: EntityObject): ComponentManager;
         constructor(_entityObject: EntityObject);
@@ -683,10 +683,10 @@ declare module 'amy.js/dist/es2015/core/Entity/Manager/ComponentManager' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Entity/Manager/EntityManager' {
+declare module 'amyjs/dist/commonjs/core/Entity/Manager/EntityManager' {
     import { Collection } from "wonder-commonlib/dist/commonjs/Collection";
-    import { Entity } from "amy.js/dist/es2015/core/Entity/Entity";
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
+    import { Entity } from "amyjs/dist/commonjs/core/Entity/Entity";
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
     export class EntityManager extends Entity {
         static create(entityDispatcher: EntityObject): EntityManager;
         constructor(_entityDispatcher: EntityObject);
@@ -710,14 +710,14 @@ declare module 'amy.js/dist/es2015/core/Entity/Manager/EntityManager' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Main' {
+declare module 'amyjs/dist/commonjs/core/Main' {
     export class Main {
         static setCanvas(canvasId?: string, parentId?: string): typeof Main;
         static init(): typeof Main;
     }
 }
 
-declare module 'amy.js/dist/es2015/core/renderer/command/EDrawMode' {
+declare module 'amyjs/dist/commonjs/core/renderer/command/EDrawMode' {
     export enum EDrawMode {
         POINTS,
         LINES,
@@ -729,11 +729,11 @@ declare module 'amy.js/dist/es2015/core/renderer/command/EDrawMode' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/renderer/command/RenderCommand' {
-    import { BufferContainer } from "amy.js/dist/es2015/Component/Geometry/BufferContainer/BufferContainer";
-    import { Matrix4 } from "amy.js/dist/es2015/Math/Matrix4";
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { Material } from "amy.js/dist/es2015/Component/Material/Material";
+declare module 'amyjs/dist/commonjs/core/renderer/command/RenderCommand' {
+    import { BufferContainer } from "amyjs/dist/commonjs/Component/Geometry/BufferContainer/BufferContainer";
+    import { Matrix4 } from "amyjs/dist/commonjs/Math/Matrix4";
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { Material } from "amyjs/dist/commonjs/Component/Material/Material";
     export class RenderCommand {
         static create(): RenderCommand;
         readonly color: number[];
@@ -748,9 +748,9 @@ declare module 'amy.js/dist/es2015/core/renderer/command/RenderCommand' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/renderer/render/Renderer' {
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { WebglState } from "amy.js/dist/es2015/core/renderer/state/WebglState";
+declare module 'amyjs/dist/commonjs/core/renderer/render/Renderer' {
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { WebglState } from "amyjs/dist/commonjs/core/renderer/state/WebglState";
     export abstract class Renderer {
         webglState: WebglState;
         setClearColor(r: number, g: number, b: number, a: number): void;
@@ -760,9 +760,9 @@ declare module 'amy.js/dist/es2015/core/renderer/render/Renderer' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/renderer/render/WebglRenderer' {
-    import { RenderCommand } from "amy.js/dist/es2015/core/renderer/command/RenderCommand";
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
+declare module 'amyjs/dist/commonjs/core/renderer/render/WebglRenderer' {
+    import { RenderCommand } from "amyjs/dist/commonjs/core/renderer/command/RenderCommand";
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
     export class WebglRenderer extends Renderer {
         static create(): WebglRenderer;
         init(): void;
@@ -772,7 +772,7 @@ declare module 'amy.js/dist/es2015/core/renderer/render/WebglRenderer' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/renderer/state/WebglState' {
+declare module 'amyjs/dist/commonjs/core/renderer/state/WebglState' {
     export class WebglState {
         static create(): WebglState;
         setClearColor(r: number, g: number, b: number, a: number): void;
@@ -780,9 +780,9 @@ declare module 'amy.js/dist/es2015/core/renderer/state/WebglState' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Scene/GameObjectScene' {
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { Renderer } from "amy.js/dist/es2015/core/renderer/render/Renderer";
+declare module 'amyjs/dist/commonjs/core/Scene/GameObjectScene' {
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { Renderer } from "amyjs/dist/commonjs/core/renderer/render/Renderer";
     export class GameObjectScene extends EntityObject {
         static create(): GameObjectScene;
         readonly currentCamera: any;
@@ -793,9 +793,9 @@ declare module 'amy.js/dist/es2015/core/Scene/GameObjectScene' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/Scene/Scene' {
-    import { EntityObject } from "amy.js/dist/es2015/core/Entity/EntityObject";
-    import { GameObjectScene } from "amy.js/dist/es2015/core/Scene/GameObjectScene";
+declare module 'amyjs/dist/commonjs/core/Scene/Scene' {
+    import { EntityObject } from "amyjs/dist/commonjs/core/Entity/EntityObject";
+    import { GameObjectScene } from "amyjs/dist/commonjs/core/Scene/GameObjectScene";
     export class Scene extends EntityObject {
         static create(): Scene;
         gameObjectScene: GameObjectScene;
@@ -805,7 +805,7 @@ declare module 'amy.js/dist/es2015/core/Scene/Scene' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Math/Color' {
+declare module 'amyjs/dist/commonjs/Math/Color' {
     export class Color {
         static create(colorVal: string): Color;
         r: number;
@@ -817,7 +817,7 @@ declare module 'amy.js/dist/es2015/Math/Color' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Math/Matrix4' {
+declare module 'amyjs/dist/commonjs/Math/Matrix4' {
     export class Matrix4 {
         elements: any;
         constructor(opt_src?: any);
@@ -849,7 +849,7 @@ declare module 'amy.js/dist/es2015/Math/Matrix4' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Math/Vector' {
+declare module 'amyjs/dist/commonjs/Math/Vector' {
     export class Vector {
         constructor(x?: number, y?: number, z?: number, w?: number);
         x: number;
@@ -859,7 +859,7 @@ declare module 'amy.js/dist/es2015/Math/Vector' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Math/Vector3' {
+declare module 'amyjs/dist/commonjs/Math/Vector3' {
     export class Vector3 {
         elements: any;
         constructor(opt_src?: any);
@@ -867,14 +867,14 @@ declare module 'amy.js/dist/es2015/Math/Vector3' {
     }
 }
 
-declare module 'amy.js/dist/es2015/Math/Vector4' {
+declare module 'amyjs/dist/commonjs/Math/Vector4' {
     export class Vector4 {
         elements: any;
         constructor(opt_src?: any);
     }
 }
 
-declare module 'amy.js/dist/es2015/until/Loader' {
+declare module 'amyjs/dist/commonjs/until/Loader' {
     export class Loader {
         static of(): Loader;
         readFileToStream(files: any): any;
@@ -883,7 +883,7 @@ declare module 'amy.js/dist/es2015/until/Loader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/until/MaterialLoader' {
+declare module 'amyjs/dist/commonjs/until/MaterialLoader' {
     import { Collection } from "wonder-commonlib/dist/es2015/Collection";
     export class MaterialLoader {
         static create(): MaterialLoader;
@@ -905,7 +905,7 @@ declare module 'amy.js/dist/es2015/until/MaterialLoader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/until/ObjLoader' {
+declare module 'amyjs/dist/commonjs/until/ObjLoader' {
     import { Collection } from "wonder-commonlib/dist/es2015/Collection";
     export class ObjLoader {
         static create(): ObjLoader;
@@ -929,11 +929,11 @@ declare module 'amy.js/dist/es2015/until/ObjLoader' {
     }
 }
 
-declare module 'amy.js/dist/es2015/until/singleton' {
+declare module 'amyjs/dist/commonjs/until/singleton' {
     export function singleton(isInitWhenCreate?: boolean): (target: any) => void;
 }
 
-declare module 'amy.js/dist/es2015/until/Test' {
+declare module 'amyjs/dist/commonjs/until/Test' {
     export type fileObject = {
         obj: string;
         material: string;
@@ -945,15 +945,15 @@ declare module 'amy.js/dist/es2015/until/Test' {
     }
 }
 
-declare module 'amy.js/dist/es2015/until/Util' {
+declare module 'amyjs/dist/commonjs/until/Util' {
     export class Util {
         static isArray(target: any): boolean;
         static ajax(config: any): void;
     }
 }
 
-declare module 'amy.js/dist/es2015/core/device/view/IView' {
-    import { ContextConfigData } from "amy.js/dist/es2015/core/ContextConfig";
+declare module 'amyjs/dist/commonjs/core/device/view/IView' {
+    import { ContextConfigData } from "amyjs/dist/commonjs/core/ContextConfig";
     export interface IView {
         offset: {
             x: number;
@@ -971,7 +971,7 @@ declare module 'amy.js/dist/es2015/core/device/view/IView' {
     }
 }
 
-declare module 'amy.js/dist/es2015/core/ContextConfig' {
+declare module 'amyjs/dist/commonjs/core/ContextConfig' {
     export type ContextConfigData = {
         alpha: boolean;
         depth: boolean;

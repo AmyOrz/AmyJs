@@ -1770,9 +1770,7 @@
 	            canvas.setAttribute("id", canvasId);
 	        }
 	        if (parentId) {
-	            console.log(document.querySelector("#ct"));
 	            this._parentEle = document.querySelector("#" + parentId);
-	            console.log(this._parentEle);
 	            if (this._parentEle == void 0)
 	                alert("找不到指定parentId的dom节点");
 	        }
